@@ -1,16 +1,8 @@
-#include "physics_3D.h"
+#include "misc/physics_3D.h"
+#include "misc/objLoader.h"
+#include "asset.h"
 
-class Ball{
-    private:
-        //objectMesh
-        //bounding boxes
-        PhysicsObject3D characterPhysics;
-
+class Ball : public Asset{
     public:
-        float getX(); //just call the get
-        float getY();
-        float getZ();
-
-        //get bounding boxes?
-
+        void accelerate(float x, float y, float z);
 };
