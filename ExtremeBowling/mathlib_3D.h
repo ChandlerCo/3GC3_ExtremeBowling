@@ -41,18 +41,18 @@ public:
 };
 
 class Rot3D {
-    public:
-        float angle;
-        Vec3D axis;
+public:
+    float angle;
+    Vec3D axis;
 
-        Rot3D();
-        Rot3D(float in_x, float in_y, float in_z, float in_a);
+    Rot3D();
+    Rot3D(float in_x, float in_y, float in_z, float in_a);
 
-        void rot3D(Dimension3 *d);
+    void rot3D(Dimension3 *d);
 
-        static void rot3DAxisX(Dimension3 *d, float rad);
-        static void rot3DAxisY(Dimension3 *d, float rad);
-        static void rot3DAxisZ(Dimension3 *d, float rad);
+    static void rot3DAxisX(Dimension3 *d, float rad);
+    static void rot3DAxisY(Dimension3 *d, float rad);
+    static void rot3DAxisZ(Dimension3 *d, float rad);
 };
 
 #endif
