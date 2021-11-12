@@ -16,13 +16,12 @@ class loadObj
 
 
     private:
-
         std::string filepath="";
-        // vectors and faces
-        std::vector<std::vector<float>*> *v = new std::vector<std::vector<float>*>;
-        std::vector<std::vector<int>*>   *f    = new std::vector<std::vector<int>*>;
-        std::vector<std::string>* split (std::string line, char sep); 
-        float convert(std::string line);
+        // vertices and faces
+        std::vector<std::vector<float>*> *v = new std::vector<std::vector<float>*>; //verticies
+        std::vector<std::vector<int>*>   *f    = new std::vector<std::vector<int>*>; //faces
+        std::vector<std::string>* split (std::string line, char sep); //split string
+        float convert(std::string line); //turns a string into a float
         float *getNormal(float **c1, float **c2, float **c3); //calculate normal
 };
 

@@ -31,7 +31,7 @@ private:
     static Vec3D collisionBoxBox(Collider3D box_1, Collider3D box_2);
     static Vec3D collisionBoxSphere(Collider3D box, Collider3D sph);
     static Vec3D collisionSphereSphere(Collider3D sph_1, Collider3D sph_2);
-}
+};
 
 class PhysicsObject3D{
 private:

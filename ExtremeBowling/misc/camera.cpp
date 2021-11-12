@@ -1,11 +1,11 @@
 #include "camera.h"
 #include <cmath>
 
-Camera::Camera(float startDistance, float orbitCentre[3]){
+Camera::Camera(float startDistance){
     this->speed = 20;
     this->distance = startDistance;
     for(int i = 0; i < 3; i++){
-        this->centre[i] = orbitCentre[i];
+        this->centre[i] = 0;
     }
     this->phi = M_PI/3 ;
     this->theta = M_PI/3;
