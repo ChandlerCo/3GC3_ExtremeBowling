@@ -1,7 +1,7 @@
 #include "physics_3D.h"
 
 #define GRAVITY 9.81
-#define MAX_SPD 100
+#define MAX_SPD 1000
 #define ZERO 0.0000001
 
 Collider3D::Collider3D()
@@ -12,7 +12,7 @@ Collider3D::Collider3D()
     size_x = 0;
     size_y = 0;
     size_z = 0;
-    offset = Point3D(0, 0, 0);
+    offset = Vec3D(0, 0, 0);
     old_pos = Point3D(0, 0, 0);
 }
 
@@ -24,15 +24,15 @@ Collider3D::Collider3D(ColType col, Point3D *p_position, Rot3D *p_rotation, floa
     size_x = s_x;
     size_y = s_y;
     size_z = s_z;
-    offset = Point3D(off_x, off_y, off_z);
+    offset = Vec3D(off_x, off_y, off_z);
     old_pos = calculatePos();
 }
 
 Point3D Collider3D::calculatePos()
 {
-    Point3D pos = offset.clone();
-    p_rot->rotate3D(&pos);
-    return Vec3D::createVector(Point3D(0, 0, 0), *p_pos).movePoint(pos);
+    Vec3D rot_offset = offset.clone();
+    p_rot->rotate3D(&rot_offset);
+    return rot_offset.movePoint(*p_pos);
 }
 
 Vec3D Collider3D::collision(Collider3D col)
@@ -112,8 +112,30 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
         if (delta_x < box.size_x / 2 && delta_y < box.size_y / 2 && delta_z < box.size_z / 2)
         {
             // complicated reflection - need to find where previous sphere position was
-            // placeholder: use vertical
+            // placeholder: use closest face
             //std::cout << rad + (box.size_y / 2) - delta_y << " placeholder\n";
+            float max_delta = std::max(std::max(delta_x, delta_y), delta_z);
+            if (max_delta == delta_x)
+            {
+                if (x_axis.dotProd(b_to_s) > 0)
+                    return x_axis.normalize().multiply(rad + box.size_x / 2 - delta_x);
+                else
+                    return x_axis.normalize().multiply(delta_x - rad - box.size_x / 2);
+            }
+            else if (max_delta == delta_y)
+            {
+                if (x_axis.dotProd(b_to_s) > 0)
+                    return x_axis.normalize().multiply(rad + box.size_x / 2 - delta_x);
+                else
+                    return x_axis.normalize().multiply(delta_x - rad - box.size_x / 2);
+            }
+            else if (max_delta == delta_z)
+            {
+                if (x_axis.dotProd(b_to_s) > 0)
+                    return x_axis.normalize().multiply(rad + box.size_x / 2 - delta_x);
+                else
+                    return x_axis.normalize().multiply(delta_x - rad - box.size_x / 2);
+            }
             return y_axis.normalize().multiply(rad + (box.size_y / 2) - delta_y);
         }
         
@@ -121,18 +143,23 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
         if (delta_x < box.size_x / 2 && delta_y < box.size_y / 2) // front/back
         {
             if (delta_z < rad + box.size_z / 2)
-                return z_axis.normalize().multiply(rad + box.size_z / 2 - delta_z);
+            {
+                if (z_axis.dotProd(b_to_s) > 0)
+                    return z_axis.normalize().multiply(rad + box.size_z / 2 - delta_z);
+                else
+                    return z_axis.normalize().multiply(delta_z - rad - box.size_z / 2);
+            }
+                
             return Vec3D();
         }
         if (delta_x < box.size_x / 2 && delta_z < box.size_z / 2)
         {
             if (delta_y < rad + box.size_y / 2) // top/bottom
             {
-                //std::cout << rad + (box.size_y / 2) - delta_y << " top and botton\n";
-                //std::cout << y_axis.x << " | " << y_axis.y << " | " << y_axis.z << std::endl;
-                y_axis = y_axis.normalize().multiply(rad + (box.size_y / 2) - delta_y);
-                //std::cout << y_axis.x << " | " << y_axis.y << " | " << y_axis.z << std::endl;
-                return y_axis;
+                if (y_axis.dotProd(b_to_s) > 0)
+                    return y_axis.normalize().multiply(rad + box.size_z / 2 - delta_y);
+                else
+                    return y_axis.normalize().multiply(delta_y - rad - box.size_z / 2);
             }
                 
             return Vec3D();
@@ -140,7 +167,12 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
         if (delta_y < box.size_y / 2 && delta_z < box.size_z / 2)
         {
             if (delta_x < rad + box.size_x / 2) // left/right
-                return x_axis.normalize().multiply(rad + box.size_x / 2 - delta_x);
+            {
+                if (x_axis.dotProd(b_to_s) > 0)
+                    return x_axis.normalize().multiply(rad + box.size_x / 2 - delta_x);
+                else
+                    return x_axis.normalize().multiply(delta_x - rad - box.size_x / 2);
+            }
             return Vec3D();
         }
         // TODO
@@ -224,18 +256,26 @@ PhysicsObject3D::PhysicsObject3D()
     rot = Rot3D();
     rot_vel = 0;
 
+    moveable = false;
+    surface_friction = 0;
+    acc_friction = 0;
+
     id = 0;
     collider = Collider3D();
     collided.clear(); 
 }
 
-PhysicsObject3D::PhysicsObject3D(float p_x, float p_y, float p_z)
+PhysicsObject3D::PhysicsObject3D(float p_x, float p_y, float p_z, bool move, float f)
 {
     pos = Point3D(p_x, p_y, p_z);
     vel = Vec3D();
     acc = Vec3D();
     rot = Rot3D();
     rot_vel = 0;
+
+    moveable = move;
+    surface_friction = f;
+    acc_friction = 0;
 
     id = 0;
     collider = Collider3D();
@@ -255,6 +295,15 @@ Vec3D PhysicsObject3D::getVel()
 Rot3D PhysicsObject3D::getRot()
 {
     return rot;
+}
+bool PhysicsObject3D::isMoveable()
+{
+    return moveable;
+}
+
+float PhysicsObject3D::getSurfaceFriction()
+{
+    return surface_friction;
 }
 
 int PhysicsObject3D::getId()
@@ -282,6 +331,16 @@ void PhysicsObject3D::setRotation(float x, float y, float z, float a)
     rot = Rot3D(x, y, z, a);
 }
 
+void PhysicsObject3D::setMoveable(bool move)
+{
+    moveable = move;
+}
+
+void PhysicsObject3D::setAccFriction(float f)
+{
+    acc_friction = f;
+}
+
 void PhysicsObject3D::addBoxCollider(float s_x, float s_y, float s_z, float off_x, float off_y, float off_z)
 {
     collider = Collider3D(ColType::box, &pos, &rot, s_x, s_y, s_z, off_x, off_y, off_z);
@@ -304,24 +363,19 @@ void PhysicsObject3D::addAcceleration(float x, float y, float z)
 // updatePhysics
 // friction: applies a friction force slowing down the object. set to 0 if not wanted
 // time: time passed since last call in ms
-void PhysicsObject3D::updatePhysics(float friction, float time)
+void PhysicsObject3D::updatePhysics(float time, std::vector<PhysicsObject3D *> objs)
 {
     time = time / 1000;     // convert to seconds
 
-    // change velocity based on friction. if velocity reverses direction, reset to 0
-    float acc_friction = friction * GRAVITY;                             // calculate force of friction
-    Vec3D old_vel = vel.clone();
-    vel = vel.addVec(vel.normalize().multiply(-acc_friction * time)); // calculate change in velocity
-    
-    if ((vel.x != 0 && vel.x / old_vel.x < 0) || (vel.y != 0 && vel.y / old_vel.y < 0) || (vel.z != 0 && vel.z / old_vel.z < 0))  // if velocity reverses direction, set to 0
-        vel = Vec3D();
+    // ------------------- deceleration due to friction -------------------------
+    acc_friction = std::min(acc_friction * time, 1.0f);
 
-    // Only apply acceleration if it can overcome force of friction
-    if (acc.length() > acc_friction)
-        vel = vel.addVec(acc.multiply(time));    // add acc to vel
+    vel = vel.multiply(1-acc_friction); // calculate change in velocity
 
-    // reset acceleration
-    acc = Vec3D();
+    acc_friction = 0;
+
+    // --------------------------- kinematics ------------------------------------
+    vel = vel.addVec(acc.multiply(time));    // add acc to vel
 
     // apply speed limit to avoid objects passing through each other when moving at high speed
     if (vel.length() > MAX_SPD)
@@ -330,11 +384,24 @@ void PhysicsObject3D::updatePhysics(float friction, float time)
     // add vel to position
     pos = vel.multiply(time).movePoint(pos);
 
-    // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------//
-    // =============================================================================================================
+    // reset acceleration
+    acc = Vec3D();
+
+    // ------------------------ collisions with other objects -------------------------
+    for (std::vector<PhysicsObject3D *>::iterator it = objs.begin(); it < objs.end(); it++)
+    {
+        if (!moveable && (*it)->isMoveable())      // if this object is immovable but the other object is
+            (*it)->collisionImmovable(*this);
+        else if (moveable && !(*it)->isMoveable()) // if this object is movable and other object is immovable
+            collisionImmovable(**it);
+        else if (moveable && (*it)->isMoveable())  // if both objects are movable
+            collision(*it);
+    }
+
+    // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
     // create floor
-    PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -1, pos.z);  // create a floor object directly below object
-    the_floor.addBoxCollider(10, 2, 10, 0, 0, 0);
+    PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -10, pos.z);     // create a floor object directly below object
+    the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at -5
     collisionImmovable(the_floor);
 }
 
@@ -361,6 +428,9 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
 
     if (ref_normal.dotProd(other_obj->vel) < 0)
         other_obj->vel = other_obj->vel.addVec(ref_normal.project(other_obj->vel).multiply(-1));
+
+    acc_friction = other_obj->getSurfaceFriction() * surface_friction;
+    other_obj->setAccFriction(acc_friction);
 }
 
 void PhysicsObject3D::collisionImmovable(PhysicsObject3D other_obj)
@@ -374,11 +444,17 @@ void PhysicsObject3D::collisionImmovable(PhysicsObject3D other_obj)
     // this means it is the direction the two objects should move in order to move away from each other
     // the length of ref_normal is the length the two objects should be separated by in order to stop overlapping
     
+    acc_friction = other_obj.getSurfaceFriction() * surface_friction;
+
     // Move point so that it no longer touches the immovable object
     pos = ref_normal.multiply(-1).movePoint(pos);
     // Modify velocity so that it is not going into the other object
     if (ref_normal.dotProd(vel) > 0)
-        vel = vel.addVec(ref_normal.project(vel).multiply(-1));
+        vel = vel.addVec(ref_normal.project(vel).multiply(-1.75 + acc_friction));
+    
+    
+    
+    
 }
 
 void PhysicsObject3D::addCollided(int id)

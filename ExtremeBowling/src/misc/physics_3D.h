@@ -20,7 +20,7 @@ public:
     float size_x;
     float size_y;
     float size_z;
-    Point3D offset;
+    Vec3D offset;
     Point3D old_pos;
     Collider3D();
     Collider3D(ColType col, Point3D *p_position, Rot3D *p_rotation, float s_x, float s_y, float s_z, float off_x, float off_y, float off_z);
@@ -41,18 +41,24 @@ private:
     Vec3D acc;
     Rot3D rot;
     float rot_vel;
+    bool moveable;
+
+    float surface_friction;
+    float acc_friction;
     
     int id;
     Collider3D collider;
     std::vector<int> collided;       // when an object collides with another object, they can add some value to collided to know what they collided with 
 public:
     PhysicsObject3D();
-    PhysicsObject3D(float p_x, float p_y, float p_z);
+    PhysicsObject3D(float p_x, float p_y, float p_z, bool move = false, float f = 0);
 
     // getters
     Point3D getPos();
     Vec3D getVel();
     Rot3D getRot();
+    bool isMoveable();
+    float getSurfaceFriction();
     int getId();
     std::vector<int> getCollided();
 
@@ -61,13 +67,16 @@ public:
     void setVelocity(float x, float y, float z);
     void setRotation(float x, float y, float z, float a);
 
+    void setMoveable(bool move);
+    void setAccFriction(float f);
+
     void addBoxCollider(float s_x, float s_y, float s_z, float off_x, float off_y, float off_z);
     void addCubeCollider(float size, float off_x, float off_y, float off_z);
     void addSphereCollider(float size, float off_x, float off_y, float off_z);
 
     // modifiers
     void addAcceleration(float x, float y, float z);
-    void updatePhysics(float friction, float time);
+    void updatePhysics(float time, std::vector<PhysicsObject3D *> objs = {});
     
     void reflect(Vec3D ref_normal, float scale);
     
