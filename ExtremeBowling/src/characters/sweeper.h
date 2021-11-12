@@ -13,6 +13,7 @@ class Sweeper : public Enemy {
         Sweeper(float inX, float inY, float inZ);
 
         void animate();
+        // collision animation? 
 };
 
 #endif

@@ -46,3 +46,8 @@ void Boomba::animate()
     physics.addAcceleration(0.1, 0.1, 0.1); // is this enough to update the position?
     // Call update physics?
 }
+
+void Boomba::collisionAnimation()
+{
+    
+}

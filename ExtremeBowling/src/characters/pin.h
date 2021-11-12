@@ -1,4 +1,4 @@
-#include "physics_3D.h"
+#include "asset.h"
 
 #ifndef PIN_H
 #define PIN_H
@@ -8,17 +8,11 @@ Pins will spawn in certain areas of the map, and will not respawn unless
 the map is reset. 
 */
 
-class Pin {
-    private:
-        PhysicsObject3D powerUpPhysics;
-        // Mesh *pinMesh;
-        // Texture pinTexture;
+class Pin : public Asset {
     public:
-        float getX();
-        float getY();
-        float getZ();
+        Pin(float inX, float inY, float inZ);
 
-        void collisionAnimation(); // only call this when player collides 
+        void collisionAnimation();
 };
 
 #endif

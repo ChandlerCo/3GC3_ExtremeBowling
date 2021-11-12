@@ -16,6 +16,7 @@ class Boomba : public Enemy {
         Boomba(float inX, float inY, float inZ);
 
         void animate();
+        void collisionAnimation();
 };
 
 #endif
