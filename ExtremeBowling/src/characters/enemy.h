@@ -1,18 +1,22 @@
-#include "physics_3D.h"
+#include "asset.h"
 
 #ifndef ENEMY_H
 #define ENEMY_H
 
-class Enemy {
+class Enemy : public Asset {
     protected:
-        PhysicsObject3D enemyPhysics;
-        Point3D pos;
-        // Mesh here
-        // Texture here
+        // store initial position
+        float inX;
+        float inY;
+        float inZ;
     public:
 
-        void defaultMovement(); 
-        void collisionAnimation();
+        /* 
+        not sure if these need to be included here
+        no implementation in enemy.cpp
+        */
+        void animate(); 
+        void collisionAnimation(); 
 };
 
 #endif

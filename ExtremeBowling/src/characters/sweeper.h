@@ -9,8 +9,10 @@ will move the player off the map if the player collides with it.
 */
 
 class Sweeper : public Enemy {
-    Sweeper();
-    Sweeper(float inX, float inY, float inZ);
+    public:
+        Sweeper(float inX, float inY, float inZ);
+
+        void animate();
 };
 
 #endif
