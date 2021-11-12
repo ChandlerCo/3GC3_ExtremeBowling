@@ -1,3 +1,4 @@
+#include <iostream>
 #include "mathlib_3D.h"
 
 Dimension3::Dimension3()
@@ -101,7 +102,7 @@ Vec3D Vec3D::multiply(float scalar)
 
 Vec3D Vec3D::createVector(Point3D p_1, Point3D p_2)
 {
-    return Vec3D(p_2.x - p_1.x, p_2.y - p_1.y, , p_2.z - p_1.z);
+    return Vec3D(p_2.x - p_1.x, p_2.y - p_1.y, p_2.z - p_1.z);
 }
 
 Point3D Vec3D::movePoint(Point3D source)
@@ -127,41 +128,52 @@ Rot3D::Rot3D(float in_x, float in_y, float in_z, float in_a)
     axis = Vec3D(in_x, in_y, in_z);
 }
 
-void Rot3D::rot3D(Dimension3 *d)
+void Rot3D::rotate3D(Dimension3 *d)
 {
     // rotate about x axis until rotation vector is in x-z plane
     // find angle
     float theta_x = atan2(axis.y, axis.z);
 
     Vec3D rot = axis.clone();
-    rotVecAxisX(&rot, -theta_x);
-    rotVecAxisX(d, -theta_x);
+    rot3DAxisX(&rot, -theta_x);
+    rot3DAxisX(d, -theta_x);
+    //std::cout << d->x << " | " << d->y << " | " << d->z << std::endl;
 
     // rotate about y axis until rotation vector is on z axis
     // find angle
     float theta_y = atan2(rot.x, rot.z);
 
-    rotVecAxisY(d, -theta_y);
+    rot3DAxisY(d, -theta_y);
+    //std::cout << d->x << " | " << d->y << " | " << d->z << std::endl;
 
     // rotate vector by angle
-    rotVecAxisZ(d, angle);
-
+    rot3DAxisZ(d, angle);
+    //std::cout << d->x << " | " << d->y << " | " << d->z << std::endl;
     // reverse rotation about y axis
-    rotVecAxisY(d, theta_y);
-
+    rot3DAxisY(d, theta_y);
+    //std::cout << d->x << " | " << d->y << " | " << d->z << std::endl;
     // reverse rotation about x axis
-    rotVecAxisX(d, theta_x);
+    rot3DAxisX(d, theta_x);
 }
 
 void Rot3D::rot3DAxisX(Dimension3 *d, float rad)
 {
-    *d = Vec3D(v.x, cos(rad) * v.y - sin(rad) * v.z, v.y * sin(rad) + v.z * cos(rad));
+    float y = d->y;
+    float z = d->z;
+    d->y = cos(rad) * y - sin(rad) * z;
+    d->z = sin(rad) * y + cos(rad) * z;
 }
 void Rot3D::rot3DAxisY(Dimension3 *d, float rad)
 {
-    *d = Vec3D(cos(rad) * v.x + sin(rad) * v.z, v.y, -sin(rad) * v.x + cos(rad) * v.z);
+    float x = d->x;
+    float z = d->z;
+    d->x = cos(rad) * x + sin(rad) * z;
+    d->z = -sin(rad) * x + cos(rad) * z;
 }
 void Rot3D::rot3DAxisZ(Dimension3 *d, float rad)
 {
-    *d = Vec3D(cos(rad) * v.x - sin(rad) * v.y, sin(rad) * v.x + sin(rad) * v.y, v.z);
+    float x = d->x;
+    float y = d->y;
+    d->x = cos(rad) * x - sin(rad) * y;
+    d->y = sin(rad) * x + cos(rad) * y;
 }

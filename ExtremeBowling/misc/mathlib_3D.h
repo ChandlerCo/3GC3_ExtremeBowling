@@ -48,7 +48,7 @@ class Rot3D {
         Rot3D();
         Rot3D(float in_x, float in_y, float in_z, float in_a);
 
-        void rot3D(Dimension3 *d);
+        void rotate3D(Dimension3 *d);
 
         static void rot3DAxisX(Dimension3 *d, float rad);
         static void rot3DAxisY(Dimension3 *d, float rad);
