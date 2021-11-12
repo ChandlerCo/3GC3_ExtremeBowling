@@ -1,4 +1,5 @@
 #include "../misc/physics_3D.h"
+#include "../misc/objLoader.h"
 
 #ifndef ASSET_H
 #define ASSET_H

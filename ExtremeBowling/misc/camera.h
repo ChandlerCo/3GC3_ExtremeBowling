@@ -10,8 +10,8 @@ class Camera {
 
     public:
         Camera(float startDistance);
-        void orbitVertical(bool direction); 
-        void orbitHorizontal(bool direction);
+        void orbitVertical(int amount); 
+        void orbitHorizontal(int amount);
         void changeDistance(bool direction);
         void translate(float x, float y, float z); //input translation distance
 

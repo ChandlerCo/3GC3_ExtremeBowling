@@ -1,11 +1,13 @@
 #include "ioFuncs.h"
-
-
+#include "characters/ball.h"
+#include "misc/camera.h"
 
 int refreshRate;
 int windowX;
 int windowY;
 bool pauseStatus;
+
+Ball ball(0,0,0);
 Camera ballCam(100);
 
 

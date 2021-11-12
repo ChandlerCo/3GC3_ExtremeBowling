@@ -2,7 +2,7 @@
 #include <cmath>
 
 Camera::Camera(float startDistance){
-    this->speed = 20;
+    this->speed = 1;
     this->distance = startDistance;
     for(int i = 0; i < 3; i++){
         this->centre[i] = 0;
@@ -28,17 +28,17 @@ void Camera::changeDistance(bool direction){
     updatePosition();
 }
 
-void Camera::orbitVertical(bool direction){
-    if(!direction && theta < M_PI/2){
-        this->theta += M_PI*this->speed/1000;
+void Camera::orbitVertical(int amount){
+    if(amount > 0 && theta < M_PI/2){
+        this->theta += M_PI*amount*this->speed/1000;
         updatePosition();
-    } else if(direction && theta > M_PI/16){
-        this->theta -= M_PI*this->speed/1000;
+    } else if(amount < 0 && theta > M_PI/16){
+        this->theta -= M_PI*amount*this->speed/1000;
         updatePosition();
     }
 }
 
-void Camera::orbitHorizontal(bool direction){
+void Camera::orbitHorizontal(int direction){
     if(direction){
         this->phi += M_PI*this->speed/1000;
     } else{
