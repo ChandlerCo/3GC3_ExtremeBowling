@@ -3,6 +3,7 @@
 
 #include <math.h> 
 #include <iostream>
+#include <vector>
 
 #include "mathlib_3D.h"
 
@@ -26,8 +27,8 @@ public:
     Point3D calculatePos();
     Vec3D collision(Collider3D col);
 private:
-    static bool collisionSpherePoint(Point3D sph_p, float rad, Point3D p);
-    static Vec3D collisionBoxPoint(Collider3D box, Point3D box_p, Point3D old_bp, Point3D p, Point3D old_p);
+    //static bool collisionSpherePoint(Point3D sph_p, float rad, Point3D p);
+    //static Vec3D collisionBoxPoint(Collider3D box, Point3D box_p, Point3D old_bp, Point3D p, Point3D old_p);
     static Vec3D collisionBoxBox(Collider3D box_1, Collider3D box_2);
     static Vec3D collisionBoxSphere(Collider3D box, Collider3D sph);
     static Vec3D collisionSphereSphere(Collider3D sph_1, Collider3D sph_2);
@@ -42,8 +43,8 @@ private:
     float rot_vel;
     
     int id;
-    Collider collider;
-    vector<int> collided;       // when an object collides with another object, they can add some value to collided to know what they collided with 
+    Collider3D collider;
+    std::vector<int> collided;       // when an object collides with another object, they can add some value to collided to know what they collided with 
 public:
     PhysicsObject3D();
     PhysicsObject3D(float p_x, float p_y, float p_z);
@@ -53,7 +54,7 @@ public:
     Vec3D getVel();
     Rot3D getRot();
     int getId();
-    vector<int> getCollided();
+    std::vector<int> getCollided();
 
     // setters
     void setId(int object_id);
@@ -70,8 +71,8 @@ public:
     
     void reflect(Vec3D ref_normal, float scale);
     
-    void collision(PhysicsObject3D *otherObj);
-    void collisionImmovable(PhysicsObject3D otherObj);
+    void collision(PhysicsObject3D *other_obj);
+    void collisionImmovable(PhysicsObject3D other_obj);
     void addCollided(int id);
 };
 
