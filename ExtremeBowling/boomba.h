@@ -1,4 +1,4 @@
-#include "physics_3D.h"
+#include "enemy.h"
 
 #ifndef BOOMBA_H
 #define BOOMBA_H
@@ -11,18 +11,9 @@ move for a certain amount of time after colliding with a Boomba, or we could hav
 the player bounce off of the Boomba and lose pins, or a life.
 */
 
-class Boomba {
-    private:
-        PhysicsObject3D boombaPhysics;
-        // Mesh *boombaMesh;
-        // Texture boombaTexture;
-    public:
-        float getX();
-        float getY();
-        float getZ();
-
-        void defaultMovement(); // random, slow movement, should not move off map by itself, avoid powerups?
-        void collisionAnimation(); // will depend on if player has invisible powerup or not
+class Boomba : public Enemy {
+    Boomba();
+    Boomba(float inX, float inY, float inZ);
 };
 
 #endif
