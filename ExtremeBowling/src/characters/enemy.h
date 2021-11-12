@@ -10,7 +10,6 @@ class Enemy {
         // Mesh here
         // Texture here
     public:
-        float getPos();
 
         void defaultMovement(); 
         void collisionAnimation();

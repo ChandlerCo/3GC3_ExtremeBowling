@@ -1,3 +1,6 @@
+#ifndef CAMERA_H
+#define CAMERA_H
+
 class Camera {
     private:
         float speed;
@@ -19,3 +22,5 @@ class Camera {
         float getY();
         float getZ();
 };
+
+#endif

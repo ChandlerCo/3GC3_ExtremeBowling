@@ -8,7 +8,6 @@
 #  include <GL/freeglut.h>
 #endif
 
-#include "misc/camera.h"
 
 void keyboard(unsigned char key, int _x, int _y);
 void keyboard(unsigned char key, int _x, int _y);
