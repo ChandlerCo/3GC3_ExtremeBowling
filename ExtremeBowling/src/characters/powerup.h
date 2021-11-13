@@ -18,10 +18,11 @@ class PowerUp : public Asset {
         - become "invisible" */
         std::string type[4]; // do we need to store types as strings?
     public:
-        PowerUp(float inX, float inY, float inZ);
+        // PowerUp(float inX, float inY, float inZ);
         void defaultAnimation(); // can have box slowly rotate or hover up and down
         void collisionAnimation(); // only call this when player collides
         void powerUpType(); // will let player class know which type of power up to apply
+        using Asset::Asset;
 };
 
 #endif

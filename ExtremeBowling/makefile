@@ -6,7 +6,24 @@
 #changing platform dependant stuff, do not change this
 # Linux (default)
 
-PROGRAM_NAME := "ExtremeBowling"
+PROGRAM_NAME = "ExtremeBowling"
+EXEEXT=
+
+TARGET_EXEC ?= a.out
+
+BUILD_DIR ?= ./build
+SRC_DIRS ?= ./src
+
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
+
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -g -Wall -std=c++11 
+
+LDFLAGS = -lGL -lGLU -ldl -lm -lglut -lstdc++ 
 
 # Windows (cygwin)
 ifeq "$(OS)" "Windows_NT"
@@ -21,35 +38,20 @@ else
 	endif
 endif
 
-
-LDFLAGS = -lGL -lGLU -ldl -lm -lglut -lstdc++ 
-CXXFLAGS=-g -Wall -std=c++11 
-CCX=g++
-EXEEXT=
-RM=rm
-
-TARGET_EXEC ?= a.out
-
-BUILD_DIR ?= ./build
-SRC_DIRS ?= ./src
-
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
-OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
-DEPS := $(OBJS:.o=.d)
-
-INC_DIRS := $(shell find $(SRC_DIRS) -type d)
-INC_FLAGS := $(addprefix -I,$(INC_DIRS))
-
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
-
-$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $@ $^ $(CFLAGS) $(LDFLAGS)
-
+$(BUILD_DIR)/$(PROGRAM_NAME)$(EXEEXT): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 # c++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@ 
+
+
+
+.PHONY: run
+run: 
+	$(BUILD_DIR)/$(PROGRAM_NAME)$(EXEEXT)
+
 
 
 .PHONY: clean
@@ -60,9 +62,4 @@ clean:
 -include $(DEPS)
 
 MKDIR_P ?= mkdir -p
-
-run: $(PROGRAM_NAME)
-	./$(PROGRAM_NAME)$(EXEEXT)
-
-
 

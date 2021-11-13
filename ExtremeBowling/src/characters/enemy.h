@@ -9,6 +9,8 @@ class Enemy : public Asset {
         float inX;
         float inY;
         float inZ;
+    public:
+        using Asset::Asset;
 };
 
 #endif

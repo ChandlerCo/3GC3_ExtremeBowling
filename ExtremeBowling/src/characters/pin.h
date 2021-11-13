@@ -10,9 +10,10 @@ the map is reset.
 
 class Pin : public Asset {
     public:
-        Pin(float inX, float inY, float inZ);
+        // Pin(float inX, float inY, float inZ);
 
         void collisionAnimation();
+        using Asset::Asset;
 };
 
 #endif

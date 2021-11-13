@@ -1,4 +1,5 @@
 #include "camera.h"
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 Camera::Camera(float startDistance){
@@ -38,11 +39,11 @@ void Camera::orbitVertical(int amount){
     }
 }
 
-void Camera::orbitHorizontal(int direction){
-    if(direction){
-        this->phi += M_PI*this->speed/1000;
-    } else{
-        this->phi -= M_PI*this->speed/1000;
+void Camera::orbitHorizontal(int amount){
+    if(amount > 0){
+        this->phi += M_PI*amount*this->speed/1000;
+    } else if (amount < 0){
+        this->phi -= M_PI*amount*this->speed/1000;
     }
     this->updatePosition();
 

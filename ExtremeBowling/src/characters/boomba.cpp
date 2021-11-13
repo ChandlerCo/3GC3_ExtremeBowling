@@ -1,14 +1,14 @@
 #include "boomba.h"
 
-Boomba::Boomba(float inX, float inY, float inZ)
-{
-    this->physics = PhysicsObject3D(inX, inY, inZ);
+// Boomba::Boomba(float inX, float inY, float inZ)
+// {
+//     this->physics = PhysicsObject3D(inX, inY, inZ);
 
-    // initial position
-    this->inX = inX;
-    this->inY = inY;
-    this->inZ = inZ;
-}
+//     // initial position
+//     this->inX = inX;
+//     this->inY = inY;
+//     this->inZ = inZ;
+// }
 
 void Boomba::animate()
 {
