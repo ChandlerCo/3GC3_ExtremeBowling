@@ -77,7 +77,7 @@ public:
 
     // modifiers
     void addAcceleration(float x, float y, float z);
-    void updatePhysics(float time, std::vector<PhysicsObject3D *> objs = {});
+    void updatePhysics(float time, bool gravity, std::vector<PhysicsObject3D *> objs = {});
     
     void reflect(Vec3D ref_normal, float scale);
     

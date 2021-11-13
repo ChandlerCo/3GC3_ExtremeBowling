@@ -34,6 +34,36 @@ float Asset::getZ(){
     return this->physics.getPos().z;
 }
 
+Rot3D getRot()
+{
+    return this->rot;
+}
+
+void Asset::position(float x, float y, float z)
+{
+    this->physics.setPosition(x, y, z);
+}
+
+void Asset::velocity(float x, float y, float z)
+{
+    this->physics.setVelocity(x, y, z);
+}
+
+void Asset::accelerate(float x, float y, float z)
+{
+    this->physics.addAcceleration(x, y, z);
+}
+
+void Asset::runPhysics(float time, vector<PhysicsObject3D *> objs = {})
+{
+    this->physics.updatePhysics(time, objs);
+}
+
+PhysicsObject3D * Asset::getPhysicsPointer()
+{
+    return &this->physics;
+}
+
 // Load the obj file
 bool Asset::loadObj(const char* filename)
 {

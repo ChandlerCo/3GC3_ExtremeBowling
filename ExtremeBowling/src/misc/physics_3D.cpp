@@ -1,6 +1,6 @@
 #include "physics_3D.h"
 
-#define GRAVITY 9.81
+#define GRAVITY (-9.81)
 #define MAX_SPD 1000
 #define ZERO 0.0000001
 
@@ -368,7 +368,7 @@ void PhysicsObject3D::addAcceleration(float x, float y, float z)
 // updatePhysics
 // friction: applies a friction force slowing down the object. set to 0 if not wanted
 // time: time passed since last call in ms
-void PhysicsObject3D::updatePhysics(float time, std::vector<PhysicsObject3D *> objs)
+void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<PhysicsObject3D *> objs)
 {
     time = time / 1000;     // convert to seconds
 
@@ -380,6 +380,9 @@ void PhysicsObject3D::updatePhysics(float time, std::vector<PhysicsObject3D *> o
     acc_friction = 0;
 
     // --------------------------- kinematics ------------------------------------
+    if (gravity)    // add gravity
+        acc.addVec(0, GRAVITY, 0);
+
     vel = vel.addVec(acc.multiply(time));    // add acc to vel
 
     // apply speed limit to avoid objects passing through each other when moving at high speed
@@ -405,7 +408,7 @@ void PhysicsObject3D::updatePhysics(float time, std::vector<PhysicsObject3D *> o
 
     // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
     // create floor
-    PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -10, pos.z);     // create a floor object directly below object
+    PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -5, pos.z);      // create a floor object directly below object
     the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at -5
     collisionImmovable(the_floor);
 }
