@@ -18,7 +18,7 @@ class Asset {
 
         std::vector <unsigned int> vtxIndices, texIndices, nIndices;
         std::vector <Point3D> tempVertices; //Mesh
-        //std::vector <Point3D> tempUV; // Textures 
+        std::vector <Point3D> tempUV; // Textures 
         std::vector <Vec3D> tempNormals; // Normals
 
         bool loadObj(const char* filename);
