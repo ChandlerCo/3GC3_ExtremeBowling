@@ -1,4 +1,5 @@
 #include "ioFuncs.h"
+#include "characters/asset.h"
 #include "characters/ball.h"
 #include "misc/camera.h"
 
@@ -9,6 +10,7 @@ bool pauseStatus;
 
 Ball ball(0,0,0);
 Camera ballCam(100);
+
 
 
 
