@@ -34,9 +34,9 @@ float Asset::getZ(){
     return this->physics.getPos().z;
 }
 
-Rot3D getRot()
+Rot3D Asset::getRot()
 {
-    return this->rot;
+    return this->physics.getRot();
 }
 
 void Asset::position(float x, float y, float z)
@@ -54,9 +54,9 @@ void Asset::accelerate(float x, float y, float z)
     this->physics.addAcceleration(x, y, z);
 }
 
-void Asset::runPhysics(float time, vector<PhysicsObject3D *> objs = {})
+void Asset::runPhysics(float time, bool gravity, vector<PhysicsObject3D *> objs)
 {
-    this->physics.updatePhysics(time, objs);
+    this->physics.updatePhysics(time, gravity, objs);
 }
 
 PhysicsObject3D * Asset::getPhysicsPointer()

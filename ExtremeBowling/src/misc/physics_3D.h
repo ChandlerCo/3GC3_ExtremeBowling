@@ -9,7 +9,8 @@
 
 enum class ColType {
     box, 
-    sphere
+    sphere,
+    none
 };
 
 class Collider3D {

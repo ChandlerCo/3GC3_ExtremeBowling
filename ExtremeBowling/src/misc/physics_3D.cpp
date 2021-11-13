@@ -1,12 +1,12 @@
 #include "physics_3D.h"
 
-#define GRAVITY (-9.81)
+#define GRAVITY (-9.81f)
 #define MAX_SPD 1000
 #define ZERO 0.0000001
 
 Collider3D::Collider3D()
 {
-    collider_type = ColType::sphere;
+    collider_type = ColType::none;
     p_pos = NULL;
     p_rot = NULL;
     size_x = 0;
@@ -381,7 +381,7 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<Physic
 
     // --------------------------- kinematics ------------------------------------
     if (gravity)    // add gravity
-        acc.addVec(0, GRAVITY, 0);
+        acc = acc.addVec(Vec3D(0.0f, GRAVITY, 0.0f));
 
     vel = vel.addVec(acc.multiply(time));    // add acc to vel
 
@@ -396,21 +396,24 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<Physic
     acc = Vec3D();
 
     // ------------------------ collisions with other objects -------------------------
-    for (std::vector<PhysicsObject3D *>::iterator it = objs.begin(); it < objs.end(); it++)
+    if (collider.collider_type != ColType::none)
     {
-        if (!moveable && (*it)->isMoveable())      // if this object is immovable but the other object is
-            (*it)->collisionImmovable(*this);
-        else if (moveable && !(*it)->isMoveable()) // if this object is movable and other object is immovable
-            collisionImmovable(**it);
-        else if (moveable && (*it)->isMoveable())  // if both objects are movable
-            collision(*it);
-    }
+        for (std::vector<PhysicsObject3D *>::iterator it = objs.begin(); it < objs.end(); it++)
+        {
+            if (!moveable && (*it)->isMoveable())      // if this object is immovable but the other object is
+                (*it)->collisionImmovable(*this);
+            else if (moveable && !(*it)->isMoveable()) // if this object is movable and other object is immovable
+                collisionImmovable(**it);
+            else if (moveable && (*it)->isMoveable())  // if both objects are movable
+                collision(*it);
+        }
 
-    // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
-    // create floor
-    PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -5, pos.z);      // create a floor object directly below object
-    the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at -5
-    collisionImmovable(the_floor);
+        // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
+        // create floor
+        PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -5, pos.z);      // create a floor object directly below object
+        the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at 0
+        collisionImmovable(the_floor);
+    }
 }
 
 void PhysicsObject3D::reflect(Vec3D ref_normal, float scale)

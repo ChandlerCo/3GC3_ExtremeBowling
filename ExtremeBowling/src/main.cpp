@@ -13,23 +13,27 @@
 #ifndef MAIN
 #define MAIN
 
+#include <chrono> // for more accurate time checking
 
 // #include "ioFuncs.h"
 #include "characters/ball.h"
 #include "misc/camera.h"
 
 using namespace std;
+using namespace std::chrono;
 
 int refreshRate;
 int windowX;
 int windowY;
 bool pauseStatus;
 
-Ball ball(0,30,0);
+Ball ball(0, 30, 0, 8);
 Camera ballCam(100);
 
 int prevX;
 int prevY;
+
+int time_past;
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
@@ -89,10 +93,17 @@ void special(int key, int x, int y){
 
 
 void FPS (int val){
-  glutPostRedisplay();
-
     //any code here
-  glutTimerFunc(1000/refreshRate, FPS, 0);
+	int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    int d_time = time_current - time_past;
+    time_past = time_current; 
+	
+	ball.runPhysics(min(d_time, 33));
+
+	glutPostRedisplay();
+
+	d_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - time_past;
+  	glutTimerFunc(1000/refreshRate - d_time, FPS, 0);
 
 }
 
@@ -104,8 +115,8 @@ void display(void)
 	glLoadIdentity();
 	
 	gluLookAt(
-        ballCam.getX(),    ballCam.getY(),    ballCam.getZ(),
-        0, 0, 0, // need to replace with ball location
+        ballCam.getX(),	ballCam.getY(),	ballCam.getZ(),
+        ball.getX(),	ball.getY(),	ball.getZ(), // need to replace with ball location
         0,1,0
     );
 
@@ -119,7 +130,7 @@ void display(void)
 
 
     glPushMatrix();
-        glTranslatef(0,ball.getY(),0);
+        glTranslatef(ball.getX(),ball.getY(),ball.getZ());
         glutSolidSphere(8,20,20);
     glPopMatrix();
 
@@ -135,6 +146,7 @@ void init(){
     refreshRate = 60;
     // ball.loadObj("../src/objects/boomba.obj");
 
+	time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
 void handleReshape(int w, int h) {
