@@ -13,7 +13,6 @@
 
 
 
-
 Asset::Asset(float startX, float startY, float startZ){
     this->physics = PhysicsObject3D( startX, startY, startZ);
 

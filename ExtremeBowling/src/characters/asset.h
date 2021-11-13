@@ -10,6 +10,7 @@ class Asset {
         PhysicsObject3D physics;
 
     public:
+        Asset();
         Asset(float startX, float startY, float startZ);
         float getX();
         float getY();
