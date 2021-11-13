@@ -323,7 +323,7 @@ void PhysicsObject3D::setId(int object_id)
 
 void PhysicsObject3D::setPosition(float x, float y, float z)
 {
-    pos = Pos3D(x, y ,z);
+    pos = Point3D(x, y ,z);
 }
 
 void PhysicsObject3D::setVelocity(float x, float y, float z)
