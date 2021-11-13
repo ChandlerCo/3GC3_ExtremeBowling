@@ -23,10 +23,11 @@ endif
 
 
 LDFLAGS = -lGL -lGLU -ldl -lm -lglut -lstdc++ 
-CXXFLAGS=-g -Wall -std=c++11 
+CXXFLAGS=
 CCX=g++
 EXEEXT=
 RM=rm
+
 
 TARGET_EXEC ?= a.out
 
@@ -40,16 +41,15 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -g -Wall -std=c++11  
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $@ $^ $(CFLAGS) $(LDFLAGS)
-
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 # c++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@ -lGL -lGLU -ldl -lm -lglut -lstdc++ 
 
 
 .PHONY: clean
@@ -60,9 +60,4 @@ clean:
 -include $(DEPS)
 
 MKDIR_P ?= mkdir -p
-
-run: $(PROGRAM_NAME)
-	./$(PROGRAM_NAME)$(EXEEXT)
-
-
 

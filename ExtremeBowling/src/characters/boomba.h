@@ -13,10 +13,11 @@ the player bounce off of the Boomba and lose pins, or a life.
 
 class Boomba : public Enemy {
     public:
-        Boomba(float inX, float inY, float inZ);
+        // Boomba(float inX, float inY, float inZ);
 
         void animate();
         void collisionAnimation();
+        using Enemy::Enemy;
 };
 
 #endif

@@ -1,16 +1,91 @@
-#include "ioFuncs.h"
+#ifdef __APPLE__
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
+#  include <GLUT/glut.h>
+#else
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+#  include <GL/freeglut.h>
+#endif
+
+
+
+#ifndef MAIN
+#define MAIN
+
+
+// #include "ioFuncs.h"
 #include "characters/ball.h"
 #include "misc/camera.h"
+
+using namespace std;
 
 int refreshRate;
 int windowX;
 int windowY;
 bool pauseStatus;
 
-Ball ball(0,0,0);
+Ball ball(0,30,0);
 Camera ballCam(100);
 
+int prevX;
+int prevY;
 
+void keyboard(unsigned char key, int _x, int _y) {
+    // if (key == 'q') {
+    //     exit(0);
+    // }
+
+	if (key  == ' '){
+		pauseStatus = !pauseStatus;
+	}
+}
+
+void mouse(int button, int state, int x, int y){
+	//mouse left click-jump
+}
+
+void motion(int x, int y){
+	//pan camera
+}
+
+void passive(int x, int y){
+	if(!pauseStatus){
+		ballCam.orbitHorizontal(x - prevX);
+		ballCam.orbitVertical(y - prevY);
+
+		prevX = x;
+		prevY = y;
+
+	}
+}
+
+
+
+
+void special(int key, int x, int y){
+	if(!pauseStatus){
+		Vec3D forwardVec(ball.getX() - ballCam.getX(),ball.getY() - ballCam.getY(),ball.getZ() - ballCam.getZ());
+		forwardVec.normalize().multiply(10);
+
+		if (key == GLUT_KEY_UP){
+			ball.accelerate(forwardVec.x, forwardVec.y, forwardVec.z);
+		}
+		
+		if (key == GLUT_KEY_DOWN){
+			ball.accelerate(-forwardVec.x, -forwardVec.y, forwardVec.z);
+		}
+
+		if (key == GLUT_KEY_RIGHT){
+			ball.accelerate(forwardVec.y, -forwardVec.x, forwardVec.z);
+		}
+
+		if (key == GLUT_KEY_LEFT){
+			ball.accelerate(-forwardVec.y, forwardVec.x, forwardVec.z);
+		}
+
+	}
+}
 
 
 void FPS (int val){
@@ -36,8 +111,18 @@ void display(void)
 
 
     //graphics objects here
-    glColor3b(1,1,1);
-	glutSolidSphere(10,20,20);
+    glColor3f(1,1,1);
+	glPushMatrix();
+        glTranslatef(20,0,0);
+        glutSolidCube(5);
+    glPopMatrix();
+
+
+    glPushMatrix();
+        glTranslatef(0,ball.getY(),0);
+        glutSolidSphere(8,20,20);
+    glPopMatrix();
+
 
 	glutSwapBuffers();
 
@@ -48,6 +133,7 @@ void init(){
     windowX = 800;
     windowY = 800;
     refreshRate = 60;
+    // ball.loadObj("../src/objects/boomba.obj");
 
 }
 
@@ -95,3 +181,7 @@ int main(int argc, char** argv)
 
 	return 0;					
 }
+
+
+
+#endif
