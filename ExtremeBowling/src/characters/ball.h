@@ -5,8 +5,11 @@
 
 class Ball : public Asset{
     public:
-        void accelerate(float x, float y, float z);
+        Ball(float x, float y, float z, float radius);
+        void runPhysics(float time);
         using Asset::Asset;
+    private:
+        vector<PhysicsObject3D *> scene_objs;
 };
 
 #endif

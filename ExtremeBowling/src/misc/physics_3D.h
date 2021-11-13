@@ -9,7 +9,8 @@
 
 enum class ColType {
     box, 
-    sphere
+    sphere,
+    none
 };
 
 class Collider3D {
@@ -64,6 +65,7 @@ public:
 
     // setters
     void setId(int object_id);
+    void setPosition(float x, float y, float z);
     void setVelocity(float x, float y, float z);
     void setRotation(float x, float y, float z, float a);
 
@@ -76,7 +78,7 @@ public:
 
     // modifiers
     void addAcceleration(float x, float y, float z);
-    void updatePhysics(float time, std::vector<PhysicsObject3D *> objs = {});
+    void updatePhysics(float time, bool gravity, std::vector<PhysicsObject3D *> objs = {});
     
     void reflect(Vec3D ref_normal, float scale);
     
