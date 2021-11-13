@@ -321,6 +321,11 @@ void PhysicsObject3D::setId(int object_id)
     id = object_id;
 }
 
+void PhysicsObject3D::setPosition(float x, float y, float z)
+{
+    pos = Pos3D(x, y ,z);
+}
+
 void PhysicsObject3D::setVelocity(float x, float y, float z)
 {
     vel = Vec3D(x, y ,z);

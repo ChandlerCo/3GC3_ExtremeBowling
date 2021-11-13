@@ -64,6 +64,7 @@ public:
 
     // setters
     void setId(int object_id);
+    void setPosition(float x, float y, float z);
     void setVelocity(float x, float y, float z);
     void setRotation(float x, float y, float z, float a);
 
