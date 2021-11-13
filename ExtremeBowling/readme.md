@@ -15,22 +15,22 @@ display
 
 To Do:
     Chandler
-        Physics should be workable
-            for now floor infinite and at y =0
+        make sure the ball can move
+        make a floor/plane
 
     Joseph:
-        getter for position
-            done through physics class
-        
-        //sweeper moves forwards and backwards
-        //boomba moves left and right
+        make a vector of <Enemy> with random spawn points - in the init function
+        in FPS function
+            update enemy position by calling animate() method for enemies
+                figure out how to overide in subclass
+
+        do animations in character class
     
     Sarvin:
-        load objects into glut through character method and or GLUT commands in main
+        get display in main working
 
         
     
     Thomas:
-        ball
-            get position
-            set acceleration
+        fix the camera
+        
