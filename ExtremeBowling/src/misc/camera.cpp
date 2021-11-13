@@ -1,4 +1,5 @@
 #include "camera.h"
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 Camera::Camera(float startDistance){

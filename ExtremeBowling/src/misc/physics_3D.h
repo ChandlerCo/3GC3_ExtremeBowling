@@ -1,7 +1,8 @@
 #ifndef PHYSICS_3D_H
 #define PHYSICS_3D_H
 
-#include <math.h> 
+#define _USE_MATH_DEFINES
+#include <cmath> 
 #include <iostream>
 #include <vector>
 
