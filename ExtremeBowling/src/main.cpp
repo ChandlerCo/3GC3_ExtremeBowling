@@ -71,23 +71,24 @@ void passive(int x, int y){
 
 void special(int key, int x, int y){
 	if(!pauseStatus){
-		Vec3D forwardVec(ball.getX() - ballCam.getX(),ball.getY() - ballCam.getY(),ball.getZ() - ballCam.getZ());
-		forwardVec.normalize().multiply(10);
+		Vec3D forward(ball.getX() - ballCam.getX(),0,ball.getZ() - ballCam.getZ());
+		forward = forward.normalize().multiply(10);
+		Vec3D sideways = forward.crossProd(Vec3D(0, 1, 0)).normalize().multiply(10);
 
 		if (key == GLUT_KEY_UP){
-			ball.accelerate(forwardVec.x, forwardVec.y, forwardVec.z);
+			ball.accelerate(forward.x, 0, forward.z);
 		}
 		
 		if (key == GLUT_KEY_DOWN){
-			ball.accelerate(-forwardVec.x, -forwardVec.y, forwardVec.z);
+			ball.accelerate(-forward.x, 0, -forward.z);
 		}
 
 		if (key == GLUT_KEY_RIGHT){
-			ball.accelerate(forwardVec.y, -forwardVec.x, forwardVec.z);
+			ball.accelerate(sideways.x, 0, sideways.z);
 		}
 
 		if (key == GLUT_KEY_LEFT){
-			ball.accelerate(-forwardVec.y, forwardVec.x, forwardVec.z);
+			ball.accelerate(-sideways.x, 0, -sideways.z);
 		}
 
 	}
