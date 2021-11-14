@@ -1,27 +1,15 @@
-#please use 'make clean' to clean the directory of intermediate build files and the executable
-#simply typing 'make' will compile all source code files to object files .o, and then link all
-#object files into an executable
-#we are using a lot of makefile macros
-
-#changing platform dependant stuff, do not change this
-# Linux (default)
-
-PROGRAM_NAME = "ExtremeBowling"
-EXEEXT=
-
-TARGET_EXEC ?= a.out
+PROGRAM_NAME = ExtremeBowling
 
 BUILD_DIR ?= ./build
 SRC_DIRS ?= ./src
 
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
-DEPS := $(OBJS:.o=.d)
 
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
-INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+INC_FLAGS := $(addprefix -I ,$(INC_DIRS))
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -g -Wall -std=c++11 
+CXXFLAGS ?= $(INC_FLAGS) -g -Wall -std=c++11 
 
 LDFLAGS = -lGL -lGLU -ldl -lm -lglut -lstdc++ 
 
@@ -38,19 +26,17 @@ else
 	endif
 endif
 
-$(BUILD_DIR)/$(PROGRAM_NAME)$(EXEEXT): $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+run: $(PROGRAM_NAME)
+	./$(PROGRAM_NAME)$(EXEEXT)
+
+$(PROGRAM_NAME): $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
 # c++ source
-$(BUILD_DIR)/%.cpp.o: %.cpp
+ $(BUILD_DIR)/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@ 
+	$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
-
-
-.PHONY: run
-run: 
-	$(BUILD_DIR)/$(PROGRAM_NAME)$(EXEEXT)
 
 
 
@@ -59,7 +45,7 @@ run:
 clean:
 	$(RM) -r $(BUILD_DIR)
 
--include $(DEPS)
+
 
 MKDIR_P ?= mkdir -p
 
