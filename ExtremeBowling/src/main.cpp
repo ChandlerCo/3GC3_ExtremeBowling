@@ -1,4 +1,5 @@
 #ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
 #  include <OpenGL/gl.h>
 #  include <OpenGL/glu.h>
 #  include <GLUT/glut.h>
@@ -129,7 +130,9 @@ void displayAsset(string name)
 			Point3D v = ll[name].tempVertices[ll[name].vtxIndices[i] - 1];
 			glVertex3f(v.x, v.y, v.z);
 
-			// textures will go here
+			// textures
+			Point3D t = ll[name].tempUV[ll[name].texIndices[i] - 1];
+			glVertex3f(t.x, t.y, t.z);
 
 			// normals
 			Vec3D n = ll[name].tempNormals[ll[name].nIndices[i]-1];
@@ -151,9 +154,9 @@ void display(void)
         0,1,0
     );
 	
-	loadAsset("../src/objects/powerup.obj", "powerup");
-	displayAsset("powerup");
-    //graphics objects here
+	
+	displayAsset("ball");
+
     glColor3f(1,1,1);
 	glPushMatrix();
         glTranslatef(20,0,0);
@@ -176,6 +179,10 @@ void init(){
     windowX = 800;
     windowY = 800;
     refreshRate = 60;
+	loadAsset("src/objects/ball.obj", "ball");
+	loadAsset("src/objects/powerup.obj", "powerup");
+	loadAsset("src/objects/boomba.obj", "boomba");
+	loadAsset("src/objects/pin.obj", "pin");
     // ball.loadObj("../src/objects/boomba.obj");
 
 	time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
