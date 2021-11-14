@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-#include "ioFuncs.h"
-#include "characters/asset.h"
-=======
 #ifdef __APPLE__
 #  include <OpenGL/gl.h>
 #  include <OpenGL/glu.h>
@@ -18,9 +14,9 @@
 #define MAIN
 
 #include <chrono> // for more accurate time checking
+#include <map>
 
 // #include "ioFuncs.h"
->>>>>>> 39bb3b293d46a30602aa29bd965984a013fb78b8
 #include "characters/ball.h"
 #include "misc/camera.h"
 
@@ -31,6 +27,7 @@ int refreshRate;
 int windowX;
 int windowY;
 bool pauseStatus;
+map<string, Asset> ll; // dictionary of characters
 
 Ball ball(0, 30, 0, 8);
 Camera ballCam(100);
@@ -70,12 +67,6 @@ void passive(int x, int y){
 }
 
 
-<<<<<<< HEAD
-
-void FPS (int val){
-  glutPostRedisplay();
-=======
->>>>>>> 39bb3b293d46a30602aa29bd965984a013fb78b8
 
 
 void special(int key, int x, int y){
@@ -117,8 +108,37 @@ void FPS (int val){
   	glutTimerFunc(1000/refreshRate - d_time, FPS, 0);
 
 }
+void loadAsset(const char* filename, string name)
+{
+	Asset character;
+	character = Asset();
+	character.loadObj(filename);
+	ll[name] = character; 
+}
 
+// sets the normals and builds the character based on mesh info
+void displayAsset(string name)
+{
+	
+	glPushMatrix();
+		glBegin(GL_TRIANGLES);
+		int size = ll[name].vtxIndices.size();
+		// render each triangle
+		for (int i = 0; i < size ; i++) {
+			// vertices
+			Point3D v = ll[name].tempVertices[ll[name].vtxIndices[i] - 1];
+			glVertex3f(v.x, v.y, v.z);
 
+			// textures will go here
+
+			// normals
+			Vec3D n = ll[name].tempNormals[ll[name].nIndices[i]-1];
+			glNormal3f(n.x, n.y, n.z);
+		}
+		glEnd();
+	glPopMatrix();
+
+}
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -130,8 +150,8 @@ void display(void)
         ball.getX(),	ball.getY(),	ball.getZ(), // need to replace with ball location
         0,1,0
     );
-
-
+	loadAsset("../src/objects/powerup.obj", "powerup");
+	displayAsset("powerup");
     //graphics objects here
     glColor3f(1,1,1);
 	glPushMatrix();
