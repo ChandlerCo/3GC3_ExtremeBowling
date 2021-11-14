@@ -101,8 +101,10 @@ void FPS (int val){
     time_past = time_current; 
 
 	ball.runPhysics(min(d_time, 33));
+	ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
 
 	glutPostRedisplay();
+	
 
 	d_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - time_past;
   	glutTimerFunc(1000/refreshRate - d_time, FPS, 0);
@@ -166,7 +168,7 @@ void display(void)
     );
 	
 
-	displayAsset("powerup");
+	// displayAsset("powerup");
 
     //graphics objects here
     glColor3f(1,1,1);
@@ -181,6 +183,15 @@ void display(void)
         glutSolidSphere(8,20,20);
     glPopMatrix();
 
+	glColor3f(1,0,0);
+	glPushMatrix();
+		glBegin(GL_POLYGON);
+			glVertex3f(200,0,200);
+			glVertex3f(200,0,-200);
+			glVertex3f(-200,0,-200);
+			glVertex3f(-200,0,200);
+		glEnd();
+	glPopMatrix();
 
 	glutSwapBuffers();
 

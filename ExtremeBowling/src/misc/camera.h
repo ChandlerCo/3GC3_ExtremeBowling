@@ -3,7 +3,7 @@
 
 class Camera {
     private:
-        float speed;
+        float sensitivity;
         float distance;
         float centre[3];
         float position[3];
@@ -17,6 +17,7 @@ class Camera {
         void orbitHorizontal(int amount);
         void changeDistance(bool direction);
         void translate(float x, float y, float z); //input translation distance
+        void changePosition(float x, float y, float z);
 
         float getX();
         float getY();

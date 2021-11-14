@@ -3,7 +3,7 @@
 #include <cmath>
 
 Camera::Camera(float startDistance){
-    this->speed = 1;
+    this->sensitivity = 5;
     this->distance = startDistance;
     for(int i = 0; i < 3; i++){
         this->centre[i] = 0;
@@ -30,22 +30,16 @@ void Camera::changeDistance(bool direction){
 }
 
 void Camera::orbitVertical(int amount){
-    if(amount > 0 && theta < M_PI/2){
-        this->theta += M_PI*amount*this->speed/1000;
-        updatePosition();
-    } else if(amount < 0 && theta > M_PI/16){
-        this->theta -= M_PI*amount*this->speed/1000;
-        updatePosition();
+    if((amount > 0 && theta < M_PI/2) || (amount < 0 && theta > M_PI/16) ){
+        this->theta += M_PI*amount*sensitivity/1000;
+        this->updatePosition();
     }
 }
 
 void Camera::orbitHorizontal(int amount){
-    if(amount > 0){
-        this->phi += M_PI*amount*this->speed/1000;
-    } else if (amount < 0){
-        this->phi -= M_PI*amount*this->speed/1000;
-    }
-    this->updatePosition();
+        this->phi += M_PI*amount*sensitivity/1000;
+        this->updatePosition();
+    
 
 }
 
@@ -53,6 +47,13 @@ void Camera::translate(float x, float y, float z){
     this->centre[0] += x;
     this->centre[1] += y;
     this->centre[2] += z;
+    this->updatePosition();
+}
+
+void Camera::changePosition(float x, float y, float z){
+    this->centre[0] = x;
+    this->centre[1] = y;
+    this->centre[2] = z;
     this->updatePosition();
 }
 
