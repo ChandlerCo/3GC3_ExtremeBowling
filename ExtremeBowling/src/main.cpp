@@ -1,4 +1,5 @@
 #ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
 #  include <OpenGL/gl.h>
 #  include <OpenGL/glu.h>
 #  include <GLUT/glut.h>
@@ -14,10 +15,13 @@
 #define MAIN
 
 #include <chrono> // for more accurate time checking
+#include <random>
 
 // #include "ioFuncs.h"
 #include "characters/ball.h"
 #include "misc/camera.h"
+#include "characters/boomba.h"
+#include "characters/sweeper.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -29,6 +33,20 @@ bool pauseStatus;
 
 Ball ball(0, 30, 0, 8);
 Camera ballCam(100);
+
+// make separate enemySpawner class? 
+random_device device;
+mt19937 generator(device());
+uniform_real_distribution<float> enemyX(-50, 50);
+uniform_real_distribution<float> enemyZ(-50, 50);
+//vector<Enemy*> enemies;
+vector<Boomba> boombas;
+vector<Sweeper> sweepers;
+int initNumOfBoombas = 5;
+float boombaDistToFloor = 5;
+int initNumOfSweepers = 5;
+float sweeperDistToFloor = 5;
+//int initNumOfEnemies = initNumOfBoombas + initNumOfSweepers;
 
 int prevX;
 int prevY;
@@ -94,6 +112,15 @@ void special(int key, int x, int y){
 
 void FPS (int val){
     //any code here
+
+	for (int i = 0; i < initNumOfBoombas; i++) {
+		boombas.at(i).animate();
+	}
+
+	for (int i = 0; i < initNumOfSweepers; i++) {
+		sweepers.at(i).animate();
+	}
+
 	int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     int d_time = time_current - time_past;
     time_past = time_current; 
@@ -134,6 +161,19 @@ void display(void)
         glutSolidSphere(8,20,20);
     glPopMatrix();
 
+	for (int i = 0; i < initNumOfBoombas; i++) {
+		glPushMatrix();
+			glTranslatef(boombas.at(i).getX(), boombas.at(i).getY(), boombas.at(i).getZ());
+			glutSolidTeapot(2);
+		glPopMatrix();
+	}
+	
+	for (int i = 0; i < initNumOfSweepers; i++) {
+		glPushMatrix();
+			glTranslatef(sweepers.at(i).getX(), sweepers.at(i).getY(), sweepers.at(i).getZ());
+			glutSolidCone(2, 10, 20, 20);
+		glPopMatrix();
+	}
 
 	glutSwapBuffers();
 
@@ -145,6 +185,15 @@ void init(){
     windowY = 800;
     refreshRate = 60;
     // ball.loadObj("../src/objects/boomba.obj");
+
+	for (int i = 0; i < initNumOfBoombas; i++) {
+		boombas.push_back(Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
+		cout << boombas.at(i).getX() << endl;
+	}
+
+	for (int i = 0; i < initNumOfSweepers; i++) {
+		sweepers.push_back(Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
+	}
 
 	time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
