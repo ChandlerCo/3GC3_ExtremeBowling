@@ -1,21 +1,27 @@
 #include "sweeper.h"
 
-// Sweeper::Sweeper(float inX, float inY, float inZ)
-// {
-//     this->physics = PhysicsObject3D(inX, inY, inZ);
+Sweeper::Sweeper(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
+{
+    this->physics = PhysicsObject3D(inX, inY, inZ);
 
-//     // initial position
-//     this->inX = inX;
-//     this->inY = inY;
-//     this->inZ = inZ;
-// }
+    // initial position
+    this->inX = inX;
+    this->inY = inY;
+    this->inZ = inZ;
+
+    moveZBy = 0.1;
+}
 
 void Sweeper::animate()
 {
-    if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 5) {
+    //std::cout << "sweeper animate" << std::endl;
+
+    if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 10) {
         physics.setRotation(0, 1, 0, 180); 
+        moveZBy = -moveZBy;
     }
 
-    physics.addAcceleration(0.5, 0.5, 0.5);
+    physics.setPosition(physics.getPos().x, physics.getPos().y, physics.getPos().z + moveZBy);
+
     // Update physics?
 }
