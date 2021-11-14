@@ -1,17 +1,22 @@
 #include "boomba.h"
 
-// Boomba::Boomba(float inX, float inY, float inZ)
-// {
-//     this->physics = PhysicsObject3D(inX, inY, inZ);
+Boomba::Boomba(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
+{
+    this->physics = PhysicsObject3D(inX, inY, inZ);
 
-//     // initial position
-//     this->inX = inX;
-//     this->inY = inY;
-//     this->inZ = inZ;
-// }
+    // initial position
+    this->inX = inX;
+    this->inY = inY;
+    this->inZ = inZ;
+
+    // initial rotation
+    physics.setRotation(0, 1, 0, -90);
+}
 
 void Boomba::animate()
 {
+    //std::cout << "boomba animate" << std::endl;
+
     /* 
     in main, we'll have a glutTimerFunc or smth,
     and we'll call:
@@ -31,19 +36,21 @@ void Boomba::animate()
     degrees, and start moving to the right
     */
 
-    // Check if boomba is at initial position, animation start
-    if (inX == physics.getPos().x && inY == physics.getPos().y && inZ == physics.getPos().z) {
-        physics.setRotation(0, 1, 0, -90);
-    }
-
     // move boomba in forward direction until it reaches certain point
     // once limit reached, rotate 180, and move forward again until next limit reached
 
-    if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 3) {
-        physics.setRotation(0, 1, 0, 180); // is rotation in respect to initial angle or current angle?
+    if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 5) {
+        physics.setRotation(0, 1, 0, -physics.getRot().angle);
     }
 
-    physics.addAcceleration(0.1, 0.1, 0.1); // is this enough to update the position?
+    if (physics.getRot().angle > 0) {
+        physics.setPosition(physics.getPos().x + 0.1, physics.getPos().y, physics.getPos().z);
+    }
+
+    if (physics.getRot().angle < 0) {
+        physics.setPosition(physics.getPos().x - 0.1, physics.getPos().y, physics.getPos().z);
+    }
+    
     // Call update physics?
 }
 
