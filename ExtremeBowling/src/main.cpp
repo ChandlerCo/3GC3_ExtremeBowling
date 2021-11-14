@@ -150,6 +150,7 @@ void display(void)
         ball.getX(),	ball.getY(),	ball.getZ(), // need to replace with ball location
         0,1,0
     );
+	
 	loadAsset("../src/objects/powerup.obj", "powerup");
 	displayAsset("powerup");
     //graphics objects here
