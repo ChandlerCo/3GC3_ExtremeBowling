@@ -146,6 +146,18 @@ bool Asset::loadObj(const char* filename)
             }
             delete[] first;
             face++;
+        } else if (objType.compare("vt ") == 0)
+        {
+            char* first = new char[line.size()+1];
+            memcpy(first, line.c_str(), line.size()+1);
+            Point3D texture;
+            std::strtok(first, " ");  
+            texture.x = std::stof(std::strtok(NULL, " "));
+            texture.y = std::stof(std::strtok(NULL, " "));
+            texture.z = 0;
+            tempUV.push_back(texture);
+            delete[] first;
+            tex++;
         }
     }
     openOBJ.close();
