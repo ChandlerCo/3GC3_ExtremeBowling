@@ -32,6 +32,8 @@ map<string, Asset> ll; // dictionary of characters
 Ball ball(0, 30, 0, 8);
 Camera ballCam(100);
 
+PhysicsObject3D temp_floor(0, -1, 0, false, 0.1);	// PLACEHOLDER
+
 int prevX;
 int prevY;
 
@@ -206,6 +208,8 @@ void init(){
     // ball.loadObj("../src/objects/boomba.obj");
 	loadAsset("src/objects/powerup.obj", "powerup");
 
+	temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
+	ball.addSceneObject(&temp_floor);
 	time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
