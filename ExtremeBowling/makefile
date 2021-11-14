@@ -30,7 +30,7 @@ run: $(PROGRAM_NAME)
 	./$(PROGRAM_NAME)$(EXEEXT)
 
 $(PROGRAM_NAME): $(OBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LDFLAGS)
 
 # c++ source
  $(BUILD_DIR)/%.cpp.o: %.cpp
