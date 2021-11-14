@@ -100,7 +100,7 @@ void FPS (int val){
 	int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     int d_time = time_current - time_past;
     time_past = time_current; 
-	
+
 	ball.runPhysics(min(d_time, 33));
 
 	glutPostRedisplay();
@@ -124,10 +124,19 @@ void displayAsset(string name)
 	glPushMatrix();
 		glBegin(GL_TRIANGLES);
 		int size = ll[name].vtxIndices.size();
+		int num_vertices = ll[name].tempVertices.size();
+		int num_normals = ll[name].tempNormals.size();
+		int index;
 		// render each triangle
 		for (int i = 0; i < size ; i++) {
 			// vertices
-			Point3D v = ll[name].tempVertices[ll[name].vtxIndices[i] - 1];
+			index = ll[name].vtxIndices[i] - 1;
+
+			if (index < 0)
+				index = num_vertices + index + 1;
+
+			Point3D v = ll[name].tempVertices.at(index);
+
 			glVertex3f(v.x, v.y, v.z);
 
 			// textures
@@ -135,7 +144,12 @@ void displayAsset(string name)
 			glVertex3f(t.x, t.y, t.z);
 
 			// normals
-			Vec3D n = ll[name].tempNormals[ll[name].nIndices[i]-1];
+			index = ll[name].nIndices[i] - 1;
+
+			if (index < 0)
+				index = num_normals + index + 1;
+
+			Vec3D n = ll[name].tempNormals.at(index);
 			glNormal3f(n.x, n.y, n.z);
 		}
 		glEnd();
@@ -184,6 +198,7 @@ void init(){
 	loadAsset("src/objects/boomba.obj", "boomba");
 	loadAsset("src/objects/pin.obj", "pin");
     // ball.loadObj("../src/objects/boomba.obj");
+	loadAsset("src/objects/powerup.obj", "powerup");
 
 	time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
