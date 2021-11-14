@@ -19,7 +19,9 @@ Asset::Asset(float startX, float startY, float startZ){
     //something to load object files or object type
 
 }
-
+Asset::Asset(){
+    this->physics = PhysicsObject3D( 0, 0, 0);
+}
 
 float Asset::getX(){
     return this->physics.getPos().x;
