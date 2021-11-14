@@ -221,19 +221,21 @@ void display(void)
 		glEnd();
 	glPopMatrix();
 
-	// for (int i = 0; i < initNumOfBoombas; i++) {
-	// 	glPushMatrix();
-	// 		glTranslatef(boombas.at(i).getX(), boombas.at(i).getY(), boombas.at(i).getZ());
-	// 		glutSolidTeapot(2);
-	// 	glPopMatrix();
-	// }
+	for (int i = 0; i < initNumOfBoombas; i++) {
+		glPushMatrix();
+		glColor3f(0, 0, 1);
+			glTranslatef(boombas.at(i).getX(), boombas.at(i).getY(), boombas.at(i).getZ());
+			glutSolidTeapot(2);
+		glPopMatrix();
+	}
 	
-	// for (int i = 0; i < initNumOfSweepers; i++) {
-	// 	glPushMatrix();
-	// 		glTranslatef(sweepers.at(i).getX(), sweepers.at(i).getY(), sweepers.at(i).getZ());
-	// 		glutSolidCone(2, 10, 20, 20);
-	// 	glPopMatrix();
-	// }
+	for (int i = 0; i < initNumOfSweepers; i++) {
+		glPushMatrix();
+			glColor3f(0, 0, 1);
+			glTranslatef(sweepers.at(i).getX(), sweepers.at(i).getY(), sweepers.at(i).getZ());
+			glutSolidCone(2, 10, 20, 20);
+		glPopMatrix();
+	}
 
 	glutSwapBuffers();
 
@@ -249,7 +251,6 @@ void init(){
 
 	for (int i = 0; i < initNumOfBoombas; i++) {
 		boombas.push_back(Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
-		cout << boombas.at(i).getX() << endl;
 	}
 
 	for (int i = 0; i < initNumOfSweepers; i++) {
