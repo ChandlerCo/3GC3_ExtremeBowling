@@ -1,7 +1,7 @@
 # include "ball.h"
 
 
-Ball::Ball(float x, float y, float z, float radius): Asset(x, y , z)
+Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z, "ball")
 {
     this->physics.setMoveable(true);
     this->physics.setSurfaceFriction(1);
@@ -16,4 +16,9 @@ void Ball::runPhysics(float time)
 void Ball::addSceneObject(PhysicsObject3D * new_object)
 {
     this->scene_objs.push_back(new_object);
+}
+
+void Ball::activatePowerUp(PowerUp powerup)
+{
+    this->active_power_up = powerup;
 }

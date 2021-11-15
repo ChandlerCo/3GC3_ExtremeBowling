@@ -1,6 +1,6 @@
 #include "sweeper.h"
 
-Sweeper::Sweeper(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
+Sweeper::Sweeper(float inX, float inY, float inZ, string filename) : Enemy(inX, inY, inZ, filename)
 {
     this->physics = PhysicsObject3D(inX, inY, inZ);
 
@@ -9,14 +9,14 @@ Sweeper::Sweeper(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
     this->inY = inY;
     this->inZ = inZ;
 
-    moveZBy = 0.1;
+    moveZBy = 1;
 }
 
 void Sweeper::animate()
 {
     //std::cout << "sweeper animate" << std::endl;
 
-    if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 10) {
+    if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 50) {
         physics.setRotation(0, 1, 0, 180); 
         moveZBy = -moveZBy;
     }

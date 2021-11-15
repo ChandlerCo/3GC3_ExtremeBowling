@@ -1,36 +1,65 @@
-Character class
-    Physics class
-        accelerate in the direction of a given vector
-        return location
+TODO
 
-Camera
-    get camera position
+POLISH:
+fix camera starting position - thomas
 
-object/camera vector
+textures / materials
+
+inialize collider(bounding boxes) for all assets
+
+clean up enemy class and subclasses
+
+lighting
+
+rotation  - make useful for drawing obj files
+
+proper obj files and scale them properly
 
 
-display
-    get objects on screen somehow
+CORE MECHANICS
 
+pause feature
 
-To Do:
-    Chandler
-        make sure the ball can move
-        make a floor/plane
+power ups
 
-    Joseph:
-        make a vector of <Enemy> with random spawn points - in the init function
-        in FPS function
-            update enemy position by calling animate() method for enemies
-                figure out how to overide in subclass
+asset interaction
+    ball and enemy
+    ball and pin
+    etc
 
-        do animations in character class
-    
-    Sarvin:
-        get display in main working
+level class
+    start location
+    end location
+    enemy spawn points
+    power spawn points
+    floor map
+    checkpoints
+    pin locations
+    pins collected
 
-        
-    
-    Thomas:
-        fix the camera
-        
+ball:
+    respawn - if y < __ respawn
+    lives
+    last checkpoint
+    power up status
+
+menu interface
+
+level selector
+
+score calculation
+    pin
+
+Advanced graphics
+    lighting
+    alpha blending - ball
+
+Instruction
+
+OTHER IDEAS
+
+shaders
+
+mini map
+
+camera zoom

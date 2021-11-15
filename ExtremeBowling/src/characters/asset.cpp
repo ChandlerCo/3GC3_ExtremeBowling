@@ -13,11 +13,11 @@
 
 
 
-Asset::Asset(float startX, float startY, float startZ){
+Asset::Asset(float startX, float startY, float startZ, string filename){
     this->physics = PhysicsObject3D( startX, startY, startZ);
 
     //something to load object files or object type
-
+    loadObj("src/objects/" + filename + ".obj");
 }
 Asset::Asset(){
     this->physics = PhysicsObject3D( 0, 0, 0);
@@ -66,7 +66,7 @@ PhysicsObject3D * Asset::getPhysicsPointer()
 }
 
 // Load the obj file
-bool Asset::loadObj(const char* filename)
+bool Asset::loadObj(string filename)
 {
     // counters
     int pos = 0;
@@ -161,4 +161,41 @@ bool Asset::loadObj(const char* filename)
     }
     openOBJ.close();
     return true;
+}
+
+void Asset::displayAsset()
+{
+	
+	glPushMatrix();
+		glBegin(GL_TRIANGLES);
+		int size = vtxIndices.size();
+		int num_vertices = tempVertices.size();
+		int num_normals = tempNormals.size();
+		int index;
+		// render each triangle
+		for (int i = 0; i < size ; i++) {
+			// vertices
+			index = vtxIndices[i] - 1;
+
+			if (index < 0)
+				index = num_vertices + index + 1;
+
+			Point3D v = tempVertices.at(index);
+
+			glVertex3f(v.x, v.y, v.z);
+
+			// textures will go here
+
+			// normals
+			index = nIndices[i] - 1;
+
+			if (index < 0)
+				index = num_normals + index + 1;
+
+			Vec3D n = tempNormals.at(index);
+			glNormal3f(n.x, n.y, n.z);
+		}
+		glEnd();
+	glPopMatrix();
+
 }
