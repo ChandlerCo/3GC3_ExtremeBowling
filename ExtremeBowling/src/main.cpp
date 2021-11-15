@@ -28,6 +28,7 @@ using namespace std;
 using namespace std::chrono;
 
 int refreshRate;
+int frameTime;
 int windowX;
 int windowY;
 bool pauseStatus;
@@ -96,8 +97,6 @@ void passive(int x, int y){
 }
 
 
-
-
 void special(int key, int x, int y){
     if(!pauseStatus){
         Vec3D forward(ball.getX() - ballCam.getX(),0,ball.getZ() - ballCam.getZ());
@@ -123,10 +122,9 @@ void special(int key, int x, int y){
     }
 }
 
-
 void FPS (int val){
     //any code here
-
+    frameTime = 0;
     for (Boomba &i : boombas) {
         i.animate();
     }
@@ -138,17 +136,27 @@ void FPS (int val){
     int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     int d_time = time_current - time_past;
     time_past = time_current; 
+    frameTime += d_time;
 
     ball.runPhysics(min(d_time, 33));
     ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
 
+
     glutPostRedisplay();
-    
 
     d_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - time_past;
-      glutTimerFunc(1000/refreshRate - d_time, FPS, 0);
+
+    frameTime += d_time;
+
+    if(frameTime > 1000 / refreshRate){
+        glutTimerFunc(1, FPS, 0);
+    } else {
+        glutTimerFunc(1000 / refreshRate - frameTime, FPS, 0);
+    }
+    
 
 }
+
 void loadAsset(const char* filename, string name)
 {
     Asset character;
@@ -194,6 +202,39 @@ void displayAsset(string name)
     glPopMatrix();
 
 }
+
+void displayFPS(){
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0.0, windowX, 0.0, windowY);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glColor3f(0.0, 1.0, 0.0);
+    glRasterPos2i(10, windowY - 15);
+
+
+    string s = to_string(1000 / (frameTime+1));
+    void * font = GLUT_BITMAP_9_BY_15;
+    for (string::iterator i = s.begin(); i != s.end(); ++i)
+    {
+        char c = *i;
+        glutBitmapCharacter(font, c);
+    }
+
+
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
+}
+
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -260,10 +301,11 @@ void display(void)
         glPopMatrix();
     }
 
+    displayFPS();
+
     glutSwapBuffers();
 
 }
-
 
 void init(){
     glEnable(GL_LIGHTING);
@@ -271,6 +313,7 @@ void init(){
     windowX = 800;
     windowY = 800;
     refreshRate = 120;
+    frameTime = 0;
     // ball.loadObj("../src/objects/boomba.obj");
     //loadAsset("src/objects/powerup.obj", "powerup");
 
