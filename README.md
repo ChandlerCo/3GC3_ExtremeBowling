@@ -1,5 +1,12 @@
 # 3GC3_ExtremeBowling
 
+Team 2
+
+Sarvin Azadis   azadis2
+Chandler Co     coc
+Thomas Hankins  hankinst
+Joseph Lee      leej240
+
 # Prototype Features
 * OBJ file parsing and drawing
     - Draws faces and sets normals
@@ -29,6 +36,10 @@
     - moveable character
     - enemies spawned and moving
 
+# Controls
+* Arrow keys move the ball - gives acceleration relative to direction camera is facing
+
+* Move mouse to adjust camera angle
 
 ### Project References
 * Boomba
