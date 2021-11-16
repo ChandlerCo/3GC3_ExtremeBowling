@@ -31,13 +31,13 @@ void Camera::changeDistance(bool direction){
 
 void Camera::orbitVertical(int amount){
     if((amount > 0 && theta < M_PI/2) || (amount < 0 && theta > M_PI/16) ){
-        this->theta += M_PI*amount*sensitivity/1000;
+        this->theta += M_PI*amount*sensitivity/10000;
         this->updatePosition();
     }
 }
 
 void Camera::orbitHorizontal(int amount){
-        this->phi += M_PI*amount*sensitivity/1000;
+        this->phi += M_PI*amount*sensitivity/10000;
         this->updatePosition();
     
 
