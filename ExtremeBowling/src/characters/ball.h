@@ -8,6 +8,7 @@ class Ball : public Asset{
         Ball(float x, float y, float z, float radius);
         void runPhysics(float time);
         using Asset::Asset;
+        void addSceneObject(PhysicsObject3D * new_object);
     private:
         vector<PhysicsObject3D *> scene_objs;
 };

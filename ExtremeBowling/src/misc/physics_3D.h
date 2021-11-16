@@ -71,6 +71,7 @@ public:
     void setRotation(float x, float y, float z, float a);
 
     void setMoveable(bool move);
+    void setSurfaceFriction(float f);
     void setAccFriction(float f);
 
     void addBoxCollider(float s_x, float s_y, float s_z, float off_x, float off_y, float off_z);

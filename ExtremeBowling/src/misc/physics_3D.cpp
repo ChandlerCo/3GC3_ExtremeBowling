@@ -124,17 +124,17 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
             }
             else if (max_delta == delta_y)
             {
-                if (x_axis.dotProd(b_to_s) > 0)
-                    return x_axis.normalize().multiply(rad + box.size_x / 2 - delta_x);
+                if (y_axis.dotProd(b_to_s) > 0)
+                    return y_axis.normalize().multiply(rad + box.size_y / 2 - delta_y);
                 else
-                    return x_axis.normalize().multiply(delta_x - rad - box.size_x / 2);
+                    return y_axis.normalize().multiply(delta_y - rad - box.size_y / 2);
             }
             else if (max_delta == delta_z)
             {
-                if (x_axis.dotProd(b_to_s) > 0)
-                    return x_axis.normalize().multiply(rad + box.size_x / 2 - delta_x);
+                if (z_axis.dotProd(b_to_s) > 0)
+                    return z_axis.normalize().multiply(rad + box.size_z / 2 - delta_z);
                 else
-                    return x_axis.normalize().multiply(delta_x - rad - box.size_x / 2);
+                    return z_axis.normalize().multiply(delta_z - rad - box.size_z / 2);
             }
             return y_axis.normalize().multiply(rad + (box.size_y / 2) - delta_y);
         }
@@ -145,9 +145,9 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
             if (delta_z < rad + box.size_z / 2)
             {
                 if (z_axis.dotProd(b_to_s) > 0)
-                    return z_axis.normalize().multiply(rad + box.size_z / 2 - delta_z);
+                    return z_axis.normalize().multiply(rad + box.size_x / 2 - delta_z);
                 else
-                    return z_axis.normalize().multiply(delta_z - rad - box.size_z / 2);
+                    return z_axis.normalize().multiply(delta_z - rad - box.size_x / 2);
             }
                 
             return Vec3D();
@@ -157,9 +157,9 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
             if (delta_y < rad + box.size_y / 2) // top/bottom
             {
                 if (y_axis.dotProd(b_to_s) > 0)
-                    return y_axis.normalize().multiply(rad + box.size_z / 2 - delta_y);
+                    return y_axis.normalize().multiply(rad + box.size_y / 2 - delta_y);
                 else
-                    return y_axis.normalize().multiply(delta_y - rad - box.size_z / 2);
+                    return y_axis.normalize().multiply(delta_y - rad - box.size_y / 2);
             }
                 
             return Vec3D();
@@ -341,6 +341,11 @@ void PhysicsObject3D::setMoveable(bool move)
     moveable = move;
 }
 
+void PhysicsObject3D::setSurfaceFriction(float f)
+{
+    surface_friction = f;
+}
+
 void PhysicsObject3D::setAccFriction(float f)
 {
     acc_friction = f;
@@ -400,6 +405,7 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<Physic
     {
         for (std::vector<PhysicsObject3D *>::iterator it = objs.begin(); it < objs.end(); it++)
         {
+            
             if (!moveable && (*it)->isMoveable())      // if this object is immovable but the other object is
                 (*it)->collisionImmovable(*this);
             else if (moveable && !(*it)->isMoveable()) // if this object is movable and other object is immovable
@@ -410,9 +416,9 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<Physic
 
         // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
         // create floor
-        PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -5, pos.z);      // create a floor object directly below object
-        the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at 0
-        collisionImmovable(the_floor);
+        //PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -5, pos.z);      // create a floor object directly below object
+        //the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at 0
+        //collisionImmovable(the_floor);
     }
 }
 

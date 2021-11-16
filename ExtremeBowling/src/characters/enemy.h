@@ -10,6 +10,10 @@ class Enemy : public Asset {
         float inY;
         float inZ;
     public:
+        Enemy(float inX, float inY, float inZ);
+
+        //virtual void animate();
+        void animate();
         using Asset::Asset;
 };
 

@@ -16,10 +16,13 @@
 
 #include <chrono> // for more accurate time checking
 #include <map>
+#include <random>
 
 // #include "ioFuncs.h"
 #include "characters/ball.h"
 #include "misc/camera.h"
+#include "characters/boomba.h"
+#include "characters/sweeper.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -32,6 +35,22 @@ map<string, Asset> ll; // dictionary of characters
 
 Ball ball(0, 30, 0, 8);
 Camera ballCam(100);
+
+PhysicsObject3D temp_floor(0, -1, 0, false, 0.1);	// PLACEHOLDER
+
+// make separate enemySpawner class? 
+random_device device;
+mt19937 generator(device());
+uniform_real_distribution<float> enemyX(-50, 50);
+uniform_real_distribution<float> enemyZ(-50, 50);
+//vector<Enemy*> enemies;
+vector<Boomba> boombas;
+vector<Sweeper> sweepers;
+int initNumOfBoombas = 5;
+float boombaDistToFloor = 5;
+int initNumOfSweepers = 5;
+float sweeperDistToFloor = 5;
+//int initNumOfEnemies = initNumOfBoombas + initNumOfSweepers;
 
 int prevX;
 int prevY;
@@ -72,23 +91,24 @@ void passive(int x, int y){
 
 void special(int key, int x, int y){
 	if(!pauseStatus){
-		Vec3D forwardVec(ball.getX() - ballCam.getX(),ball.getY() - ballCam.getY(),ball.getZ() - ballCam.getZ());
-		forwardVec.normalize().multiply(10);
+		Vec3D forward(ball.getX() - ballCam.getX(),0,ball.getZ() - ballCam.getZ());
+		forward = forward.normalize().multiply(10);
+		Vec3D sideways = forward.crossProd(Vec3D(0, 1, 0)).normalize().multiply(10);
 
 		if (key == GLUT_KEY_UP){
-			ball.accelerate(forwardVec.x, forwardVec.y, forwardVec.z);
+			ball.accelerate(forward.x, 0, forward.z);
 		}
 		
 		if (key == GLUT_KEY_DOWN){
-			ball.accelerate(-forwardVec.x, -forwardVec.y, forwardVec.z);
+			ball.accelerate(-forward.x, 0, -forward.z);
 		}
 
 		if (key == GLUT_KEY_RIGHT){
-			ball.accelerate(forwardVec.y, -forwardVec.x, forwardVec.z);
+			ball.accelerate(sideways.x, 0, sideways.z);
 		}
 
 		if (key == GLUT_KEY_LEFT){
-			ball.accelerate(-forwardVec.y, forwardVec.x, forwardVec.z);
+			ball.accelerate(-sideways.x, 0, -sideways.z);
 		}
 
 	}
@@ -97,13 +117,24 @@ void special(int key, int x, int y){
 
 void FPS (int val){
     //any code here
+
+	for (int i = 0; i < initNumOfBoombas; i++) {
+		boombas.at(i).animate();
+	}
+
+	for (int i = 0; i < initNumOfSweepers; i++) {
+		sweepers.at(i).animate();
+	}
+
 	int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     int d_time = time_current - time_past;
     time_past = time_current; 
 
 	ball.runPhysics(min(d_time, 33));
+	ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
 
 	glutPostRedisplay();
+	
 
 	d_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - time_past;
   	glutTimerFunc(1000/refreshRate - d_time, FPS, 0);
@@ -171,6 +202,9 @@ void display(void)
 	
 	displayAsset("ball");
 
+	// displayAsset("powerup");
+
+    //graphics objects here
     glColor3f(1,1,1);
 	glPushMatrix();
         glTranslatef(20,0,0);
@@ -183,6 +217,31 @@ void display(void)
         glutSolidSphere(8,20,20);
     glPopMatrix();
 
+	glColor3f(1,0,0);
+	glPushMatrix();
+		glBegin(GL_POLYGON);
+			glVertex3f(200,0,200);
+			glVertex3f(200,0,-200);
+			glVertex3f(-200,0,-200);
+			glVertex3f(-200,0,200);
+		glEnd();
+	glPopMatrix();
+
+	for (int i = 0; i < initNumOfBoombas; i++) {
+		glPushMatrix();
+		glColor3f(0, 0, 1);
+			glTranslatef(boombas.at(i).getX(), boombas.at(i).getY(), boombas.at(i).getZ());
+			glutSolidTeapot(2);
+		glPopMatrix();
+	}
+	
+	for (int i = 0; i < initNumOfSweepers; i++) {
+		glPushMatrix();
+			glColor3f(0, 0, 1);
+			glTranslatef(sweepers.at(i).getX(), sweepers.at(i).getY(), sweepers.at(i).getZ());
+			glutSolidCone(2, 10, 20, 20);
+		glPopMatrix();
+	}
 
 	glutSwapBuffers();
 
@@ -199,6 +258,17 @@ void init(){
 	loadAsset("src/objects/pin.obj", "pin");
     // ball.loadObj("../src/objects/boomba.obj");
 	loadAsset("src/objects/powerup.obj", "powerup");
+
+	temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
+	ball.addSceneObject(&temp_floor);
+
+	for (int i = 0; i < initNumOfBoombas; i++) {
+		boombas.push_back(Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
+	}
+
+	for (int i = 0; i < initNumOfSweepers; i++) {
+		sweepers.push_back(Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
+	}
 
 	time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
