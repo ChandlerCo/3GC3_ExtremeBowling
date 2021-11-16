@@ -1,5 +1,46 @@
 # 3GC3_ExtremeBowling
 
+Team 2
+
+Sarvin Azadis   azadis2
+Chandler Co     coc
+Thomas Hankins  hankinst
+Joseph Lee      leej240
+
+# Prototype Features
+* OBJ file parsing and drawing
+    - Draws faces and sets normals
+    - Textures not yet drawn
+
+* Camera
+    - Complex camera which moves around ball based on mouse movement
+
+* Character Class - ball.h/ball.cpp
+    - Contains physics values(position, bounding box, etc), loaded obj, controls, active power-up
+
+* A pin/powerup class:
+    - created
+    - not yet fully implemented
+
+* Enemy classes - boomba, sweepers
+    - physics values(position, bounding box, etc)
+    - animation/movement
+    - loaded obj
+
+* Physics
+    - physics values, position, velocity, acceleration etc.
+    - bonuding boxes and collision detection
+
+* Basic World
+    - floor
+    - moveable character
+    - enemies spawned and moving
+
+# Controls
+* Arrow keys move the ball - gives acceleration relative to direction camera is facing
+
+* Move mouse to adjust camera angle
+
 ### Project References
 * Boomba
     - Downloaded from https://free3d.com/3d-model/goomba-424140.html

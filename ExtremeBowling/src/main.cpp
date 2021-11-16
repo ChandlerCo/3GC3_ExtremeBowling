@@ -28,15 +28,16 @@ using namespace std;
 using namespace std::chrono;
 
 int refreshRate;
+int frameTime;
 int windowX;
 int windowY;
 bool pauseStatus;
 map<string, Asset> ll; // dictionary of characters
 
-Ball ball(0, 30, 0, 8);
+Ball ball(0, 10, 0, 8);
 Camera ballCam(100);
 
-PhysicsObject3D temp_floor(0, -1, 0, false, 0.1);	// PLACEHOLDER
+PhysicsObject3D temp_floor(0, -1, 0, false, 0.1);    // PLACEHOLDER
 
 // make separate enemySpawner class? 
 random_device device;
@@ -57,220 +58,277 @@ int prevY;
 
 int time_past;
 
+float light_pos[4] = {5,5,5,1};
+float amb[4] = {1,1,1,1};
+float diff[4] = {1,1,1,1};
+float spec[4] = {1,1,1,1};
+
+float ambMat2[4] = {0.5,0.5,0.5,1};
+float diffMat2[4] = {0,1,0,1};
+float specMat2[4] = {0,1,0,1};
+
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
     //     exit(0);
     // }
 
-	if (key  == ' '){
-		pauseStatus = !pauseStatus;
-	}
+    if (key  == ' '){
+        pauseStatus = !pauseStatus;
+    }
 }
 
 void mouse(int button, int state, int x, int y){
-	//mouse left click-jump
+    //mouse left click-jump
 }
 
 void motion(int x, int y){
-	//pan camera
+    //pan camera
 }
 
 void passive(int x, int y){
-	if(!pauseStatus){
-		ballCam.orbitHorizontal(x - prevX);
-		ballCam.orbitVertical(y - prevY);
+    if(!pauseStatus){
+        ballCam.orbitHorizontal(x - prevX);
+        ballCam.orbitVertical(y - prevY);
 
-		prevX = x;
-		prevY = y;
+        prevX = x;
+        prevY = y;
 
-	}
+    }
 }
-
-
 
 
 void special(int key, int x, int y){
-	if(!pauseStatus){
-		Vec3D forward(ball.getX() - ballCam.getX(),0,ball.getZ() - ballCam.getZ());
-		forward = forward.normalize().multiply(10);
-		Vec3D sideways = forward.crossProd(Vec3D(0, 1, 0)).normalize().multiply(10);
+    if(!pauseStatus){
+        Vec3D forward(ball.getX() - ballCam.getX(),0,ball.getZ() - ballCam.getZ());
+        forward = forward.normalize().multiply(30);
+        Vec3D sideways = forward.crossProd(Vec3D(0, 1, 0)).normalize().multiply(30);
 
-		if (key == GLUT_KEY_UP){
-			ball.accelerate(forward.x, 0, forward.z);
-		}
-		
-		if (key == GLUT_KEY_DOWN){
-			ball.accelerate(-forward.x, 0, -forward.z);
-		}
+        if (key == GLUT_KEY_UP){
+            ball.accelerate(forward.x, 0, forward.z);
+        }
+        
+        if (key == GLUT_KEY_DOWN){
+            ball.accelerate(-forward.x, 0, -forward.z);
+        }
 
-		if (key == GLUT_KEY_RIGHT){
-			ball.accelerate(sideways.x, 0, sideways.z);
-		}
+        if (key == GLUT_KEY_RIGHT){
+            ball.accelerate(sideways.x, 0, sideways.z);
+        }
 
-		if (key == GLUT_KEY_LEFT){
-			ball.accelerate(-sideways.x, 0, -sideways.z);
-		}
+        if (key == GLUT_KEY_LEFT){
+            ball.accelerate(-sideways.x, 0, -sideways.z);
+        }
 
-	}
+    }
 }
-
 
 void FPS (int val){
     //any code here
+    frameTime = 0;
+    for (Boomba &i : boombas) {
+        i.animate();
+    }
 
-	for (int i = 0; i < initNumOfBoombas; i++) {
-		boombas.at(i).animate();
-	}
+    for (Sweeper &i : sweepers) {
+        i.animate();
+    }
 
-	for (int i = 0; i < initNumOfSweepers; i++) {
-		sweepers.at(i).animate();
-	}
-
-	int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     int d_time = time_current - time_past;
     time_past = time_current; 
+    frameTime += d_time;
 
-	ball.runPhysics(min(d_time, 33));
-	ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
+    ball.runPhysics(min(d_time, 33));
+    ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
 
-	glutPostRedisplay();
-	
 
-	d_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - time_past;
-  	glutTimerFunc(1000/refreshRate - d_time, FPS, 0);
+    glutPostRedisplay();
+
+    d_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - time_past;
+
+    frameTime += d_time;
+
+    if(frameTime > 1000 / refreshRate){
+        glutTimerFunc(1, FPS, 0);
+    } else {
+        glutTimerFunc(1000 / refreshRate - frameTime, FPS, 0);
+    }
+    
 
 }
+
 void loadAsset(const char* filename, string name)
 {
-	Asset character;
-	character = Asset();
-	character.loadObj(filename);
-	ll[name] = character; 
+    Asset character;
+    character = Asset();
+    character.loadObj(filename);
+    ll[name] = character; 
 }
 
 // sets the normals and builds the character based on mesh info
 void displayAsset(string name)
 {
-	
-	glPushMatrix();
-		glBegin(GL_TRIANGLES);
-		int size = ll[name].vtxIndices.size();
-		int num_vertices = ll[name].tempVertices.size();
-		int num_normals = ll[name].tempNormals.size();
-		int index;
-		// render each triangle
-		for (int i = 0; i < size ; i++) {
-			// vertices
-			index = ll[name].vtxIndices[i] - 1;
+    
+    glPushMatrix();
+        glBegin(GL_TRIANGLES);
+        int size = ll[name].vtxIndices.size();
+        int num_vertices = ll[name].tempVertices.size();
+        int num_normals = ll[name].tempNormals.size();
+        int index;
+        // render each triangle
+        for (int i = 0; i < size ; i++) {
+            // vertices
+            index = ll[name].vtxIndices[i] - 1;
 
-			if (index < 0)
-				index = num_vertices + index + 1;
+            if (index < 0)
+                index = num_vertices + index + 1;
 
-			Point3D v = ll[name].tempVertices.at(index);
+            Point3D v = ll[name].tempVertices.at(index);
 
-			glVertex3f(v.x, v.y, v.z);
+            glVertex3f(v.x, v.y, v.z);
 
-			// textures
-			Point3D t = ll[name].tempUV[ll[name].texIndices[i] - 1];
-			glVertex3f(t.x, t.y, t.z);
+            // textures will go here
 
-			// normals
-			index = ll[name].nIndices[i] - 1;
+            // normals
+            index = ll[name].nIndices[i] - 1;
 
-			if (index < 0)
-				index = num_normals + index + 1;
+            if (index < 0)
+                index = num_normals + index + 1;
 
-			Vec3D n = ll[name].tempNormals.at(index);
-			glNormal3f(n.x, n.y, n.z);
-		}
-		glEnd();
-	glPopMatrix();
+            Vec3D n = ll[name].tempNormals.at(index);
+            glNormal3f(n.x, n.y, n.z);
+        }
+        glEnd();
+    glPopMatrix();
 
 }
+
+void displayFPS(){
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0.0, windowX, 0.0, windowY);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glColor3f(0.0, 1.0, 0.0);
+    glRasterPos2i(10, windowY - 15);
+
+
+    string s = to_string(1000 / (frameTime+1));
+    void * font = GLUT_BITMAP_9_BY_15;
+    for (string::iterator i = s.begin(); i != s.end(); ++i)
+    {
+        char c = *i;
+        glutBitmapCharacter(font, c);
+    }
+
+
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
+}
+
 void display(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	
-	gluLookAt(
-        ballCam.getX(),	ballCam.getY(),	ballCam.getZ(),
-        ball.getX(),	ball.getY(),	ball.getZ(), // need to replace with ball location
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    gluLookAt(
+        ballCam.getX(),    ballCam.getY(),    ballCam.getZ(),
+        ball.getX(),    ball.getY(),    ball.getZ(), // need to replace with ball location
         0,1,0
     );
-	
-	
-	displayAsset("ball");
 
-	// displayAsset("powerup");
+    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
+    
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
+    /*
+    glPushMatrix();
+    glTranslatef(20,0,20);
+    glScalef(0.1, 0.1, 0.1);
+    displayAsset("powerup");
+    glPopMatrix();
+    */
 
     //graphics objects here
-    glColor3f(1,1,1);
-	glPushMatrix();
-        glTranslatef(20,0,0);
-        glutSolidCube(5);
-    glPopMatrix();
 
 
     glPushMatrix();
         glTranslatef(ball.getX(),ball.getY(),ball.getZ());
-        glutSolidSphere(8,20,20);
+        glScalef(2, 2, 2);
+        ball.displayAsset();
     glPopMatrix();
 
-	glColor3f(1,0,0);
-	glPushMatrix();
-		glBegin(GL_POLYGON);
-			glVertex3f(200,0,200);
-			glVertex3f(200,0,-200);
-			glVertex3f(-200,0,-200);
-			glVertex3f(-200,0,200);
-		glEnd();
-	glPopMatrix();
+    glColor3f(1,0,0);
+    glPushMatrix();
+        glBegin(GL_POLYGON);
+            glVertex3f(200,0,200);
+            glVertex3f(200,0,-200);
+            glVertex3f(-200,0,-200);
+            glVertex3f(-200,0,200);
+        glEnd();
+    glPopMatrix();
 
-	for (int i = 0; i < initNumOfBoombas; i++) {
-		glPushMatrix();
-		glColor3f(0, 0, 1);
-			glTranslatef(boombas.at(i).getX(), boombas.at(i).getY(), boombas.at(i).getZ());
-			glutSolidTeapot(2);
-		glPopMatrix();
-	}
-	
-	for (int i = 0; i < initNumOfSweepers; i++) {
-		glPushMatrix();
-			glColor3f(0, 0, 1);
-			glTranslatef(sweepers.at(i).getX(), sweepers.at(i).getY(), sweepers.at(i).getZ());
-			glutSolidCone(2, 10, 20, 20);
-		glPopMatrix();
-	}
+    for (Boomba i : boombas) {
+        glPushMatrix();
+        glColor3f(0, 0, 1);
+            glTranslatef(i.getX(), i.getY(), i.getZ());
+            glScalef(0.5, 0.5, 0.5);
+            i.displayAsset();
+        glPopMatrix();
+    }
+    
+    for (Sweeper i : sweepers) {
+        glPushMatrix();
+            glColor3f(0, 0, 1);
+            glTranslatef(i.getX(), i.getY(), i.getZ());
+            glScalef(0.1, 0.1, 0.1);
+            i.displayAsset();
+        glPopMatrix();
+    }
 
-	glutSwapBuffers();
+    displayFPS();
+
+    glutSwapBuffers();
 
 }
 
-
 void init(){
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
     windowX = 800;
     windowY = 800;
-    refreshRate = 60;
-	loadAsset("src/objects/ball.obj", "ball");
-	loadAsset("src/objects/powerup.obj", "powerup");
-	loadAsset("src/objects/boomba.obj", "boomba");
-	loadAsset("src/objects/pin.obj", "pin");
+    refreshRate = 120;
+    frameTime = 0;
     // ball.loadObj("../src/objects/boomba.obj");
-	loadAsset("src/objects/powerup.obj", "powerup");
+    //loadAsset("src/objects/powerup.obj", "powerup");
 
-	temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
-	ball.addSceneObject(&temp_floor);
+    temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
+    ball.addSceneObject(&temp_floor);
 
-	for (int i = 0; i < initNumOfBoombas; i++) {
-		boombas.push_back(Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
-	}
+    for (int i = 0; i < initNumOfBoombas; i++) {
+        boombas.push_back(Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator), "boomba")); // can change boombaDistToFloor later
+    }
 
-	for (int i = 0; i < initNumOfSweepers; i++) {
-		sweepers.push_back(Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
-	}
+    for (int i = 0; i < initNumOfSweepers; i++) {
+        sweepers.push_back(Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator), "pin"));
+    }
 
-	time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
 void handleReshape(int w, int h) {
@@ -287,27 +345,27 @@ void handleReshape(int w, int h) {
 /* main function - program entry point */
 int main(int argc, char** argv)
 {
-	init();
+    init();
 
-	glutInit(&argc, argv);		//starts up GLUT
-	glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(windowX, windowY);
+    glutInit(&argc, argv);        //starts up GLUT
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
+    glutInitWindowSize(windowX, windowY);
     glutInitWindowPosition(300,300);
 
-	glutCreateWindow("Extreme Bowling");	//creates the window
+    glutCreateWindow("Extreme Bowling");    //creates the window
 
 
 
     //callbacks
-	glutKeyboardFunc(keyboard);
+    glutKeyboardFunc(keyboard);
     glutPassiveMotionFunc(passive);
-	glutSpecialFunc(special);
-	glutReshapeFunc(handleReshape);
-	
-	glutDisplayFunc(display);	//registers "display" as the display callback function
+    glutSpecialFunc(special);
+    glutReshapeFunc(handleReshape);
+    
+    glutDisplayFunc(display);    //registers "display" as the display callback function
 
 
-	glutTimerFunc(1000/refreshRate,FPS, 0);
+    glutTimerFunc(1000/refreshRate,FPS, 0);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -315,7 +373,7 @@ int main(int argc, char** argv)
 
     glutMainLoop();
 
-	return 0;					
+    return 0;                    
 }
 
 

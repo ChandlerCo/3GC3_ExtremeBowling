@@ -1,5 +1,18 @@
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
+#  include <GLUT/glut.h>
+#else
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+#  include <GL/freeglut.h>
+#endif
+
 #include "../misc/physics_3D.h"
 #include "../misc/mathlib_3D.h"
+#include <cstring>
+#include <string>
 #include <vector>
 
 #ifndef ASSET_H
@@ -13,7 +26,7 @@ class Asset {
 
     public:
         Asset();
-        Asset(float startX, float startY, float startZ);
+        Asset(float startX, float startY, float startZ, string filename);
         float getX();
         float getY();
         float getZ();
@@ -32,7 +45,8 @@ class Asset {
         std::vector <Point3D> tempUV; // Textures 
         std::vector <Vec3D> tempNormals; // Normals
 
-        bool loadObj(const char* filename);
+        bool loadObj(string filename);
+        void displayAsset();
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "boomba.h"
 
-Boomba::Boomba(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
+Boomba::Boomba(float inX, float inY, float inZ, string filename) : Enemy(inX, inY, inZ, filename)
 {
     this->physics = PhysicsObject3D(inX, inY, inZ);
 

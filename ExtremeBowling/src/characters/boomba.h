@@ -1,3 +1,5 @@
+#include <cstring>
+#include <string>
 #include "enemy.h"
 
 #ifndef BOOMBA_H
@@ -13,12 +15,11 @@ the player bounce off of the Boomba and lose pins, or a life.
 
 class Boomba : public Enemy {
     public:
-        Boomba(float inX, float inY, float inZ);
+        Boomba(float inX, float inY, float inZ, string filename);
 
         // virtual void animate() override;
         void animate();
         void collisionAnimation();
-        using Enemy::Enemy;
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "enemy.h"
 
-Enemy::Enemy(float inX, float inY, float inZ) : Asset(inX, inY, inZ)
+Enemy::Enemy(float inX, float inY, float inZ, string filename) : Asset(inX, inY, inZ, filename)
 {
     
 }
