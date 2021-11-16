@@ -124,7 +124,11 @@ void special(int key, int x, int y){
 
 void FPS (int val){
     //any code here
-    frameTime = 0;
+    int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    int d_time = time_current - time_past;
+    frameTime = d_time;
+    time_past = time_current; 
+
     for (Boomba &i : boombas) {
         i.animate();
     }
@@ -133,10 +137,6 @@ void FPS (int val){
         i.animate();
     }
 
-    int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-    int d_time = time_current - time_past;
-    time_past = time_current; 
-    frameTime += d_time;
 
     ball.runPhysics(min(d_time, 33));
     ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
@@ -146,12 +146,10 @@ void FPS (int val){
 
     d_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - time_past;
 
-    frameTime += d_time;
-
-    if(frameTime > 1000 / refreshRate){
+    if(d_time > 1000 / refreshRate){
         glutTimerFunc(1, FPS, 0);
     } else {
-        glutTimerFunc(1000 / refreshRate - frameTime, FPS, 0);
+        glutTimerFunc(1000 / refreshRate - d_time, FPS, 0);
     }
     
 
