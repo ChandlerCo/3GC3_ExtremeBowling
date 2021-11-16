@@ -1,8 +1,8 @@
 #include "powerup.h"
 
-// PowerUp::PowerUp(float inX, float inY, float inZ)
+// PowerUp::PowerUp(float inX, float inY, float inZ) : Asset(inX, inY, inZ)
 // {
-//     this->physics = PhysicsObject3D(inX, inY, inZ);
+//     loadObj("powerup");
 // }
 
 void PowerUp::defaultAnimation()

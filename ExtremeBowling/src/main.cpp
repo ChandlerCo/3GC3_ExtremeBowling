@@ -29,6 +29,7 @@ using namespace std::chrono;
 
 int refreshRate;
 int frameTime;
+int frameCount;
 int windowX;
 int windowY;
 bool pauseStatus;
@@ -45,8 +46,7 @@ mt19937 generator(device());
 uniform_real_distribution<float> enemyX(-50, 50);
 uniform_real_distribution<float> enemyZ(-50, 50);
 //vector<Enemy*> enemies;
-vector<Boomba> boombas;
-vector<Sweeper> sweepers;
+vector<Enemy *> enemies;
 int initNumOfBoombas = 5;
 float boombaDistToFloor = 5;
 int initNumOfSweepers = 5;
@@ -129,12 +129,8 @@ void FPS (int val){
     frameTime = d_time;
     time_past = time_current; 
 
-    for (Boomba &i : boombas) {
-        i.animate();
-    }
-
-    for (Sweeper &i : sweepers) {
-        i.animate();
+    for (Enemy * i : enemies) {
+        i->animate();
     }
 
 
@@ -145,11 +141,13 @@ void FPS (int val){
     glutPostRedisplay();
 
     d_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - time_past;
-
+    
+    frameCount += 1;
     if(d_time > 1000 / refreshRate){
         glutTimerFunc(1, FPS, 0);
+        
     } else {
-        glutTimerFunc(1000 / refreshRate - d_time, FPS, 0);
+        glutTimerFunc(1000 / refreshRate, FPS, 0);
     }
     
 
@@ -245,15 +243,15 @@ void display(void)
         0,1,0
     );
 
-    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
+    // glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+    // glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+    // glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
     
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
+    // glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
+    // glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
+    // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
+    // glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
     /*
     glPushMatrix();
     glTranslatef(20,0,20);
@@ -281,23 +279,15 @@ void display(void)
         glEnd();
     glPopMatrix();
 
-    for (Boomba i : boombas) {
+    glColor3f(0, 0, 1);
+    for (Enemy * i : enemies) {
         glPushMatrix();
-        glColor3f(0, 0, 1);
-            glTranslatef(i.getX(), i.getY(), i.getZ());
+            glTranslatef(i->getX(), i->getY(), i->getZ());
             glScalef(0.5, 0.5, 0.5);
-            i.displayAsset();
+            i->displayAsset();
         glPopMatrix();
     }
-    
-    for (Sweeper i : sweepers) {
-        glPushMatrix();
-            glColor3f(0, 0, 1);
-            glTranslatef(i.getX(), i.getY(), i.getZ());
-            glScalef(0.1, 0.1, 0.1);
-            i.displayAsset();
-        glPopMatrix();
-    }
+
 
     displayFPS();
 
@@ -319,11 +309,11 @@ void init(){
     ball.addSceneObject(&temp_floor);
 
     for (int i = 0; i < initNumOfBoombas; i++) {
-        boombas.push_back(Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator), "boomba")); // can change boombaDistToFloor later
+        enemies.push_back(new Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
     }
 
     for (int i = 0; i < initNumOfSweepers; i++) {
-        sweepers.push_back(Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator), "pin"));
+        enemies.push_back(new Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
     }
 
     time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();

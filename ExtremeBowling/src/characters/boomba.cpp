@@ -1,16 +1,10 @@
 #include "boomba.h"
 
-Boomba::Boomba(float inX, float inY, float inZ, string filename) : Enemy(inX, inY, inZ, filename)
+Boomba::Boomba(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
 {
-    this->physics = PhysicsObject3D(inX, inY, inZ);
-
-    // initial position
-    this->inX = inX;
-    this->inY = inY;
-    this->inZ = inZ;
-
     // initial rotation
     physics.setRotation(0, 1, 0, -90);
+    loadObj("boomba");
 }
 
 void Boomba::animate()

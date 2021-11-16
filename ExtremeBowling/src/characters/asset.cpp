@@ -13,11 +13,10 @@
 
 
 
-Asset::Asset(float startX, float startY, float startZ, string filename){
+Asset::Asset(float startX, float startY, float startZ){
     this->physics = PhysicsObject3D( startX, startY, startZ);
 
     //something to load object files or object type
-    loadObj("src/objects/" + filename + ".obj");
 }
 Asset::Asset(){
     this->physics = PhysicsObject3D( 0, 0, 0);
@@ -77,7 +76,7 @@ bool Asset::loadObj(string filename)
 
     // open the file
     std::ifstream openOBJ;
-    openOBJ.open(filename);
+    openOBJ.open("src/objects/" + filename + ".obj");
     
     if (!openOBJ.good())
     {

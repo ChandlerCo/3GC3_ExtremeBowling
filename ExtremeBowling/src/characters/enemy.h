@@ -12,11 +12,8 @@ class Enemy : public Asset {
         float inY;
         float inZ;
     public:
-        Enemy(float inX, float inY, float inZ, string filename);
-
-        //virtual void animate();
-        void animate();
-        //using Asset::Asset;
+        Enemy(float inX, float inY, float inZ);
+        virtual void animate();
 };
 
 #endif
