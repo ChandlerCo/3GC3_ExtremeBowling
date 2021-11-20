@@ -57,6 +57,11 @@ float Vec3D::length()
     return sqrt(x * x + y * y + z * z);
 }
 
+float Vec3D::quickLength()
+{
+    return x * x + y * y + z * z;
+}
+
 Vec3D Vec3D::clone()
 {
     return Vec3D(x, y, z);

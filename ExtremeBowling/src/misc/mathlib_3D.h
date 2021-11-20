@@ -28,6 +28,7 @@ public:
     Vec3D();
     Vec3D(float in_x, float in_y, float in_z);
     float length();
+    float quickLength();
     Vec3D clone();
     Vec3D addVec(Vec3D p);
     Vec3D normalize();
