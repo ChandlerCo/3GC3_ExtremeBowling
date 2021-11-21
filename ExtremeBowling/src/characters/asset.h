@@ -26,7 +26,7 @@ class Asset {
 
     public:
         Asset();
-        Asset(float startX, float startY, float startZ, string filename);
+        Asset(float startX, float startY, float startZ);
         float getX();
         float getY();
         float getZ();

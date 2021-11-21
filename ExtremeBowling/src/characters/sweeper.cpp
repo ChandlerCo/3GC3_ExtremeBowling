@@ -1,18 +1,12 @@
 #include "sweeper.h"
 
-Sweeper::Sweeper(float inX, float inY, float inZ, string filename) : Enemy(inX, inY, inZ, filename)
+Sweeper::Sweeper(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
 {
-    this->physics = PhysicsObject3D(inX, inY, inZ);
-
-    // initial position
-    this->inX = inX;
-    this->inY = inY;
-    this->inZ = inZ;
-
-    moveZBy = 1;
+    this->moveZBy = 1;
+    loadObj("pin"); //we change this later
 }
 
-void Sweeper::animate()
+void Sweeper::animate() 
 {
     //std::cout << "sweeper animate" << std::endl;
 

@@ -15,9 +15,7 @@ the player bounce off of the Boomba and lose pins, or a life.
 
 class Boomba : public Enemy {
     public:
-        Boomba(float inX, float inY, float inZ, string filename);
-
-        // virtual void animate() override;
+        Boomba(float inX, float inY, float inZ);
         void animate();
         void collisionAnimation();
 };

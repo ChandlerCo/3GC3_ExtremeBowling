@@ -12,7 +12,7 @@ will move the player off the map if the player collides with it.
 
 class Sweeper : public Enemy {
     public:
-        Sweeper(float inX, float inY, float inZ, string filename);
+        Sweeper(float inX, float inY, float inZ);
         float moveZBy;
 
         //virtual void animate() override;

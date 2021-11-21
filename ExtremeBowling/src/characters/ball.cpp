@@ -1,11 +1,12 @@
 # include "ball.h"
 
 
-Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z, "ball")
+Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
 {
     this->physics.setMoveable(true);
     this->physics.setSurfaceFriction(1);
     this->physics.addSphereCollider(radius * 2, 0, 0, 0);
+    loadObj("ball");
 }
 void Ball::runPhysics(float time)
 {
