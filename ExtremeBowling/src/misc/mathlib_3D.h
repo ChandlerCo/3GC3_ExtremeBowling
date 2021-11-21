@@ -43,17 +43,27 @@ public:
 
 class Rot3D {
     public:
-        float angle;
-        Vec3D axis;
+        float real;
+        float x;
+        float y;
+        float z;
 
         Rot3D();
         Rot3D(float in_x, float in_y, float in_z, float in_a);
 
+        float getAngle();
+        float getX();
+        float getY();
+        float getZ();
+
         void rotate3D(Dimension3 *d);
+        void addRotation(float in_x, float in_y, float in_z, float in_a, bool relative);
 
         static void rot3DAxisX(Dimension3 *d, float rad);
         static void rot3DAxisY(Dimension3 *d, float rad);
         static void rot3DAxisZ(Dimension3 *d, float rad);
+    private:
+        static void hamiltonProd(float a_r, float a_x, float a_y, float a_z, float b_r, float b_x, float b_y, float b_z, float * res);
 };
 
 #endif

@@ -165,11 +165,9 @@ bool Asset::loadObj(string filename)
 void Asset::displayAsset()
 {
 	Rot3D r = physics.getRot();
-    if (r.angle != 0)
-        cout << r.angle << " " << r.axis.x << " " << r.axis.y << " " << r.axis.z<< " <<\n";
-    r.angle *= 180.0f / M_PI;
+
 	glPushMatrix();
-        glRotatef(r.angle, r.axis.x, r.axis.y, r.axis.z);
+        glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());
 		glBegin(GL_TRIANGLES);
 		int size = vtxIndices.size();
 		int num_vertices = tempVertices.size();

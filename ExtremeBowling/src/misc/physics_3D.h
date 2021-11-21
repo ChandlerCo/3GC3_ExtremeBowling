@@ -70,6 +70,8 @@ public:
     void setPosition(float x, float y, float z);
     void setVelocity(float x, float y, float z);
     void setRotation(float x, float y, float z, float a);
+    void addRotation(float x, float y, float z, float a);
+    void addRelativeRotation(float x, float y, float z, float a);
 
     void setMoveable(bool move);
     void setSurfaceFriction(float f);

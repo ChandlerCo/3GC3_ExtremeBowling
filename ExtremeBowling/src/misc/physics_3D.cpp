@@ -1,7 +1,7 @@
 #include "physics_3D.h"
 
 #define GRAVITY (-9.81f)
-#define MAX_SPD 100
+#define MAX_SPD 1000
 #define ZERO 0.0000001
 
 Collider3D::Collider3D()
@@ -361,7 +361,16 @@ void PhysicsObject3D::setVelocity(float x, float y, float z)
 
 void PhysicsObject3D::setRotation(float x, float y, float z, float a)
 {
-    rot = Rot3D(x, y, z, a * M_PI / 180.0f);
+    rot = Rot3D(x, y, z, a);
+}
+
+void PhysicsObject3D::addRotation(float x, float y, float z, float a)
+{
+    rot.addRotation(x, y, z, a, false);
+}
+void PhysicsObject3D::addRelativeRotation(float x, float y, float z, float a)
+{
+    rot.addRotation(x, y, z, a, true);
 }
 
 void PhysicsObject3D::setMoveable(bool move)
@@ -444,9 +453,9 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<Physic
 
         // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
         // create floor
-        PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -15, pos.z);      // create a floor object directly below object
-        the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at 0
-        collisionImmovable(the_floor);
+        //PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -15, pos.z);      // create a floor object directly below object
+        //the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at 0
+        //collisionImmovable(the_floor);
     }
 }
 
