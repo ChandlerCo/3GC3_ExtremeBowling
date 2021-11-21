@@ -1,60 +1,71 @@
 TODO
 
-POLISH:
-fix camera starting position - thomas
+Chandler-
+    bounding boxes
+    floor class
+        csv
 
-lighting, textures, materials - sarvin
+Thomas-
+    level class         - thomas
+        start location
+        end location
+        enemy spawn points
+        power spawn points
+        floor map           - chandler
+        checkpoints
+        pin locations
+        pins collected
+        - load from file - chandler
 
-inialize collider(bounding boxes) for all assets - joseph
+        score calculation
+            pin
 
-clean up enemy class and subclasses - thomas
+    fix camera
+    add fps toggle
+    make obj faster
+        may need to test
+    learn some blender
 
-rotation  - make useful for drawing obj files - chandler
+Sarvin-
+    Lighting
+    and helping joseph with core mechanics
 
-proper obj files and scale them properly - sarvin
- - ensure obj drawer is working
+Joseph-
+    do everything modularly
+    pause mechanic
+        pop up mechanic
+    jump mechanic
+        add upward velocity, use main
+    power up class
+        add interactions, use main
+
+    ball:
+        respawn - if y < __ respawn - checkpoint
+        lives
+        last checkpoint - for later
+        power up status
+
+        asset interaction - chandler will leave a method to check
+            ball and enemy
+            ball and pin
+            etc
+
+    menu interface - put in a seperate file
+        Instructions
+        -previous high score
+        -level selector
+
+    level selector
+        -load level class into main, clear other level
 
 
-CORE MECHANICS
 
-pause feature
+Stuff for later:
 
-power ups
-
-asset interaction
-    ball and enemy
-    ball and pin
-    etc
-
-level class         - thomas
-    start location
-    end location
-    enemy spawn points
-    power spawn points
-    floor map           - chandler
-    checkpoints
-    pin locations
-    pins collected
-    - load from file - chandler
-
-ball:
-    respawn - if y < __ respawn
-    lives
-    last checkpoint
-    power up status
-
-menu interface
-
-level selector
-
-score calculation
-    pin
 
 Advanced graphics
     lighting
     alpha blending - ball
-
-Instruction
 
 OTHER IDEAS
 
@@ -63,5 +74,3 @@ shaders
 mini map
 
 camera zoom
-
-original objs, blender, maya
