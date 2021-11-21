@@ -3,7 +3,7 @@
 Sweeper::Sweeper(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
 {
     this->moveZBy = 1;
-    loadObj("pin"); //we change this later
+    loadObj("pin", this->vertices, this->uvs, this->normals); //we change this later
 }
 
 void Sweeper::animate() 

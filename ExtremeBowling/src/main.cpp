@@ -45,7 +45,6 @@ random_device device;
 mt19937 generator(device());
 uniform_real_distribution<float> enemyX(-50, 50);
 uniform_real_distribution<float> enemyZ(-50, 50);
-//vector<Enemy*> enemies;
 vector<Enemy *> enemies;
 int initNumOfBoombas = 5;
 float boombaDistToFloor = 5;
@@ -82,7 +81,14 @@ void mouse(int button, int state, int x, int y){
 }
 
 void motion(int x, int y){
-    //pan camera
+    if(!pauseStatus){
+        ballCam.orbitHorizontal(x - prevX);
+        ballCam.orbitVertical(y - prevY);
+
+        prevX = x;
+        prevY = y;
+
+    }
 }
 
 void passive(int x, int y){
@@ -153,51 +159,6 @@ void FPS (int val){
 
 }
 
-void loadAsset(const char* filename, string name)
-{
-    Asset character;
-    character = Asset();
-    character.loadObj(filename);
-    ll[name] = character; 
-}
-
-// sets the normals and builds the character based on mesh info
-void displayAsset(string name)
-{
-    
-    glPushMatrix();
-        glBegin(GL_TRIANGLES);
-        int size = ll[name].vtxIndices.size();
-        int num_vertices = ll[name].tempVertices.size();
-        int num_normals = ll[name].tempNormals.size();
-        int index;
-        // render each triangle
-        for (int i = 0; i < size ; i++) {
-            // vertices
-            index = ll[name].vtxIndices[i] - 1;
-
-            if (index < 0)
-                index = num_vertices + index + 1;
-
-            Point3D v = ll[name].tempVertices.at(index);
-
-            glVertex3f(v.x, v.y, v.z);
-
-            // textures will go here
-
-            // normals
-            index = ll[name].nIndices[i] - 1;
-
-            if (index < 0)
-                index = num_normals + index + 1;
-
-            Vec3D n = ll[name].tempNormals.at(index);
-            glNormal3f(n.x, n.y, n.z);
-        }
-        glEnd();
-    glPopMatrix();
-
-}
 
 void displayFPS(){
 
@@ -239,26 +200,9 @@ void display(void)
     
     gluLookAt(
         ballCam.getX(),    ballCam.getY(),    ballCam.getZ(),
-        ball.getX(),    ball.getY(),    ball.getZ(), // need to replace with ball location
+        ball.getX(),    ball.getY(),    ball.getZ(),
         0,1,0
     );
-
-    // glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-    // glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
-    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
-    // glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
-    
-    // glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
-    // glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
-    // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
-    // glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
-    /*
-    glPushMatrix();
-    glTranslatef(20,0,20);
-    glScalef(0.1, 0.1, 0.1);
-    displayAsset("powerup");
-    glPopMatrix();
-    */
 
     //graphics objects here
 
@@ -302,8 +246,6 @@ void init(){
     windowY = 800;
     refreshRate = 120;
     frameTime = 0;
-    // ball.loadObj("../src/objects/boomba.obj");
-    //loadAsset("src/objects/powerup.obj", "powerup");
 
     temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
     ball.addSceneObject(&temp_floor);
