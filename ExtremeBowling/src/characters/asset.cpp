@@ -178,8 +178,10 @@ bool Asset::loadObj(string filename,
 
 void Asset::displayAsset()
 {
+	Rot3D r = physics.getRot();
+
 	glPushMatrix();
-        // glutSolidCube(3);
+        glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());
 		glBegin(GL_TRIANGLES);
 		// render each triangle
 		for (int i = 0; i < this->vertices.size() ; i++) {

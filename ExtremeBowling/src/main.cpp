@@ -204,6 +204,23 @@ void display(void)
         0,1,0
     );
 
+    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
+    
+     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
+     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
+     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
+     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
+    /*
+    glPushMatrix();
+    glTranslatef(20,0,20);
+    glScalef(0.1, 0.1, 0.1);
+    displayAsset("powerup");
+    glPopMatrix();
+    */
+
     //graphics objects here
 
 
@@ -240,8 +257,7 @@ void display(void)
 }
 
 void init(){
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+
     windowX = 800;
     windowY = 800;
     refreshRate = 120;
@@ -264,6 +280,8 @@ void init(){
 void handleReshape(int w, int h) {
     windowX = w;
     windowY = h;
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
