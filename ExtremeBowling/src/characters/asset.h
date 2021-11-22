@@ -1,28 +1,18 @@
-#ifdef __APPLE__
-#define GL_SILENCE_DEPRECATION
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
-#  include <GLUT/glut.h>
-#else
-#  include <GL/gl.h>
-#  include <GL/glu.h>
-#  include <GL/freeglut.h>
-#endif
-
 #include "../misc/physics_3D.h"
 #include "../misc/mathlib_3D.h"
-#include <cstring>
-#include <string>
-#include <vector>
+
 
 #ifndef ASSET_H
 #define ASSET_H
 
+#include <vector>
+#include "graphics.h"
 using namespace std;
 
 class Asset {
     protected:
         PhysicsObject3D physics;
+
 
     public:
         Asset();
@@ -40,12 +30,15 @@ class Asset {
 
         PhysicsObject3D * getPhysicsPointer();
 
-        std::vector <unsigned int> vtxIndices, texIndices, nIndices;
-        std::vector <Point3D> tempVertices; //Mesh
-        std::vector <Point3D> tempUV; // Textures 
-        std::vector <Vec3D> tempNormals; // Normals
-
-        bool loadObj(string filename);
+        bool loadObj(string filename,
+            vector <Vec3D> & out_vertices,
+            vector <Vec3D> & out_uvs,
+            vector <Vec3D> & out_normals 
+        );
+        
+        vector <Vec3D> vertices; 
+        vector <Vec3D> uvs; //texture mapping
+        vector <Vec3D> normals;
         void displayAsset();
 };
 

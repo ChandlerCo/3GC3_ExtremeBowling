@@ -4,7 +4,7 @@ Boomba::Boomba(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
 {
     // initial rotation
     physics.setRotation(0, 1, 0, -90);
-    loadObj("boomba");
+    loadObj("boomba", this->vertices, this->uvs, this->normals);
 }
 
 void Boomba::animate()

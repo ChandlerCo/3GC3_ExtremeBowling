@@ -11,6 +11,17 @@
 #include <cstring>
 #include <string>
 
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
+#  include <GLUT/glut.h>
+#else
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+#  include <GL/freeglut.h>
+#endif
+
 
 
 Asset::Asset(float startX, float startY, float startZ){
@@ -65,134 +76,115 @@ PhysicsObject3D * Asset::getPhysicsPointer()
 }
 
 // Load the obj file
-bool Asset::loadObj(string filename)
+bool Asset::loadObj(string filename,
+                vector <Vec3D> & out_vertices,
+                vector <Vec3D> & out_uvs,
+                vector <Vec3D> & out_normals)
 {
-    // counters
-    int pos = 0;
-    int tex = 0;
-    int norm = 0;
-    int face = 0;
 
+    vector <unsigned int> vtxIndices, uvIndices, nIndices;
+    vector <Vec3D> tempVertices; //Mesh
+    vector <Vec3D> tempUV; // Textures 
+    vector <Vec3D> tempNormals; // Normals
 
     // open the file
-    std::ifstream openOBJ;
-    openOBJ.open("src/objects/" + filename + ".obj");
+    filename = "src/objects/" + filename + ".obj";
+    FILE * file = fopen(filename.c_str(), "r");
+
     
-    if (!openOBJ.good())
-    {
-        std::cout << "Can't open OBJ file" << std::endl;
-        exit(1);
+    if( file == NULL ){
+        printf("Impossible to open the file !\n");
+         return false;
     }
 
     // reading the file
-    while(!openOBJ.eof()) 
+    while(true) 
     {
+        
+        char lineHeader[128];
 
-        std::string line;
-        getline(openOBJ, line);
-        std::string objType = line.substr(0,2);
+        int res = fscanf(file, "%s", lineHeader);
 
-        // vertices
-        if (objType.compare("v ") == 0) 
+        if (res == EOF)
+            break;
+
+        if (strcmp(lineHeader, "v") == 0) 
         {
-            // parse copied line
-            char* first = new char[line.size()+1];
-            memcpy(first, line.c_str(), line.size()+1);
-
-
-            // extract the tokens
-            Point3D vertex;
-            strtok(first, " "); // skips past the v, vt, vn or f part
-
-            // converting the contents of a string into a float value
-            vertex.x = std::stof(std::strtok(NULL, " "));
-            vertex.y = std::stof(std::strtok(NULL, " "));
-            vertex.z = std::stof(std::strtok(NULL, " "));
-
+            Vec3D vertex;
+            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
             tempVertices.push_back(vertex);
 
-            delete[] first;
-            pos++;
-        } else if (objType.compare("vn") == 0)
+        } else if (strcmp(lineHeader, "vn") == 0)
         {
-            char* first = new char[line.size()+1];
-            memcpy(first, line.c_str(), line.size()+1);
             Vec3D normal;
-            std::strtok(first, " ");
 
-            normal.x = std::stof(std::strtok(NULL, " "));
-            normal.y = std::stof(std::strtok(NULL, " "));
-            normal.z = std::stof(std::strtok(NULL, " "));
-
+            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
             tempNormals.push_back(normal);
 
-            delete[] first;
-            norm++;
-
         // faces
-        } else if (objType.compare("f ")== 0) 
+        } else if (strcmp(lineHeader, "f")== 0) 
         {
-            char* first = new char[line.size()+1];
-            memcpy(first, line.c_str(), line.size()+1);
+            string vertex1, vertex2, vertex3;
+            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
 
-            std::strtok(first, " ");
-            for (int i = 0; i <= 2; i++) 
-            {
-                vtxIndices.push_back(std::stoi(std::strtok(NULL, " /"))); // vertices
-                texIndices.push_back(std::stoi(std::strtok(NULL, " /"))); // textures
-                nIndices.push_back(std::stoi(std::strtok(NULL, " /"))); // normals
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+            if (matches != 9){
+                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
+                return false;
             }
-            delete[] first;
-            face++;
-        } else if (objType.compare("vt") == 0)
+            vtxIndices.push_back(vertexIndex[0]);
+            vtxIndices.push_back(vertexIndex[1]);
+            vtxIndices.push_back(vertexIndex[2]);
+            uvIndices     .push_back(uvIndex[0]);
+            uvIndices    .push_back(uvIndex[1]);
+            uvIndices    .push_back(uvIndex[2]);
+            nIndices.push_back(normalIndex[0]);
+            nIndices.push_back(normalIndex[1]);
+            nIndices.push_back(normalIndex[2]);
+        } else if (strcmp( lineHeader, "vt" ) == 0)
         {
-            char* first = new char[line.size()+1];
-            memcpy(first, line.c_str(), line.size()+1);
-            Point3D texture;
-            std::strtok(first, " ");  
-            texture.x = std::stof(std::strtok(NULL, " "));
-            texture.y = std::stof(std::strtok(NULL, " "));
-            texture.z = 0;
-            tempUV.push_back(texture);
-            delete[] first;
-            tex++;
+            Vec3D uv;
+            fscanf(file, "%f %f\n", &uv.x, &uv.y );
+            tempUV.push_back(uv);
         }
     }
-    openOBJ.close();
+
+    for( unsigned int i=0; i<vtxIndices.size(); i++ ){
+        unsigned int vertexIndex = vtxIndices[i] - 1;
+        if (vertexIndex < 0)
+			vertexIndex += vtxIndices.size() + 1;
+        Vec3D vertex = tempVertices[ vertexIndex ];
+        out_vertices.push_back(vertex);
+    }
+
+    for( unsigned int i=0; i<uvIndices.size(); i++ ){
+        unsigned int uvIndex = uvIndices[i] - 1;
+        if (uvIndex < 0)
+			uvIndex += uvIndices.size() + 1;
+        Vec3D uv = tempUV[ uvIndex ];
+        out_uvs.push_back(uv);
+    }
+
+    for( unsigned int i=0; i<nIndices.size(); i++ ){
+        unsigned int normalIndex = nIndices[i] - 1;
+        if (normalIndex < 0)
+			normalIndex += nIndices.size() + 1;
+        Vec3D normal = tempNormals[ normalIndex ];
+        out_normals.push_back(normal);
+    }
+
     return true;
 }
 
 void Asset::displayAsset()
 {
-	
 	glPushMatrix();
+        // glutSolidCube(3);
 		glBegin(GL_TRIANGLES);
-		int size = vtxIndices.size();
-		int num_vertices = tempVertices.size();
-		int num_normals = tempNormals.size();
-		int index;
 		// render each triangle
-		for (int i = 0; i < size ; i++) {
-			// vertices
-			index = vtxIndices[i] - 1;
-
-			if (index < 0)
-				index = num_vertices + index + 1;
-
-			Point3D v = tempVertices.at(index);
-
-			glVertex3f(v.x, v.y, v.z);
-
-			// textures will go here
-
-			// normals
-			index = nIndices[i] - 1;
-
-			if (index < 0)
-				index = num_normals + index + 1;
-
-			Vec3D n = tempNormals.at(index);
-			glNormal3f(n.x, n.y, n.z);
+		for (int i = 0; i < this->vertices.size() ; i++) {
+			glVertex3f(this->vertices.at(i).x, this->vertices.at(i).y, this->vertices.at(i).z);
+			glNormal3f(this->normals.at(i).x, this->normals.at(i).y, this->normals.at(i).z);
 		}
 		glEnd();
 	glPopMatrix();
