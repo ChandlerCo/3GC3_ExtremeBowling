@@ -2,7 +2,7 @@
 
 // PowerUp::PowerUp(float inX, float inY, float inZ) : Asset(inX, inY, inZ)
 // {
-//     loadObj("powerup", this->vertices, this->uvs, this->normals);
+//      this->graphics = Graphics("powerup");
 // }
 
 void PowerUp::defaultAnimation()

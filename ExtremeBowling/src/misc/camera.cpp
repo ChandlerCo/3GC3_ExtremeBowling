@@ -1,9 +1,10 @@
 #include "camera.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <iostream>
 
 Camera::Camera(float startDistance){
-    this->sensitivity = 5;
+    this->sensitivity = 50;
     this->distance = startDistance;
     for(int i = 0; i < 3; i++){
         this->centre[i] = 0;
@@ -15,6 +16,8 @@ Camera::Camera(float startDistance){
 
 
 void Camera::updatePosition(){
+    
+    
     this->position[0] = this->distance * sin(this->phi) * sin(this->theta) + this->centre[0];
 	this->position[1] = this->distance * cos(this->theta) + this->centre[1];
 	this->position[2] = this->distance * cos(this->phi) * sin(this->theta) + this->centre[2];

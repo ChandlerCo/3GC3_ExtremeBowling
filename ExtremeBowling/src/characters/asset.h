@@ -1,18 +1,17 @@
-#include "../misc/physics_3D.h"
-#include "../misc/mathlib_3D.h"
-
-
 #ifndef ASSET_H
 #define ASSET_H
 
 #include <vector>
-#include "graphics.h"
+#include "../misc/graphics.h"
+#include "../misc/physics_3D.h"
+#include "../misc/mathlib_3D.h"
+
 using namespace std;
 
 class Asset {
     protected:
         PhysicsObject3D physics;
-
+        Graphics graphics;
 
     public:
         Asset();
@@ -30,15 +29,6 @@ class Asset {
 
         PhysicsObject3D * getPhysicsPointer();
 
-        bool loadObj(string filename,
-            vector <Vec3D> & out_vertices,
-            vector <Vec3D> & out_uvs,
-            vector <Vec3D> & out_normals 
-        );
-        
-        vector <Vec3D> vertices; 
-        vector <Vec3D> uvs; //texture mapping
-        vector <Vec3D> normals;
         void displayAsset();
 };
 

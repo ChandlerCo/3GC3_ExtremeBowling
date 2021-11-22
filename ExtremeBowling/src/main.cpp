@@ -81,6 +81,10 @@ void mouse(int button, int state, int x, int y){
 }
 
 void motion(int x, int y){
+    if(x - prevX > 50 || y - prevY > 50){
+        prevX = x;
+        prevY = y;
+    }
     if(!pauseStatus){
         ballCam.orbitHorizontal(x - prevX);
         ballCam.orbitVertical(y - prevY);
@@ -92,6 +96,10 @@ void motion(int x, int y){
 }
 
 void passive(int x, int y){
+    if(x - prevX > 50 || y - prevY > 50){
+        prevX = x;
+        prevY = y;
+    }
     if(!pauseStatus){
         ballCam.orbitHorizontal(x - prevX);
         ballCam.orbitVertical(y - prevY);
@@ -224,11 +232,7 @@ void display(void)
     //graphics objects here
 
 
-    glPushMatrix();
-        glTranslatef(ball.getX(),ball.getY(),ball.getZ());
-        glScalef(2, 2, 2);
-        ball.displayAsset();
-    glPopMatrix();
+    ball.displayAsset();
 
     glColor3f(1,0,0);
     glPushMatrix();
@@ -242,11 +246,7 @@ void display(void)
 
     glColor3f(0, 0, 1);
     for (Enemy * i : enemies) {
-        glPushMatrix();
-            glTranslatef(i->getX(), i->getY(), i->getZ());
-            glScalef(0.5, 0.5, 0.5);
-            i->displayAsset();
-        glPopMatrix();
+        i->displayAsset();
     }
 
 

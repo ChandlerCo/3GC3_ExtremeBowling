@@ -6,7 +6,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->physics.setMoveable(true);
     this->physics.setSurfaceFriction(1);
     this->physics.addSphereCollider(radius * 2, 0, 0, 0);
-    this->loadObj("ball", this->vertices, this->uvs, this->normals);
+    this->graphics = Graphics("ball");
 }
 void Ball::runPhysics(float time)
 {
