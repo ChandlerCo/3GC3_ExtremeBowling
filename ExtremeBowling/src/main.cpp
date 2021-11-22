@@ -40,7 +40,6 @@ Camera ballCam(100);
 
 PhysicsObject3D temp_floor(0, -1, 0, false, 0.1);    // PLACEHOLDER
 
-// make separate enemySpawner class? 
 random_device device;
 mt19937 generator(device());
 uniform_real_distribution<float> enemyX(-50, 50);
@@ -91,11 +90,16 @@ void motion(int x, int y){
 
         prevX = x;
         prevY = y;
-
+    }
+    if (x > windowX || x < 0 || y > windowY || y < 0) {
+        pauseStatus = true; // if mouse outside window, game pauses
     }
 }
 
 void passive(int x, int y){
+    // if (0 <= x <= windowX || 0 <= y <= windowY) {
+    //     pauseStatus = false; // if mouse inside window, game runs
+    // }
     if(x - prevX > 50 || y - prevY > 50){
         prevX = x;
         prevY = y;
@@ -106,7 +110,9 @@ void passive(int x, int y){
 
         prevX = x;
         prevY = y;
-
+    }
+    if (x > windowX || x < 0 || y > windowY || y < 0) {
+        pauseStatus = true; // if mouse outside window, game pauses
     }
 }
 
@@ -143,14 +149,16 @@ void FPS (int val){
     frameTime = d_time;
     time_past = time_current; 
 
-    for (Enemy * i : enemies) {
-        i->animate();
+    if (!pauseStatus) {
+        for (Enemy * i : enemies) {
+            i->animate();
+        }
     }
 
-
-    ball.runPhysics(min(d_time, 33));
-    ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
-
+    if (!pauseStatus) {
+        ball.runPhysics(min(d_time, 33));
+        ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
+    }
 
     glutPostRedisplay();
 

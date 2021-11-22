@@ -5,6 +5,7 @@ Boomba::Boomba(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
     // initial rotation
     physics.setRotation(0, 1, 0, -90);
     this->graphics = Graphics("boomba");
+    this->moveXBy = 0.5;
 }
 
 void Boomba::animate()
@@ -38,11 +39,11 @@ void Boomba::animate()
     }
 
     if (physics.getRot().getAngle() > 0) {
-        physics.setPosition(physics.getPos().x + 0.1, physics.getPos().y, physics.getPos().z);
+        physics.setPosition(physics.getPos().x + moveXBy, physics.getPos().y, physics.getPos().z);
     }
 
     if (physics.getRot().getAngle() < 0) {
-        physics.setPosition(physics.getPos().x - 0.1, physics.getPos().y, physics.getPos().z);
+        physics.setPosition(physics.getPos().x - moveXBy, physics.getPos().y, physics.getPos().z);
     }
     
     // Call update physics?
