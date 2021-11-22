@@ -34,14 +34,14 @@ void Boomba::animate()
     // once limit reached, rotate 180, and move forward again until next limit reached
 
     if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 5) {
-        physics.setRotation(0, 1, 0, -physics.getRot().angle);
+        physics.setRotation(0, 1, 0, -physics.getRot().getAngle());
     }
 
-    if (physics.getRot().angle > 0) {
+    if (physics.getRot().getAngle() > 0) {
         physics.setPosition(physics.getPos().x + 0.1, physics.getPos().y, physics.getPos().z);
     }
 
-    if (physics.getRot().angle < 0) {
+    if (physics.getRot().getAngle() < 0) {
         physics.setPosition(physics.getPos().x - 0.1, physics.getPos().y, physics.getPos().z);
     }
     

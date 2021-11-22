@@ -52,16 +52,50 @@ Vec3D Collider3D::collision(Collider3D col)
     return collisionSphereSphere(*this, col);
 }
 
-/*
-bool Collider3D::collisionSpherePoint(Point3D sph_p, float rad, Point3D p)
+
+Vec3D Collider3D::collisionPointSphere(Point3D p, Point3D sph_p, float rad)
 {
-    return Vec3D::createVector(sph_p, p).length() < rad;
+    Vec3D p_to_s = Vec3D::createVector(p, sph_p);
+    if (p_to_s.quickLength() < rad * rad)
+        return p_to_s.normalize().multiply(rad - p_to_s.length());
+    return Vec3D();
 }
+/*
 Vec3D Collider3D::collisionBoxPoint(Collider3D box, Point3D box_p, Point3D old_bp, Point3D p, Point3D old_p)
 {
     Vec3D b_to_p = Vec3D::createVector(box_p, p);
 }
 */
+
+Vec3D Collider3D::collisionCornerSphere(Point3D corner, Vec3D edge_x, Vec3D edge_y, Vec3D edge_z, Point3D sph_p, float rad)
+{
+    Vec3D c_to_s = Vec3D::createVector(corner, sph_p);
+    //std::cout << corner.x << " - " << corner.y << " - " << corner.z << std::endl;
+
+    float rad_2 = rad * rad;
+
+    // check edge parallel to x axis
+    Vec3D proj_x = edge_x.project(c_to_s);
+    Vec3D x_to_s = c_to_s.addVec(proj_x.multiply(-1));
+    if (x_to_s.quickLength() < rad_2 && c_to_s.dotProd(edge_x) >= 0 && proj_x.quickLength() < edge_x.quickLength())
+        return x_to_s.normalize().multiply(rad - x_to_s.length());
+    
+    // check edge parallel to y axis
+    Vec3D proj_y = edge_y.project(c_to_s);
+    Vec3D y_to_s = c_to_s.addVec(proj_y.multiply(-1));
+    //std::cout << y_to_s.quickLength() << std::endl;
+    if (y_to_s.quickLength() < rad_2 && c_to_s.dotProd(edge_y) >= 0 && proj_y.quickLength() < edge_y.quickLength())
+        return y_to_s.normalize().multiply(rad - y_to_s.length());
+    
+    // check edge parallel to z axis
+    Vec3D proj_z = edge_z.project(c_to_s);
+    Vec3D z_to_s = c_to_s.addVec(proj_z.multiply(-1));
+    if (z_to_s.quickLength() < rad_2 && c_to_s.dotProd(edge_z) >= 0 && proj_z.quickLength() < edge_z.quickLength())
+        return z_to_s.normalize().multiply(rad - z_to_s.length());
+
+    return Vec3D();
+}
+
 Vec3D Collider3D::collisionBoxBox(Collider3D box_1, Collider3D box_2)
 {
     // check distance
@@ -70,7 +104,7 @@ Vec3D Collider3D::collisionBoxBox(Collider3D box_1, Collider3D box_2)
     Point3D pos_2 = box_2.calculatePos();
     Vec3D b_to_b = Vec3D::createVector(pos_1, pos_2);
     float contact_length = std::max(std::max(box_1.size_x, box_1.size_y), box_1.size_z) + std::max(std::max(box_2.size_x, box_2.size_y), box_2.size_z);
-    if (b_to_b.length() < ZERO)
+    if (b_to_b.quickLength() < ZERO)
         return Vec3D(1, 1, 1);
     if (b_to_b.length() < contact_length)
         return b_to_b;
@@ -145,9 +179,9 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
             if (delta_z < rad + box.size_z / 2)
             {
                 if (z_axis.dotProd(b_to_s) > 0)
-                    return z_axis.normalize().multiply(rad + box.size_x / 2 - delta_z);
+                    return z_axis.normalize().multiply(rad + box.size_z / 2 - delta_z);
                 else
-                    return z_axis.normalize().multiply(delta_z - rad - box.size_x / 2);
+                    return z_axis.normalize().multiply(delta_z - rad - box.size_z / 2);
             }
                 
             return Vec3D();
@@ -175,13 +209,9 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
             }
             return Vec3D();
         }
-        // TODO
-        // check collision with edges and corner
-        // for now, dont check
-        return Vec3D();
         
-        /*
-        Point3D f_t_r = x_axis.addVec(y_axis.addVec(z_axis)).movePoint(Point3D());
+        // calculate 8 corners
+        Point3D f_t_r = x_axis.addVec(y_axis.addVec(z_axis)).movePoint(pos_box);
         Point3D f_t_l = x_axis.multiply(-2).movePoint(f_t_r);
         Point3D f_b_l = y_axis.multiply(-2).movePoint(f_t_l);
         Point3D f_b_r = x_axis.multiply(2).movePoint(f_b_l);
@@ -189,48 +219,46 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
         Point3D b_b_l = x_axis.multiply(-2).movePoint(b_b_r);
         Point3D b_t_l = y_axis.multiply(2).movePoint(b_b_l);
         Point3D b_t_r = x_axis.multiply(2).movePoint(b_t_l);
-        // if contacting an edge
-        if (delta_x < box.size_x / 2) // front/back
-            collisionSpherePoint(pos_sph, rad, )
-        if (delta_x < box.size_x / 2 && delta_z < box.size_z / 2 && delta_y < rad + box.size_y / 2) // top/bottom
-            return y_axis;
-        if (delta_y < box.size_y / 2 && delta_z < box.size_z / 2 && delta_x < rad + box.size_x / 2) // left/right
-            return x_axis;
-        if (delta_x > box.size_x / 2 || delta_y > box.size_y / 2 || delta_z > box.size_z / 2)
-            return NULL;
-        
-        // return normal of reflection plane
-        // shortcut: use vector from center to center
-        // complicated: compare previous positions
-        Vec3D old_to_old = Vec3D::createVector(box.old_pos, sph.old_pos);
-        Vec3D old_x = box.p_rot->rot3D(Vec3D(1, 0, 0));
-        Vec3D old_y = box.p_rot->rot3D(Vec3D(0, 1, 0));
-        Vec3D old_z = box.p_rot->rot3D(Vec3D(0, 0, 1));
 
-        float old_dx = old_x.project(old_to_old).length();
-        float old_dy = old_y.project(old_to_old).length();
-        float old_dz = old_z.project(old_to_old).length();
+        Vec3D ref_norm;
+        // check for collision with box edges
+        if (delta_x < box.size_x / 2 || delta_y < box.size_y / 2 || delta_z < box.size_z / 2)
+        {
+            ref_norm = collisionCornerSphere(b_b_l, x_axis.multiply(2), y_axis.multiply(2), z_axis.multiply(2), pos_sph, rad);
+            if (ref_norm.quickLength() > 0)
+                return ref_norm;
+            ref_norm = collisionCornerSphere(b_t_r, x_axis.multiply(-2), y_axis.multiply(-2), z_axis.multiply(2), pos_sph, rad);
+            if (ref_norm.quickLength() > 0)
+                return ref_norm;
+            ref_norm = collisionCornerSphere(f_t_l, x_axis.multiply(2), y_axis.multiply(-2), z_axis.multiply(-2), pos_sph, rad);
+            if (ref_norm.quickLength() > 0)
+                return ref_norm;
+            return collisionCornerSphere(f_b_r, x_axis.multiply(-2), y_axis.multiply(2), z_axis.multiply(-2), pos_sph, rad);
+        }
 
-        // check if previous positions were already colliding. if so, dont register collision
-        if (old_dx < box.size_x / 2 && old_dy < box.size_y / 2 && old_dz < box.size_z / 2)
-            return NULL;
-        
-        if (old_dx < box.size_x / 2 && old_dy < box.size_y / 2)     // reflect off either front or back
-        {
-            return z_axis;
-        }
-        else if (old_dx < box.size_x / 2 && old_dz < box.size_z / 2)     // reflect off either top or bottom
-        {
-            return y_axis;
-        }
-        else if (old_dy < box.size_y / 2 && old_dz < box.size_z / 2)     // reflect off left top or right
-        {
-            return x_axis;
-        }
-        */
-        // proper way: find which face the vector from old position to new position intersects with
-        // current short-cut: use center to center vector
-       // return b_to_s;
+        // check collision with corners
+        ref_norm = collisionPointSphere(f_t_r, pos_sph, rad);
+        if(ref_norm.quickLength() > 0)
+            return ref_norm;
+        ref_norm = collisionPointSphere(f_t_l, pos_sph, rad);
+        if(ref_norm.quickLength() > 0)
+            return ref_norm;
+        ref_norm = collisionPointSphere(f_b_l, pos_sph, rad);
+        if(ref_norm.quickLength() > 0)
+            return ref_norm;
+        ref_norm = collisionPointSphere(f_b_r, pos_sph, rad);
+        if(ref_norm.quickLength() > 0)
+            return ref_norm;
+        ref_norm = collisionPointSphere(b_b_r, pos_sph, rad);
+        if(ref_norm.quickLength() > 0)
+            return ref_norm;
+        ref_norm = collisionPointSphere(b_b_l, pos_sph, rad);
+        if(ref_norm.quickLength() > 0)
+            return ref_norm;
+        ref_norm = collisionPointSphere(b_t_l, pos_sph, rad);
+        if(ref_norm.quickLength() > 0)
+            return ref_norm;
+        return collisionPointSphere(b_t_r, pos_sph, rad);
     }
     return Vec3D();
 }
@@ -336,6 +364,15 @@ void PhysicsObject3D::setRotation(float x, float y, float z, float a)
     rot = Rot3D(x, y, z, a);
 }
 
+void PhysicsObject3D::addRotation(float x, float y, float z, float a)
+{
+    rot.addRotation(x, y, z, a, false);
+}
+void PhysicsObject3D::addRelativeRotation(float x, float y, float z, float a)
+{
+    rot.addRotation(x, y, z, a, true);
+}
+
 void PhysicsObject3D::setMoveable(bool move)
 {
     moveable = move;
@@ -416,7 +453,7 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<Physic
 
         // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
         // create floor
-        //PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -5, pos.z);      // create a floor object directly below object
+        //PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -15, pos.z);      // create a floor object directly below object
         //the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at 0
         //collisionImmovable(the_floor);
     }
@@ -467,7 +504,7 @@ void PhysicsObject3D::collisionImmovable(PhysicsObject3D other_obj)
     pos = ref_normal.multiply(-1).movePoint(pos);
     // Modify velocity so that it is not going into the other object
     if (ref_normal.dotProd(vel) > 0)
-        vel = vel.addVec(ref_normal.project(vel).multiply(-1.75 + acc_friction));
+        vel = vel.addVec(ref_normal.project(vel).multiply(-1.9 + acc_friction));
     
     
     

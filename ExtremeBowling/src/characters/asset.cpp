@@ -164,8 +164,10 @@ bool Asset::loadObj(string filename)
 
 void Asset::displayAsset()
 {
-	
+	Rot3D r = physics.getRot();
+
 	glPushMatrix();
+        glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());
 		glBegin(GL_TRIANGLES);
 		int size = vtxIndices.size();
 		int num_vertices = tempVertices.size();

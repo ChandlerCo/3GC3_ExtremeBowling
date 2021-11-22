@@ -43,7 +43,7 @@ $(PROGRAM_NAME): $(OBJS)
 .PHONY: clean
 
 clean:
-	$(RM) -r $(BUILD_DIR)
+	$(RM) -r $(BUILD_DIR) $(PROGRAM_NAME)
 
 
 

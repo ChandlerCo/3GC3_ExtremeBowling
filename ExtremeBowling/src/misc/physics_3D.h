@@ -29,8 +29,9 @@ public:
     Point3D calculatePos();
     Vec3D collision(Collider3D col);
 private:
-    //static bool collisionSpherePoint(Point3D sph_p, float rad, Point3D p);
+    static Vec3D collisionPointSphere(Point3D p, Point3D sph_p, float rad);
     //static Vec3D collisionBoxPoint(Collider3D box, Point3D box_p, Point3D old_bp, Point3D p, Point3D old_p);
+    static Vec3D collisionCornerSphere(Point3D corner, Vec3D edge_x, Vec3D edge_y, Vec3D edge_z, Point3D sph_p, float rad);
     static Vec3D collisionBoxBox(Collider3D box_1, Collider3D box_2);
     static Vec3D collisionBoxSphere(Collider3D box, Collider3D sph);
     static Vec3D collisionSphereSphere(Collider3D sph_1, Collider3D sph_2);
@@ -69,6 +70,8 @@ public:
     void setPosition(float x, float y, float z);
     void setVelocity(float x, float y, float z);
     void setRotation(float x, float y, float z, float a);
+    void addRotation(float x, float y, float z, float a);
+    void addRelativeRotation(float x, float y, float z, float a);
 
     void setMoveable(bool move);
     void setSurfaceFriction(float f);

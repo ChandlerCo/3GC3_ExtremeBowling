@@ -11,7 +11,7 @@ void Sweeper::animate()
     //std::cout << "sweeper animate" << std::endl;
 
     if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 50) {
-        physics.setRotation(0, 1, 0, 180); 
+        physics.addRotation(0, 1, 0, 180); 
         moveZBy = -moveZBy;
     }
 
