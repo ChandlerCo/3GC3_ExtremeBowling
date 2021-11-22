@@ -3,8 +3,13 @@
 Boomba::Boomba(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
 {
     // initial rotation
-    physics.setRotation(0, 1, 0, -90);
+    this->physics.setRotation(0, 1, 0, -90);
+    this->physics.addSphereCollider(3, -0.25, 1.75, 0);
+    this->physics.setId(static_cast<int>(CharacterId::boomba));
+
     this->graphics = Graphics("boomba");
+    this->obj_scalar = 0.5;
+
     this->moveXBy = 0.5;
 }
 

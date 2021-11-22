@@ -4,6 +4,9 @@ Sweeper::Sweeper(float inX, float inY, float inZ) : Enemy(inX, inY, inZ)
 {
     this->moveZBy = 1;
     this->graphics = Graphics("pin"); //we change this later
+
+    physics.addBoxCollider(10, 10, 30, 0, 0, 15);
+    physics.setId(static_cast<int>(CharacterId::sweeper));
 }
 
 void Sweeper::animate() 
