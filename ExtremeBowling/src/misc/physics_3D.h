@@ -99,6 +99,8 @@ public:
     void addRotation(float x, float y, float z, float a);
     void addRelativeRotation(float x, float y, float z, float a);
 
+    void setRotVel(float r_v);
+
     void setInteraction(Reaction r);
     void setSurfaceFriction(float f);
     void setAccFriction(float f);

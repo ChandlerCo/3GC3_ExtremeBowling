@@ -3,6 +3,8 @@
 
 #include <math.h> 
 
+using namespace std;
+
 class Dimension3 {
 public:
     float x;

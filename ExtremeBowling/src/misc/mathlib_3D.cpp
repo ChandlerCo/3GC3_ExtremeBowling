@@ -184,9 +184,9 @@ void Rot3D::addRotation(float in_x, float in_y, float in_z, float in_a, bool rel
     
     // rotate relative to world orientation or relative to object's current rotation
     if (relative)
-        hamiltonProd(a_r, a_x, a_y, a_z, real, x, y, z, result);
-    else
         hamiltonProd(real, x, y, z, a_r, a_x, a_y, a_z, result);
+    else
+        hamiltonProd(a_r, a_x, a_y, a_z, real, x, y, z, result);
 
     real = result[0];
     x = result[1];
