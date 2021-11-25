@@ -33,7 +33,7 @@ int frameCount;
 int windowX;
 int windowY;
 bool pauseStatus;
-map<string, Asset> ll; // dictionary of characters
+
 
 Ball ball(0, 10, 0, 8);
 Camera ballCam(100);
@@ -56,14 +56,17 @@ int prevY;
 
 int time_past;
 
-float light_pos[4] = {5,5,5,1};
-float amb[4] = {1,1,1,1};
-float diff[4] = {1,1,1,1};
-float spec[4] = {1,1,1,1};
+
+GLfloat lightPos[] =
+	{ 0, 0, 1.5, 1 };
+float lightAmb[] = { 1, 1, 1, 1 };
+float lightDif[] = { 1, 1, 1, 1 };
+float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
 
 float ambMat2[4] = {0.5,0.5,0.5,1};
 float diffMat2[4] = {0,1,0,1};
 float specMat2[4] = {0,1,0,1};
+static int spin = 0;
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
@@ -94,6 +97,7 @@ void motion(int x, int y){
     if (x > windowX || x < 0 || y > windowY || y < 0) {
         pauseStatus = true; // if mouse outside window, game pauses
     }
+    
 }
 
 void passive(int x, int y){
@@ -129,17 +133,22 @@ void special(int key, int x, int y){
         
         if (key == GLUT_KEY_DOWN){
             ball.accelerate(-forward.x, 0, -forward.z);
+            spin = (spin + 30) % 360;
         }
 
         if (key == GLUT_KEY_RIGHT){
             ball.accelerate(sideways.x, 0, sideways.z);
+            spin = (spin + 30) % 360;
+            
         }
 
         if (key == GLUT_KEY_LEFT){
             ball.accelerate(-sideways.x, 0, -sideways.z);
+            spin = (spin - 30) % 360;
         }
 
     }
+    glutPostRedisplay();
 }
 
 void FPS (int val){
@@ -220,27 +229,29 @@ void display(void)
         0,1,0
     );
 
-    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
+    glShadeModel(GL_SMOOTH);
     
-     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
-     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
-     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
-     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
-    /*
-    glPushMatrix();
-    glTranslatef(20,0,20);
-    glScalef(0.1, 0.1, 0.1);
-    displayAsset("powerup");
-    glPopMatrix();
-    */
-
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
+    
+    
     //graphics objects here
 
+    glPushMatrix();
+        glPushMatrix();
+            glRotated(spin, 1.0,0.0,0.0);
+            glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+        glPopMatrix();
+        ball.displayAsset();
+    glPopMatrix();
+    glFlush();
 
-    ball.displayAsset();
+
 
     glColor3f(1,0,0);
     glPushMatrix();
@@ -252,10 +263,16 @@ void display(void)
         glEnd();
     glPopMatrix();
 
-    glColor3f(0, 0, 1);
-    for (Enemy * i : enemies) {
-        i->displayAsset();
-    }
+
+    glColor3f(0, 1, 0);
+    glPushMatrix();
+        glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+        glPushMatrix();
+            for (Enemy * i : enemies) {
+                i->displayAsset();
+            }
+        glPopMatrix();
+    glPopMatrix();
 
 
     displayFPS();
@@ -270,6 +287,7 @@ void init(){
     windowY = 800;
     refreshRate = 120;
     frameTime = 0;
+
 
     temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
     ball.addSceneObject(&temp_floor);
@@ -292,11 +310,12 @@ void handleReshape(int w, int h) {
     windowY = h;
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    glViewport(0, 0, w, h);
+    glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
     gluPerspective(70, windowX/windowY, 1, 1000);
     glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 }
 
 
