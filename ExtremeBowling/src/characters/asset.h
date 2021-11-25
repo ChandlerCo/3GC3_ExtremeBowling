@@ -5,6 +5,7 @@
 #include "../misc/graphics.h"
 #include "../misc/physics_3D.h"
 #include "../misc/mathlib_3D.h"
+#include "character_ids.h"
 
 using namespace std;
 
@@ -28,6 +29,8 @@ class Asset {
         void runPhysics(float time, bool gravity = false, vector<PhysicsObject3D *> objs = {});
 
         PhysicsObject3D * getPhysicsPointer();
+
+        float obj_scalar;
 
         void displayAsset();
 };

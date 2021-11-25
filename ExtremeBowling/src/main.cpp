@@ -40,7 +40,7 @@ Ball ball(0, 10, 0, 8);
 Camera ballCam(100);
 Menu menu;
 
-PhysicsObject3D temp_floor(0, -1, 0, false, 0.1);    // PLACEHOLDER
+PhysicsObject3D temp_floor(0, -1, 0, 1, 0.1);    // PLACEHOLDER
 
 random_device device;
 mt19937 generator(device());
@@ -280,10 +280,12 @@ void init(){
 
     for (int i = 0; i < initNumOfBoombas; i++) {
         enemies.push_back(new Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
+        ball.addSceneObject(enemies.at(i)->getPhysicsPointer()); // so that ball will check for collisions
     }
 
     for (int i = 0; i < initNumOfSweepers; i++) {
         enemies.push_back(new Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
+        ball.addSceneObject(enemies.at(i + initNumOfBoombas)->getPhysicsPointer());
     }
 
     time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();

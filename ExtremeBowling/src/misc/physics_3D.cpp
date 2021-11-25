@@ -6,7 +6,7 @@
 
 Collider3D::Collider3D()
 {
-    collider_type = ColType::none;
+    collider_type = Shape::none;
     p_pos = NULL;
     p_rot = NULL;
     size_x = 0;
@@ -16,7 +16,7 @@ Collider3D::Collider3D()
     old_pos = Point3D(0, 0, 0);
 }
 
-Collider3D::Collider3D(ColType col, Point3D *p_position, Rot3D *p_rotation, float s_x, float s_y, float s_z, float off_x, float off_y, float off_z)
+Collider3D::Collider3D(Shape col, Point3D *p_position, Rot3D *p_rotation, float s_x, float s_y, float s_z, float off_x, float off_y, float off_z)
 {
     collider_type = col;
     p_pos = p_position;
@@ -35,18 +35,18 @@ Point3D Collider3D::calculatePos()
     return rot_offset.movePoint(*p_pos);
 }
 
-Vec3D Collider3D::collision(Collider3D col)
+Vec3D Collider3D::collide(Collider3D col)
 {
-    if (collider_type == ColType::box)
+    if (collider_type == Shape::box)
     {
-        if (col.collider_type == ColType::box)
+        if (col.collider_type == Shape::box)
             return collisionBoxBox(*this, col);
         else
             return collisionBoxSphere(*this, col);
     }
-    else if (col.collider_type == ColType::box)
+    else if (col.collider_type == Shape::box)
     {
-        //std::cout << "colliding with box\n";
+        //cout << "colliding with box\n";
         return collisionBoxSphere(col, *this).multiply(-1);
     }
     return collisionSphereSphere(*this, col);
@@ -103,7 +103,7 @@ Vec3D Collider3D::collisionBoxBox(Collider3D box_1, Collider3D box_2)
     Point3D pos_1 = box_1.calculatePos();
     Point3D pos_2 = box_2.calculatePos();
     Vec3D b_to_b = Vec3D::createVector(pos_1, pos_2);
-    float contact_length = std::max(std::max(box_1.size_x, box_1.size_y), box_1.size_z) + std::max(std::max(box_2.size_x, box_2.size_y), box_2.size_z);
+    float contact_length = max(max(box_1.size_x, box_1.size_y), box_1.size_z) + max(max(box_2.size_x, box_2.size_y), box_2.size_z);
     if (b_to_b.quickLength() < ZERO)
         return Vec3D(1, 1, 1);
     if (b_to_b.length() < contact_length)
@@ -118,7 +118,7 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
 
     float rad = sph.size_x / 2;
 
-    float contact_length = rad + std::max(std::max(box.size_x, box.size_y), box.size_z);
+    float contact_length = rad + max(max(box.size_x, box.size_y), box.size_z);
     //std::cout << b_to_s.length() << " | " << contact_length << " colliding with box\n";
     if (b_to_s.length() < contact_length)
     {
@@ -148,7 +148,7 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
             // complicated reflection - need to find where previous sphere position was
             // placeholder: use closest face
             //std::cout << rad + (box.size_y / 2) - delta_y << " placeholder\n";
-            float max_delta = std::max(std::max(delta_x, delta_y), delta_z);
+            float max_delta = max(max(delta_x, delta_y), delta_z);
             if (max_delta == delta_x)
             {
                 if (x_axis.dotProd(b_to_s) > 0)
@@ -267,7 +267,7 @@ Vec3D Collider3D::collisionSphereSphere(Collider3D sph_1, Collider3D sph_2)
     Point3D pos_1 = sph_1.calculatePos();
     Point3D pos_2 = sph_2.calculatePos();
     Vec3D reflection_normal = Vec3D::createVector(pos_1, pos_2);
-    float contact_length = sph_1.size_x + sph_2.size_x;
+    float contact_length = sph_1.size_x / 2.0f + sph_2.size_x / 2.0f;
     float len = reflection_normal.length();
     if (len < ZERO)
         return Vec3D(1, 1, 1);
@@ -284,7 +284,7 @@ PhysicsObject3D::PhysicsObject3D()
     rot = Rot3D();
     rot_vel = 0;
 
-    moveable = false;
+    interaction = Reaction::fixed;
     surface_friction = 0;
     acc_friction = 0;
 
@@ -293,7 +293,7 @@ PhysicsObject3D::PhysicsObject3D()
     collided.clear(); 
 }
 
-PhysicsObject3D::PhysicsObject3D(float p_x, float p_y, float p_z, bool move, float f)
+PhysicsObject3D::PhysicsObject3D(float p_x, float p_y, float p_z, int i, float f)
 {
     pos = Point3D(p_x, p_y, p_z);
     vel = Vec3D();
@@ -301,7 +301,9 @@ PhysicsObject3D::PhysicsObject3D(float p_x, float p_y, float p_z, bool move, flo
     rot = Rot3D();
     rot_vel = 0;
 
-    moveable = move;
+    if (i < 0 || i > 2)
+        i = 1;
+    interaction = static_cast<Reaction>(i);
     surface_friction = f;
     acc_friction = 0;
 
@@ -324,9 +326,15 @@ Rot3D PhysicsObject3D::getRot()
 {
     return rot;
 }
+
+Reaction PhysicsObject3D::getInteraction()
+{
+    return interaction;
+}
+
 bool PhysicsObject3D::isMoveable()
 {
-    return moveable;
+    return interaction == Reaction::kinetic;
 }
 
 float PhysicsObject3D::getSurfaceFriction()
@@ -339,7 +347,7 @@ int PhysicsObject3D::getId()
     return id;
 }
 
-std::vector<int> PhysicsObject3D::getCollided()
+vector<Collision> PhysicsObject3D::getCollided()
 {
     return collided;
 }
@@ -373,9 +381,9 @@ void PhysicsObject3D::addRelativeRotation(float x, float y, float z, float a)
     rot.addRotation(x, y, z, a, true);
 }
 
-void PhysicsObject3D::setMoveable(bool move)
+void PhysicsObject3D::setInteraction(Reaction r)
 {
-    moveable = move;
+    interaction = r;
 }
 
 void PhysicsObject3D::setSurfaceFriction(float f)
@@ -390,32 +398,38 @@ void PhysicsObject3D::setAccFriction(float f)
 
 void PhysicsObject3D::addBoxCollider(float s_x, float s_y, float s_z, float off_x, float off_y, float off_z)
 {
-    collider = Collider3D(ColType::box, &pos, &rot, s_x, s_y, s_z, off_x, off_y, off_z);
+    collider = Collider3D(Shape::box, &pos, &rot, s_x, s_y, s_z, off_x, off_y, off_z);
 }
 
 void PhysicsObject3D::addCubeCollider(float size, float off_x, float off_y, float off_z)
 {
-    collider = Collider3D(ColType::box, &pos, &rot, size, size, size, off_x, off_y, off_z);
+    collider = Collider3D(Shape::box, &pos, &rot, size, size, size, off_x, off_y, off_z);
 }
 
 void PhysicsObject3D::addSphereCollider(float size, float off_x, float off_y, float off_z)
 {
-    collider = Collider3D(ColType::sphere, &pos, &rot, size, size, size, off_x, off_y, off_z);
+    collider = Collider3D(Shape::sphere, &pos, &rot, size, size, size, off_x, off_y, off_z);
 }
 
 void PhysicsObject3D::addAcceleration(float x, float y, float z)
 {
     acc = acc.addVec(Vec3D(x, y, z));
 }
+
+void PhysicsObject3D::addCallback(int i, void(*f)(void*, Vec3D), void* context)
+{
+    callbacks.insert(pair<int, Callback>(i, Callback(f, context)));
+}
+
 // updatePhysics
 // friction: applies a friction force slowing down the object. set to 0 if not wanted
 // time: time passed since last call in ms
-void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<PhysicsObject3D *> objs)
+void PhysicsObject3D::updatePhysics(float time, bool gravity, vector<PhysicsObject3D *> objs)
 {
     time = time / 1000;     // convert to seconds
 
     // ------------------- deceleration due to friction -------------------------
-    acc_friction = std::min(acc_friction * time, 1.0f);
+    acc_friction = min(acc_friction * time, 1.0f);
 
     vel = vel.multiply(1-acc_friction); // calculate change in velocity
 
@@ -438,16 +452,16 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, std::vector<Physic
     acc = Vec3D();
 
     // ------------------------ collisions with other objects -------------------------
-    if (collider.collider_type != ColType::none)
+    if (collider.collider_type != Shape::none)
     {
-        for (std::vector<PhysicsObject3D *>::iterator it = objs.begin(); it < objs.end(); it++)
+        for (vector<PhysicsObject3D *>::iterator it = objs.begin(); it < objs.end(); it++)
         {
             
-            if (!moveable && (*it)->isMoveable())      // if this object is immovable but the other object is
-                (*it)->collisionImmovable(*this);
-            else if (moveable && !(*it)->isMoveable()) // if this object is movable and other object is immovable
-                collisionImmovable(**it);
-            else if (moveable && (*it)->isMoveable())  // if both objects are movable
+            if (!isMoveable() && (*it)->isMoveable())      // if this object is immovable but the other object is
+                (*it)->collisionImmovable(this);
+            else if (isMoveable() && !(*it)->isMoveable()) // if this object is movable and other object is immovable
+                collisionImmovable(*it);
+            else if (isMoveable() && (*it)->isMoveable())  // if both objects are movable
                 collision(*it);
         }
 
@@ -466,7 +480,7 @@ void PhysicsObject3D::reflect(Vec3D ref_normal, float scale)
 
 void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
 {
-    Vec3D ref_normal = collider.collision(other_obj->collider);
+    Vec3D ref_normal = collider.collide(other_obj->collider);
 
     if (ref_normal.length() == 0)
         return;
@@ -483,14 +497,17 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     if (ref_normal.dotProd(other_obj->vel) < 0)
         other_obj->vel = other_obj->vel.addVec(ref_normal.project(other_obj->vel).multiply(-1));
 
-    acc_friction = other_obj->getSurfaceFriction() * surface_friction;
+    acc_friction = max(other_obj->getSurfaceFriction() * surface_friction, acc_friction);
     other_obj->setAccFriction(acc_friction);
+
+    addCollided(other_obj->getId(), ref_normal.multiply(-1));
+    other_obj->addCollided(getId(), ref_normal);
 }
 
-void PhysicsObject3D::collisionImmovable(PhysicsObject3D other_obj)
+void PhysicsObject3D::collisionImmovable(PhysicsObject3D *other_obj)
 {
-    Vec3D ref_normal = collider.collision(other_obj.collider);
-    //std::cout << ref_normal.y << "<<" << std::endl;
+    Vec3D ref_normal = collider.collide(other_obj->collider);
+    
     if (ref_normal.length() == 0)
         return;
 
@@ -498,21 +515,32 @@ void PhysicsObject3D::collisionImmovable(PhysicsObject3D other_obj)
     // this means it is the direction the two objects should move in order to move away from each other
     // the length of ref_normal is the length the two objects should be separated by in order to stop overlapping
     
-    acc_friction = other_obj.getSurfaceFriction() * surface_friction;
+    if (other_obj->getInteraction() != Reaction::ghost)
+    {
+        acc_friction = max(other_obj->getSurfaceFriction() * surface_friction, acc_friction);
 
-    // Move point so that it no longer touches the immovable object
-    pos = ref_normal.multiply(-1).movePoint(pos);
-    // Modify velocity so that it is not going into the other object
-    if (ref_normal.dotProd(vel) > 0)
-        vel = vel.addVec(ref_normal.project(vel).multiply(-1.9 + acc_friction));
-    
-    
-    
-    
+        // Move point so that it no longer touches the immovable object
+        pos = ref_normal.multiply(-1).movePoint(pos);
+        // Modify velocity so that it is not going into the other object
+        if (ref_normal.dotProd(vel) > 0)
+            vel = vel.addVec(ref_normal.project(vel).multiply(-1.9 + acc_friction));
+    }
+    // add to collided vector
+    addCollided(other_obj->getId(), ref_normal.multiply(-1));
+    other_obj->addCollided(getId(), ref_normal);
+
+    // callbacks
 }
 
-void PhysicsObject3D::addCollided(int id)
+void PhysicsObject3D::addCollided(int id, Vec3D deflection)
 {
-    collided.push_back(id);
-    vel = Vec3D();
+    // run callback function
+    map<int, Callback>::iterator it;
+    it = callbacks.find(id);
+
+    if (it != callbacks.end())
+        it->second.runFunction(deflection);
+
+    if (id != 0)
+        collided.push_back({id, deflection});
 }
