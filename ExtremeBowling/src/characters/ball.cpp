@@ -11,6 +11,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
 
     this->physics.addCallback(static_cast<int>(CharacterId::boomba), &hitBoomba, this);
     this->physics.addCallback(static_cast<int>(CharacterId::sweeper), &hitSweeper, this);
+    this->physics.addCallback(static_cast<int>(CharacterId::checkpoint), &hitCheckpoint, this);
 
     this->graphics = Graphics("ball");
     obj_scalar = 3;
@@ -34,14 +35,22 @@ void Ball::activatePowerUp(PowerUp powerup)
     this->active_power_up = powerup;
 }
 
-void Ball::hitBoomba(void* context, Vec3D deflection)
+void Ball::hitBoomba(void* context, Vec3D deflection, PhysicsObject3D* obj)
 {
     Ball* b = static_cast<Ball*>(context);
     //b->physics.setVelocity(0, 20, 0);
 }
 
-void Ball::hitSweeper(void* context, Vec3D deflection)
+void Ball::hitSweeper(void* context, Vec3D deflection, PhysicsObject3D* obj)
 {
     Ball* b = static_cast<Ball*>(context);
     //b->physics.setVelocity(0, 50, 0);
+}
+
+void Ball::hitCheckpoint(void* context, Vec3D deflection, PhysicsObject3D* obj)
+{
+    Ball* b = static_cast<Ball*>(context);
+    // set ball's last checkpoint to obj position
+    
+    
 }

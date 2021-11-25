@@ -421,9 +421,14 @@ void PhysicsObject3D::addAcceleration(float x, float y, float z)
     acc = acc.addVec(Vec3D(x, y, z));
 }
 
-void PhysicsObject3D::addCallback(int i, void(*f)(void*, Vec3D), void* context)
+void PhysicsObject3D::addCallback(int i, void(*f)(void*, Vec3D, PhysicsObject3D*), void* context)
 {
     callbacks.insert(pair<int, Callback>(i, Callback(f, context)));
+}
+
+void PhysicsObject3D::removeCallback(int i);
+{
+    callbacks.erase(i);
 }
 
 // updatePhysics
@@ -537,14 +542,14 @@ void PhysicsObject3D::collisionImmovable(PhysicsObject3D *other_obj)
     // callbacks
 }
 
-void PhysicsObject3D::addCollided(int id, Vec3D deflection)
+void PhysicsObject3D::addCollided(int id, Vec3D deflection, PhysicsObject3D* obj)
 {
     // run callback function
     map<int, Callback>::iterator it;
     it = callbacks.find(id);
 
     if (it != callbacks.end())
-        it->second.runFunction(deflection);
+        it->second.runFunction(deflection, obj);
 
     if (id != 0)
         collided.push_back({id, deflection});

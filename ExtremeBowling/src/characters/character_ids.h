@@ -2,9 +2,14 @@
 #define CHARACTER_ID_H
 enum class CharacterId {
     ball = 1,
+    // power ups
     powerupA,
+    // enemies
     boomba,
-    sweeper
+    sweeper,
+    // floor
+    checkpoint,
+    finish
 };
 
 #endif
