@@ -267,12 +267,11 @@ void display(void)
     glColor3f(0, 1, 0);
     glPushMatrix();
         glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-        glPushMatrix();
-            for (Enemy * i : enemies) {
-                i->displayAsset();
-            }
-        glPopMatrix();
+        for (Enemy * i : enemies) {
+            i->displayAsset();
+        }
     glPopMatrix();
+    glFlush();
 
 
     displayFPS();
