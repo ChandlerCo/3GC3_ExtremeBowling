@@ -23,6 +23,7 @@
 #include "misc/camera.h"
 #include "characters/boomba.h"
 #include "characters/sweeper.h"
+#include "misc/menu.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -37,6 +38,7 @@ map<string, Asset> ll; // dictionary of characters
 
 Ball ball(0, 10, 0, 8);
 Camera ballCam(100);
+Menu menu;
 
 PhysicsObject3D temp_floor(0, -1, 0, false, 0.1);    // PLACEHOLDER
 
@@ -236,6 +238,8 @@ void display(void)
     displayAsset("powerup");
     glPopMatrix();
     */
+
+    menu.display();
 
     //graphics objects here
 
