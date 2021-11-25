@@ -227,10 +227,10 @@ void display(void)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
     glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
     
-     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
-     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
-     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
-     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
     /*
     glPushMatrix();
     glTranslatef(20,0,20);
@@ -238,8 +238,6 @@ void display(void)
     displayAsset("powerup");
     glPopMatrix();
     */
-
-    menu.display();
 
     //graphics objects here
 
@@ -261,8 +259,11 @@ void display(void)
         i->displayAsset();
     }
 
-
     displayFPS();
+
+    if (pauseStatus) {
+        menu.display(windowX, windowY);
+    }
 
     glutSwapBuffers();
 
