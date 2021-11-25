@@ -35,21 +35,24 @@ void Ball::activatePowerUp(PowerUp powerup)
     this->active_power_up = powerup;
 }
 
-void Ball::hitBoomba(void* context, Vec3D deflection, PhysicsObject3D* obj)
+void Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
+    PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     //b->physics.setVelocity(0, 20, 0);
 }
 
-void Ball::hitSweeper(void* context, Vec3D deflection, PhysicsObject3D* obj)
+void Ball::hitSweeper(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
+    PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     //b->physics.setVelocity(0, 50, 0);
 }
 
-void Ball::hitCheckpoint(void* context, Vec3D deflection, PhysicsObject3D* obj)
+void Ball::hitCheckpoint(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
+    PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     // set ball's last checkpoint to obj position
     
     

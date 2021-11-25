@@ -421,12 +421,12 @@ void PhysicsObject3D::addAcceleration(float x, float y, float z)
     acc = acc.addVec(Vec3D(x, y, z));
 }
 
-void PhysicsObject3D::addCallback(int i, void(*f)(void*, Vec3D, PhysicsObject3D*), void* context)
+void PhysicsObject3D::addCallback(int i, void(*f)(void*, Vec3D, void*), void* context)
 {
     callbacks.insert(pair<int, Callback>(i, Callback(f, context)));
 }
 
-void PhysicsObject3D::removeCallback(int i);
+void PhysicsObject3D::removeCallback(int i)
 {
     callbacks.erase(i);
 }
@@ -510,8 +510,8 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     acc_friction = max(other_obj->getSurfaceFriction() * surface_friction, acc_friction);
     other_obj->setAccFriction(acc_friction);
 
-    addCollided(other_obj->getId(), ref_normal.multiply(-1));
-    other_obj->addCollided(getId(), ref_normal);
+    addCollided(other_obj->getId(), ref_normal.multiply(-1), other_obj);
+    other_obj->addCollided(getId(), ref_normal, other_obj);
 }
 
 void PhysicsObject3D::collisionImmovable(PhysicsObject3D *other_obj)
@@ -536,13 +536,13 @@ void PhysicsObject3D::collisionImmovable(PhysicsObject3D *other_obj)
             vel = vel.addVec(ref_normal.project(vel).multiply(-1.9 + acc_friction));
     }
     // add to collided vector
-    addCollided(other_obj->getId(), ref_normal.multiply(-1));
-    other_obj->addCollided(getId(), ref_normal);
+    addCollided(other_obj->getId(), ref_normal.multiply(-1), other_obj);
+    other_obj->addCollided(getId(), ref_normal, other_obj);
 
     // callbacks
 }
 
-void PhysicsObject3D::addCollided(int id, Vec3D deflection, PhysicsObject3D* obj)
+void PhysicsObject3D::addCollided(int id, Vec3D deflection, void* obj)
 {
     // run callback function
     map<int, Callback>::iterator it;
