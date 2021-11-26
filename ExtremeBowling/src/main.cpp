@@ -23,6 +23,7 @@
 #include "misc/camera.h"
 #include "characters/boomba.h"
 #include "characters/sweeper.h"
+#include "misc/menu.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -55,6 +56,8 @@ int prevX;
 int prevY;
 
 int time_past;
+
+Menu menu;
 
 
 GLfloat lightPos[] =
@@ -272,6 +275,10 @@ void display(void)
         }
     glPopMatrix();
     glFlush();
+
+    if (pauseStatus) {
+        menu.display(windowX, windowY);
+    }
 
 
     displayFPS();
