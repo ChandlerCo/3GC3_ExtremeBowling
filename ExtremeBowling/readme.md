@@ -49,7 +49,7 @@ TODO
                 ball and pin
                 etc
 
-        menu interface - put in a seperate file
+        menu interface - put in a separate file
             Instructions
             -previous high score
             -level selector
