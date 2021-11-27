@@ -39,17 +39,20 @@ void Boomba::animate()
     // move boomba in forward direction until it reaches certain point
     // once limit reached, rotate 180, and move forward again until next limit reached
 
-    if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 5) {
-        physics.setRotation(0, 1, 0, -physics.getRot().getAngle());
+    if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 10) {
+        physics.addRelativeRotation(0, 1, 0, 180);
+        moveXBy = -moveXBy;
     }
 
-    if (physics.getRot().getAngle() > 0) {
-        physics.setPosition(physics.getPos().x + moveXBy, physics.getPos().y, physics.getPos().z);
-    }
+    physics.setPosition(physics.getPos().x + moveXBy, physics.getPos().y, physics.getPos().z);
 
-    if (physics.getRot().getAngle() < 0) {
-        physics.setPosition(physics.getPos().x - moveXBy, physics.getPos().y, physics.getPos().z);
-    }
+    // if (physics.getRot().getAngle() > 0) {
+    //     physics.setPosition(physics.getPos().x + moveXBy, physics.getPos().y, physics.getPos().z);
+    // }
+
+    // if (physics.getRot().getAngle() < 0) {
+    //     physics.setPosition(physics.getPos().x - moveXBy, physics.getPos().y, physics.getPos().z);
+    // }
     
     // Call update physics?
 }
