@@ -19,6 +19,9 @@ void Ball::runPhysics(float time)
 {
     this->physics.updatePhysics(time, true, this->scene_objs);
 
+    // rotate ball
+    Vec3D rot_axis = Vec3D(0, 1, 0).crossProd(this->physics.getVel());
+    this->physics.addRotation(rot_axis.x, 0, rot_axis.z, this->physics.getVel().length()* time * 0.0072f);
 }
 
 void Ball::addSceneObject(PhysicsObject3D * new_object)

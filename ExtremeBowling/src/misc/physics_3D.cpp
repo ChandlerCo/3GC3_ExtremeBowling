@@ -381,6 +381,11 @@ void PhysicsObject3D::addRelativeRotation(float x, float y, float z, float a)
     rot.addRotation(x, y, z, a, true);
 }
 
+void PhysicsObject3D::setRotVel(float r_v)
+{
+    rot_vel = r_v;
+}
+
 void PhysicsObject3D::setInteraction(Reaction r)
 {
     interaction = r;
