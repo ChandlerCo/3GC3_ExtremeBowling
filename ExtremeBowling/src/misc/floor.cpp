@@ -59,7 +59,7 @@ void Tile::setGraphics()
     }
 }
 
-void Tile::hitBall(void* context, Vec3D deflection, void* obj)
+int Tile::hitBall(void* context, Vec3D deflection, void* obj)
 {
     Tile* t = static_cast<Tile*>(context);
     // disable the checkpoint so that it doesnt keep getting reset
@@ -67,12 +67,14 @@ void Tile::hitBall(void* context, Vec3D deflection, void* obj)
     t->physics.setId(0);
     t->physics.removeCallback(static_cast<int>(CharacterId::ball));
     t->setGraphics();
+
+    return 0;
 }
 
 Floor::Floor()
 {
     pos = Point3D();
-    float size = 1;
+    size = 1;
 }
 
 Floor::Floor(vector<string> csv, float tile_size, float friction, float x, float z)
@@ -149,6 +151,7 @@ vector<PhysicsObject3D *> Floor::getPointers()
     return p_tiles;
 }
 
+// REMOVE - implement json file loading in level class
 Floor Floor::fromFile(string filename)
 {
     ifstream f(filename);

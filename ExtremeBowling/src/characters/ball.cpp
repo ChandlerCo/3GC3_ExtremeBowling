@@ -16,18 +16,14 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->graphics = Graphics("ball");
     obj_scalar = 3;
 }
-void Ball::runPhysics(float time)
+
+void Ball::runPhysics(float time, vector<PhysicsObject3D*> world_objs)
 {
-    this->physics.updatePhysics(time, true, this->scene_objs);
+    this->physics.updatePhysics(time, true, world_objs);
 
     // rotate ball
     Vec3D rot_axis = Vec3D(0, 1, 0).crossProd(this->physics.getVel());
     this->physics.addRotation(rot_axis.x, 0, rot_axis.z, this->physics.getVel().length()* time * 0.0072f);
-}
-
-void Ball::addSceneObject(PhysicsObject3D * new_object)
-{
-    this->scene_objs.push_back(new_object);
 }
 
 void Ball::activatePowerUp(PowerUp powerup)
@@ -35,25 +31,38 @@ void Ball::activatePowerUp(PowerUp powerup)
     this->active_power_up = powerup;
 }
 
-void Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
+int Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
     PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     //b->physics.setVelocity(0, 20, 0);
+    // if invincible, return -1
+
+    return 0;
 }
 
-void Ball::hitSweeper(void* context, Vec3D deflection, void* obj)
+int Ball::hitSweeper(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
     PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     //b->physics.setVelocity(0, 50, 0);
+
+    return 0;
 }
 
-void Ball::hitCheckpoint(void* context, Vec3D deflection, void* obj)
+int Ball::hitCheckpoint(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
     PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     // set ball's last checkpoint to obj position
     
-    
+    return 0;
+}
+
+int Ball::hitPowerUp(void* context, Vec3D deflection, void* obj)
+{
+    Ball* b = static_cast<Ball*>(context);
+    PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
+
+    return 0;
 }

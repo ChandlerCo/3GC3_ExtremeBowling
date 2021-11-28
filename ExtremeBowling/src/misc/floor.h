@@ -20,7 +20,7 @@ class Tile : public Asset {
         Tile();
         Tile(float x, float z, float size, float friction, int tile_type, float r_a = 0, float r_x = 0, float r_y = 0, float r_z = 0);
         void setGraphics();
-        static void hitBall(void* context, Vec3D deflection, void* obj);
+        static int hitBall(void* context, Vec3D deflection, void* obj);
 };
 
 class Floor {
@@ -34,7 +34,7 @@ class Floor {
         Floor();
         Floor(vector<string> csv, float tile_size, float friction, float x, float z);
         static Floor fromJson(json floor_json);
-        static Floor fromFile(string filename);
+        static Floor fromFile(string filename); // REMOVE
         vector<PhysicsObject3D *> getPointers();
         void drawFloor();
 };
