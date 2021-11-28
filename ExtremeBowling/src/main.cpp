@@ -318,6 +318,7 @@ void handleReshape(int w, int h) {
     glEnable(GL_LIGHT0);
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     gluPerspective(70, windowX/windowY, 1, 1000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
