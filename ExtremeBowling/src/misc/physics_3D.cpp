@@ -421,9 +421,14 @@ void PhysicsObject3D::addAcceleration(float x, float y, float z)
     acc = acc.addVec(Vec3D(x, y, z));
 }
 
-void PhysicsObject3D::addCallback(int i, void(*f)(void*, Vec3D), void* context)
+void PhysicsObject3D::addCallback(int i, int(*f)(void*, Vec3D, void*), void* context)
 {
     callbacks.insert(pair<int, Callback>(i, Callback(f, context)));
+}
+
+void PhysicsObject3D::removeCallback(int i)
+{
+    callbacks.erase(i);
 }
 
 // updatePhysics
@@ -462,12 +467,12 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, vector<PhysicsObje
         for (vector<PhysicsObject3D *>::iterator it = objs.begin(); it < objs.end(); it++)
         {
             
-            if (!isMoveable() && (*it)->isMoveable())      // if this object is immovable but the other object is
-                (*it)->collisionImmovable(this);
-            else if (isMoveable() && !(*it)->isMoveable()) // if this object is movable and other object is immovable
-                collisionImmovable(*it);
-            else if (isMoveable() && (*it)->isMoveable())  // if both objects are movable
-                collision(*it);
+            //if (!isMoveable() && (*it)->isMoveable())      // if this object is immovable but the other object is
+            //    (*it)->collisionImmovable(this);
+            //else if (isMoveable() && !(*it)->isMoveable()) // if this object is movable and other object is immovable
+            //    collisionImmovable(*it);
+            //else if (isMoveable() && (*it)->isMoveable())  // if both objects are movable
+            collision(*it);
         }
 
         // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
@@ -483,6 +488,7 @@ void PhysicsObject3D::reflect(Vec3D ref_normal, float scale)
     vel = vel.addVec(ref_normal.project(vel).multiply(-2)).multiply(scale);
 }
 
+/*
 void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
 {
     Vec3D ref_normal = collider.collide(other_obj->collider);
@@ -505,10 +511,70 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     acc_friction = max(other_obj->getSurfaceFriction() * surface_friction, acc_friction);
     other_obj->setAccFriction(acc_friction);
 
-    addCollided(other_obj->getId(), ref_normal.multiply(-1));
-    other_obj->addCollided(getId(), ref_normal);
+    addCollided(other_obj->getId(), ref_normal.multiply(-1), other_obj);
+    other_obj->addCollided(getId(), ref_normal, other_obj);
 }
+*/
 
+void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
+{
+    // ref_normal is normal of reflection plane that both objects should move away from
+    // this means it is the direction the two objects should move in order to move away from each other
+    // the length of ref_normal is the length the two objects should be separated by in order to stop overlapping
+    Vec3D ref_normal = collider.collide(other_obj->collider);
+
+    if (ref_normal.length() == 0)
+        return;
+
+    // check reaction type
+    bool bounce_1 = isMoveable() && other_obj->getInteraction() != Reaction::ghost;
+    bool bounce_2 = other_obj->isMoveable();
+
+    // run callbacks and get reaction override
+    // -1 means force no collision
+    //  0 means use default collision
+    //  1 means force collision
+    int force_1 = runCallback(other_obj->getId(), ref_normal.multiply(-1), other_obj);
+    int force_2 = other_obj->runCallback(getId(), ref_normal, other_obj);
+    
+    // compute reaction types for both objects
+    bounce_1 = (bounce_1 && force_1 == 0) || force_1 == 1;
+    bounce_2 = (bounce_2 && force_2 == 0) || force_2 == 1;
+
+    // save projection of original velocities going towards each other
+    Vec3D vel_1 = ref_normal.project(vel);
+    Vec3D vel_2 = ref_normal.project(other_obj->vel);
+
+    // calculate friction
+    acc_friction = max(other_obj->getSurfaceFriction() * surface_friction, acc_friction);
+    other_obj->setAccFriction(acc_friction);
+
+    // two collision
+    if (bounce_1 && bounce_2)
+    {
+        pos = ref_normal.multiply(-0.5).movePoint(pos);
+        other_obj->pos = ref_normal.multiply(0.5).movePoint(other_obj->pos);
+
+        vel = vel.addVec(vel_1.multiply(-1)).addVec(vel_2);
+        other_obj->vel = other_obj->vel.addVec(vel_2.multiply(-1)).addVec(vel_1);
+    }
+    // single collision - ie collision with an immovable object
+    else if (bounce_1)
+    {
+        pos = ref_normal.multiply(-1).movePoint(pos);
+        if (ref_normal.dotProd(vel) > 0)
+            vel = vel.addVec(vel_1.multiply(-1.9 + acc_friction));
+        vel = vel.addVec(vel_2);
+    }
+    else if (bounce_2)
+    {
+        other_obj->pos = ref_normal.movePoint(other_obj->pos);
+        if (ref_normal.dotProd(other_obj->vel) < 0)
+            other_obj->vel = other_obj->vel.addVec(vel_2.multiply(-1.9 + acc_friction));
+        other_obj->vel = other_obj->vel.addVec(vel_1);
+    }
+}
+/*
 void PhysicsObject3D::collisionImmovable(PhysicsObject3D *other_obj)
 {
     Vec3D ref_normal = collider.collide(other_obj->collider);
@@ -531,21 +597,21 @@ void PhysicsObject3D::collisionImmovable(PhysicsObject3D *other_obj)
             vel = vel.addVec(ref_normal.project(vel).multiply(-1.9 + acc_friction));
     }
     // add to collided vector
-    addCollided(other_obj->getId(), ref_normal.multiply(-1));
-    other_obj->addCollided(getId(), ref_normal);
+    runCallback(other_obj->getId(), ref_normal.multiply(-1), other_obj);
+    other_obj->runCallback(getId(), ref_normal, other_obj);
 
     // callbacks
 }
+*/
 
-void PhysicsObject3D::addCollided(int id, Vec3D deflection)
+int PhysicsObject3D::runCallback(int id, Vec3D deflection, void* obj)
 {
     // run callback function
     map<int, Callback>::iterator it;
     it = callbacks.find(id);
 
     if (it != callbacks.end())
-        it->second.runFunction(deflection);
-
-    if (id != 0)
-        collided.push_back({id, deflection});
+        return it->second.runFunction(deflection, obj);
+    
+    return 0;
 }

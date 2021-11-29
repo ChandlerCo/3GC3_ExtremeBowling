@@ -40,6 +40,7 @@ Ball ball(0, 10, 0, 8);
 Camera ballCam(100);
 
 PhysicsObject3D temp_floor(0, -1, 0, 1, 0.1);    // PLACEHOLDER
+vector<PhysicsObject3D*> temp_scene_objs;
 
 random_device device;
 mt19937 generator(device());
@@ -168,7 +169,7 @@ void FPS (int val){
     }
 
     if (!pauseStatus) {
-        ball.runPhysics(min(d_time, 33));
+        ball.runPhysics(min(d_time, 33), temp_scene_objs);
         ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
     }
 
@@ -296,16 +297,16 @@ void init(){
 
 
     temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
-    ball.addSceneObject(&temp_floor);
+    temp_scene_objs.push_back(&temp_floor);
 
     for (int i = 0; i < initNumOfBoombas; i++) {
         enemies.push_back(new Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
-        ball.addSceneObject(enemies.at(i)->getPhysicsPointer()); // so that ball will check for collisions
+        temp_scene_objs.push_back(enemies.at(i)->getPhysicsPointer()); // so that ball will check for collisions
     }
 
     for (int i = 0; i < initNumOfSweepers; i++) {
         enemies.push_back(new Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
-        ball.addSceneObject(enemies.at(i + initNumOfBoombas)->getPhysicsPointer());
+        temp_scene_objs.push_back(enemies.at(i + initNumOfBoombas)->getPhysicsPointer());
     }
 
     time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
@@ -318,6 +319,7 @@ void handleReshape(int w, int h) {
     glEnable(GL_LIGHT0);
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     gluPerspective(70, windowX/windowY, 1, 1000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
