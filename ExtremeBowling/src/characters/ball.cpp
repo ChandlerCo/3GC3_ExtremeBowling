@@ -1,5 +1,5 @@
 # include "ball.h"
-
+# include <iostream>
 
 Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
 {
@@ -15,6 +15,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
 
     this->graphics = Graphics("ball");
     obj_scalar = 3;
+    this->lives = 3;
 }
 
 void Ball::runPhysics(float time, vector<PhysicsObject3D*> world_objs)
@@ -29,6 +30,10 @@ void Ball::runPhysics(float time, vector<PhysicsObject3D*> world_objs)
 void Ball::activatePowerUp(PowerUp powerup)
 {
     this->active_power_up = powerup;
+}
+
+void Ball::jump(){
+    this->physics.addVelocity(0,50,0);
 }
 
 int Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
