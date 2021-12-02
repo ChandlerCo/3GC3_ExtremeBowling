@@ -61,15 +61,15 @@ Menu menu;
 
 
 GLfloat lightPos[] =
-	{ 0, 0, 1.5, 1 };
+	{ -1.2, 5, 1.5, 1 };
 float lightAmb[] = { 1, 1, 1, 1 };
-float lightDif[] = { 1, 1, 1, 1 };
+float lightDif[] = { 0.5, 0.5, 0.5, 1 };
 float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
 
 float ambMat2[4] = {0.5,0.5,0.5,1};
 float diffMat2[4] = {0,1,0,1};
 float specMat2[4] = {0,1,0,1};
-static int spin = 0;
+
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
@@ -136,18 +136,18 @@ void special(int key, int x, int y){
         
         if (key == GLUT_KEY_DOWN){
             ball.accelerate(-forward.x, 0, -forward.z);
-            spin = (spin + 30) % 360;
+            
         }
 
         if (key == GLUT_KEY_RIGHT){
             ball.accelerate(sideways.x, 0, sideways.z);
-            spin = (spin + 30) % 360;
+            
             
         }
 
         if (key == GLUT_KEY_LEFT){
             ball.accelerate(-sideways.x, 0, -sideways.z);
-            spin = (spin - 30) % 360;
+            
         }
 
     }
@@ -220,6 +220,8 @@ void displayFPS(){
 
 }
 
+
+
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -247,8 +249,9 @@ void display(void)
 
     glPushMatrix();
         glPushMatrix();
-            glRotated(spin, 1.0,0.0,0.0);
+            glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
             glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+            
         glPopMatrix();
         ball.displayAsset();
     glPopMatrix();
@@ -258,6 +261,7 @@ void display(void)
 
     glColor3f(1,0,0);
     glPushMatrix();
+        glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
         glBegin(GL_POLYGON);
             glVertex3f(200,0,200);
             glVertex3f(200,0,-200);
@@ -316,6 +320,7 @@ void handleReshape(int w, int h) {
     windowY = h;
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glShadeModel(GL_SMOOTH);
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);
     gluPerspective(70, windowX/windowY, 1, 1000);
