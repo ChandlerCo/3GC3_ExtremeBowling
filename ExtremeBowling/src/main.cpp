@@ -306,15 +306,18 @@ void display(void)
         //graphics objects here
 
         glPushMatrix();
-            glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-            glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif2);
-            glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
-            /*
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
-            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-            */
+            glPushMatrix();
+                glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+                glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif2);
+                glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+                /*
+                glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
+                glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
+                glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
+                glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
+                */
+            glPopMatrix();
+            ball.displayAsset();
         glPopMatrix();
         glFlush();
 
