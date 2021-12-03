@@ -12,10 +12,20 @@ the map is reset. They will have a similar look to the Mario kart power up boxes
 class PowerUp : public Asset {
     private:
         /* Store type of powerups:
+        create id, load obj based on id, behaviour based on id
         - gain a life
-        - speed boost
+            +1 to the life score
         - increase/ decrease size of bowling ball
-        - become "invisible" */
+            gl scale
+            adjust bounding box size
+
+        - become "invisible" 
+            alpha blending
+            ghost mode in physics
+        
+        -4th powerup 
+            reset powerup
+            */
         std::string type[4]; // do we need to store types as strings?
     public:
         // PowerUp(float inX, float inY, float inZ);

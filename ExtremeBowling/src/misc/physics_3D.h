@@ -31,10 +31,10 @@ struct Collision
 
 struct Callback
 {
-    void(*f)(void*, Vec3D);
+    int(*f)(void*, Vec3D, void*);
     void* context;
-    Callback(void(*in_f)(void*, Vec3D), void* in_context) : f(in_f), context(in_context) {}
-    void runFunction(Vec3D v) { f(context, v); }
+    Callback(int(*in_f)(void*, Vec3D, void*), void* in_context) : f(in_f), context(in_context) {}
+    int runFunction(Vec3D v, void* obj) { return f(context, v, obj); }
 };
 
 class Collider3D {
@@ -109,7 +109,8 @@ public:
     void addCubeCollider(float size, float off_x, float off_y, float off_z);
     void addSphereCollider(float size, float off_x, float off_y, float off_z);
 
-    void addCallback(int i, void(*f)(void*, Vec3D), void* context);
+    void addCallback(int i, int(*f)(void*, Vec3D, void*), void* context);
+    void removeCallback(int i);
 
     // modifiers
     void addAcceleration(float x, float y, float z);
@@ -118,8 +119,8 @@ public:
     void reflect(Vec3D ref_normal, float scale);
     
     void collision(PhysicsObject3D *other_obj);
-    void collisionImmovable(PhysicsObject3D *other_obj);
-    void addCollided(int id, Vec3D deflection);
+    //void collisionImmovable(PhysicsObject3D *other_obj);
+    int runCallback(int id, Vec3D deflection, void* obj);
 };
 
 

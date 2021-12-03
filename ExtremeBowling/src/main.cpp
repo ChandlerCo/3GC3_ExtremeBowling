@@ -40,6 +40,7 @@ Ball ball(0, 10, 0, 8);
 Camera ballCam(100);
 
 PhysicsObject3D temp_floor(0, -1, 0, 1, 0.1);    // PLACEHOLDER
+vector<PhysicsObject3D*> temp_scene_objs;
 
 random_device device;
 mt19937 generator(device());
@@ -59,18 +60,15 @@ int time_past;
 
 Menu menu;
 
-
-GLfloat lightPos[] =
-	{ -1.2, 5, 1.5, 1 };
+// lighting values
+GLfloat lightPos[] ={ 50, 700, 1.5, 1 };
+float lightPos2[] = {0,0,0,1};
 float lightAmb[] = { 1, 1, 1, 1 };
-float lightDif[] = { 0.5, 0.5, 0.5, 1 };
+float lightDif[] = { 1, 1, 1, 1 };
 float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
+float lightSphereRadius = 0.2;
 
-float ambMat2[4] = {0.5,0.5,0.5,1};
-float diffMat2[4] = {0,1,0,1};
-float specMat2[4] = {0,1,0,1};
-
-
+//static Material material;
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
     //     exit(0);
@@ -168,7 +166,7 @@ void FPS (int val){
     }
 
     if (!pauseStatus) {
-        ball.runPhysics(min(d_time, 33));
+        ball.runPhysics(min(d_time, 33), temp_scene_objs);
         ballCam.changePosition(ball.getX(),ball.getY(),ball.getZ());
     }
 
@@ -234,23 +232,15 @@ void display(void)
         0,1,0
     );
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
-    glShadeModel(GL_SMOOTH);
+    //glShadeModel(GL_SMOOTH);
     
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
-    
-    
+        
     //graphics objects here
-
+    
     glPushMatrix();
         glPushMatrix();
-            glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
-            glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+            //glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
+            //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
             
         glPopMatrix();
         ball.displayAsset();
@@ -258,10 +248,10 @@ void display(void)
     glFlush();
 
 
-
+    //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glColor3f(1,0,0);
     glPushMatrix();
-        glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+        
         glBegin(GL_POLYGON);
             glVertex3f(200,0,200);
             glVertex3f(200,0,-200);
@@ -273,7 +263,7 @@ void display(void)
 
     glColor3f(0, 1, 0);
     glPushMatrix();
-        glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+        //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
         for (Enemy * i : enemies) {
             i->displayAsset();
         }
@@ -300,16 +290,16 @@ void init(){
 
 
     temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
-    ball.addSceneObject(&temp_floor);
+    temp_scene_objs.push_back(&temp_floor);
 
     for (int i = 0; i < initNumOfBoombas; i++) {
         enemies.push_back(new Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
-        ball.addSceneObject(enemies.at(i)->getPhysicsPointer()); // so that ball will check for collisions
+        temp_scene_objs.push_back(enemies.at(i)->getPhysicsPointer()); // so that ball will check for collisions
     }
 
     for (int i = 0; i < initNumOfSweepers; i++) {
         enemies.push_back(new Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
-        ball.addSceneObject(enemies.at(i + initNumOfBoombas)->getPhysicsPointer());
+        temp_scene_objs.push_back(enemies.at(i + initNumOfBoombas)->getPhysicsPointer());
     }
 
     time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
@@ -323,10 +313,15 @@ void handleReshape(int w, int h) {
     glShadeModel(GL_SMOOTH);
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     gluPerspective(70, windowX/windowY, 1, 1000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
+    //material = RED_RUBBER;
 }
 
 

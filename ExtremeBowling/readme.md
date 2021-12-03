@@ -35,19 +35,9 @@ TODO
             pop up mechanic
         jump mechanic
             add upward velocity, use main
-        power up class
-            add interactions, use main
             
         ball:
             respawn - if y < __ respawn - checkpoint
-            lives
-            last checkpoint - for later
-            power up status
-
-            asset interaction - chandler will leave a method to check
-                ball and enemy
-                ball and pin
-                etc
 
         menu interface - put in a separate file
             Instructions
@@ -56,14 +46,66 @@ TODO
 
         level selector
             -load level class into main, clear other level
-            
+
+        power up class
+            add interactions, use main
+
+To Do
+
+    Sarvin:
+        Lighting
+        Shaders
+        Materials
+    
+    Thomas
+        Make some obj & mtl
+
+        implement level class
+                lives
+                last checkpoint - for later
+                power up status
+                enemy spawner
+                    adjust animation with start and end path
+                delete physics objs
+                level complete fuction
+                    menu - save high score to json
+
+        ball 
+            jump stuff
+            lives
+            score
+
+    Chandler
+        previous high score
+        saved to json along with user
+        enemy spawn locations - add start+end path
+        add power ups to json
+        delete pointer to delete physics objs
+
+    
+    Joseph
+        make second menu
+        json parser
+        level selector calls level constructor with file name - pathing will be done by constructor
+        menu dissapears after clicking start level
+    
+    
+    Implement power ups
+        power up callback
+
+
+
+    make power up classes
+        chandler will do physics stuff
+        thomas will do level related stuff
+
+
+
     Stuff for later:
     
         Advanced graphics
-        lighting
         alpha blending - ball
     
     OTHER IDEAS
-        shaders
         mini map
         camera zoom

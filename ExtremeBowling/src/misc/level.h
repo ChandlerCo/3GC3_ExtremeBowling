@@ -7,6 +7,7 @@
 #include "../characters/pin.h"
 #include "../characters/powerup.h"
 #include "../characters/sweeper.h"
+#include "../characters/ball.h"
 
 
 using namespace std;
@@ -16,32 +17,67 @@ class Level {
     private:
         int startLocation[2]; // x,y coordinates
         int endLocation[3]; //x,y and radius
-        vector <int[3]> checkpoints; 
-        /*all map checkpoints including start - 
-        checkpoints will get removed as they are reached and the first one 
-        will be the current checkpoint
-        */
+
+        int score;
+        int currentTime; //current time in ms
+
         vector <PowerUp> powerUpSpawn; //might make different ones if there are different powerups
         vector <Pin> pinSpawn;
         vector <Boomba> boombaSpawn;
         vector <Sweeper> sweeperSpawn;
+
+        Ball ball;
         LevelMap map; //needs to be implemented still
 
-        int currentTime; //current time in ms
-        int pins; //current pins collected
-    
-    public:
-        Level(); //need to discuss implementation and loading
+        int powerUpStart;
 
-        bool checkLocation(int x, int y); 
-        /*will return true if at end of level
-         otherwise it will see if it's in the radius of any checkpoints
-         will also run physics and adjust for collisions when appropriate
-         then update latest checkpoint */
         
-        //
+        void powerUpDelete();
+            //if currentTime - powerUpStart > 10
+            //this->ball.deletePowerUp();
+        void pinDelete();
+            //same as above for pins
+        
+        void checkBall();
+            //if ball y < -10
+            //ball.respawn();
+        void deleteCollisions();
+            //for the power vectors, pin vector if collided = true, delete
+            //if power up check collisions = true
+            //powerup start = currentTime
+        
 
-        int getScore(); //calculates and returns score
+    public:
+        Level(); 
+        /*
+            create a new ball object
+            load map - call constructor
+                pass json data through
+
+
+            init enemies and powerups and pins
+
+        */
+        void runLevel();
+            //run physics
+            //update time
+            //check collisions
+            //powerupdelete called
+            
+
+        void endLevel();
+
+        /*
+            called if ball.finished() = true;
+            check/set high score
+            delete all objects/vectors
+            call main menu
+            delete map
+            maybe delete level itself instead
+
+        */
+
+        int getScore(); //calculates and returns score -- put in the corner of the level
 
 
 };
