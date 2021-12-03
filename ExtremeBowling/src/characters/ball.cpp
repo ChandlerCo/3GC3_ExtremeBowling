@@ -13,7 +13,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->physics.addCallback(static_cast<int>(CharacterId::sweeper), &hitSweeper, this);
     this->physics.addCallback(static_cast<int>(CharacterId::checkpoint), &hitCheckpoint, this);
 
-    this->graphics = Graphics("bowlingball");
+    this->graphics = Graphics("ball");
     obj_scalar = 3;
     this->lives = 3;
 }

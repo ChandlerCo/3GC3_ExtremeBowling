@@ -74,9 +74,9 @@ float ambMat2[4] = {0.5,0.5,0.5,1};
 float diffMat2[4] = {0,1,0,1};
 float specMat2[4] = {0,1,0,1};
 
-float ambMat[4] = {0.05f,0.0f,0.0f,1.0f};
-float diffMat[4] = {0.5f,0.4f,0.4f,1.0f};
-float specMat[4] = {0.7f,0.04f,0.04f,1.0f};
+float ambMat[4] = {0.1745f, 0.01175f, 0.01175f, 0.55f};
+float diffMat[4] = {0.61424f, 0.04136f, 0.04136f, 0.55f};
+float specMat[4] = {0.727811f, 0.626959f, 0.626959f, 0.55f };
 
 static Material material;
 
@@ -247,16 +247,22 @@ void display(void)
     
         
     //graphics objects here
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 76);
 
     glPushMatrix();
         glPushMatrix();
-            glLightfv(GL_LIGHT0, GL_POSITION, lightPos2);
+            glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
             glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif2);
             glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+            /*
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
             glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
+            */
         glPopMatrix();
         ball.displayAsset();
     glPopMatrix();
