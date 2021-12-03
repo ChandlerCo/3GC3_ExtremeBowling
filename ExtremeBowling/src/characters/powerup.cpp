@@ -6,7 +6,7 @@ PowerUp::PowerUp(float inX, float inY, float inZ, int type, int local_id) : Asse
     //this->type = type; //type 1 is gain a life, type 2 is increase size, type 3 is ghost mode
     this->physics.setId(type);
     this->physics.setLocalId(local_id);
-
+    this->obj_scalar = 5;
     this->physics.addCallback(BALL, &hitBall, this);
 }
 

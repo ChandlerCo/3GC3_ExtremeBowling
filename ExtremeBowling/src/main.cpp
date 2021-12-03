@@ -18,10 +18,12 @@
 #include <map>
 #include <random>
 
+// #include "ioFuncs.h"
 #include "characters/ball.h"
 #include "characters/boomba.h"
 #include "characters/sweeper.h"
 #include "misc/camera.h"
+#include "misc/material.cpp"
 #include "misc/menu.h"
 #include "misc/level.h"
 
@@ -37,6 +39,7 @@ bool pauseStatus;
 
 
 Ball ball(0, 10, 0, 8);
+PowerUp powerup(40,10,4);
 Camera ballCam(100);
 
 PhysicsObject3D temp_floor(0, -1, 0, 1, 0.1);    // PLACEHOLDER
@@ -61,16 +64,27 @@ int time_past;
 Menu menu;
 
 
-GLfloat lightPos[] =
-	{ 0, 0, 1.5, 1 };
+float lightPos[] =
+	{ 50, 700, 1, 1 };
+float lightPos2[] = {0,0,0,1};
 float lightAmb[] = { 1, 1, 1, 1 };
-float lightDif[] = { 1, 1, 1, 1 };
+float lightDif[] = { 0.8, 0.8, 0.8, 1 };
+float lightDif2[] = { 1, 1, 1, 1 };
 float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
 
 float ambMat2[4] = {0.5,0.5,0.5,1};
 float diffMat2[4] = {0,1,0,1};
 float specMat2[4] = {0,1,0,1};
-static int spin = 0;
+
+float ambMat[4] = {0.1745f, 0, 0.11, 0.55f};
+float diffMat[4] = {1,0,0.51, 0.55f};
+float specMat[4] = {0.727811f, 0.626959f, 0.626959f, 0.55f };
+
+float ambMat3[4] = {0, 0, 1, 1.0f};
+float diffMat3[4] = {1,1,1, 1.0f};
+float specMat3[4] = {0.333333f, 0.333333f, 0.521569f, 1.0f};
+
+static Material material;
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
@@ -83,9 +97,7 @@ void keyboard(unsigned char key, int _x, int _y) {
 }
 
 void mouse(int button, int state, int x, int y){
-    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
-        ball.jump();
-    }
+    //mouse left click-jump
 }
 
 void motion(int x, int y){
@@ -139,18 +151,18 @@ void special(int key, int x, int y){
         
         if (key == GLUT_KEY_DOWN){
             ball.accelerate(-forward.x, 0, -forward.z);
-            spin = (spin + 30) % 360;
+            
         }
 
         if (key == GLUT_KEY_RIGHT){
             ball.accelerate(sideways.x, 0, sideways.z);
-            spin = (spin + 30) % 360;
+            
             
         }
 
         if (key == GLUT_KEY_LEFT){
             ball.accelerate(-sideways.x, 0, -sideways.z);
-            spin = (spin - 30) % 360;
+            
         }
 
     }
@@ -223,6 +235,8 @@ void displayFPS(){
 
 }
 
+
+
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -235,32 +249,41 @@ void display(void)
         0,1,0
     );
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
-    glShadeModel(GL_SMOOTH);
+    //glShadeModel(GL_SMOOTH);
     
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
-    
-    
+        
     //graphics objects here
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 100);
 
     glPushMatrix();
         glPushMatrix();
-            glRotated(spin, 1.0,0.0,0.0);
             glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+            glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif2);
+            glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+            /*
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
+            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
+            */
         glPopMatrix();
         ball.displayAsset();
     glPopMatrix();
     glFlush();
 
 
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
 
+    //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glColor3f(1,0,0);
     glPushMatrix();
+        
         glBegin(GL_POLYGON);
             glVertex3f(200,0,200);
             glVertex3f(200,0,-200);
@@ -272,12 +295,19 @@ void display(void)
 
     glColor3f(0, 1, 0);
     glPushMatrix();
-        glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+        //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
         for (Enemy * i : enemies) {
             i->displayAsset();
         }
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat3);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat3);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat3);
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 9.8);
+        powerup.displayAsset();
     glPopMatrix();
     glFlush();
+
+    
 
     if (pauseStatus) {
         menu.display(windowX, windowY);
@@ -319,13 +349,19 @@ void handleReshape(int w, int h) {
     windowY = h;
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glShadeModel(GL_SMOOTH);
+    
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(70, windowX/windowY, 1, 1000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
+
 }
 
 
@@ -345,7 +381,6 @@ int main(int argc, char** argv)
 
     //callbacks
     glutKeyboardFunc(keyboard);
-    glutMouseFunc(mouse);
     glutPassiveMotionFunc(passive);
     glutSpecialFunc(special);
     glutReshapeFunc(handleReshape);
