@@ -13,16 +13,19 @@
 #endif
 
 #include <string>
+#include "button.h"
 using namespace std;
 
 class Menu {
     public:
-        Menu();
-        void display(int windowX, int windowY);
-    private:
+        Menu(int windowX, int windowY);
+        virtual void display();
+    protected:
         float windowWidth; // need to store window size as float for centering text
         float windowHeight;
         void centerText(string text, void* font, float y);
+        void initMenu();
+        void endMenu();
 };
 
 #endif

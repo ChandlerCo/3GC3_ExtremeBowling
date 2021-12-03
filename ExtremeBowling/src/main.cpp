@@ -24,8 +24,12 @@
 #include "characters/sweeper.h"
 #include "misc/camera.h"
 #include "misc/material.cpp"
-#include "misc/menu.h"
 #include "misc/level.h"
+
+#include "menu/menu.h"
+#include "menu/startMenu.h"
+#include "menu/instructionsMenu.h"
+#include "menu/pauseMenu.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -33,9 +37,11 @@ using namespace std::chrono;
 int refreshRate;
 int frameTime;
 int frameCount;
-int windowX;
-int windowY;
+int windowX = 800; // need to initialize this first here for menu parameters
+int windowY = 800;
 bool pauseStatus;
+bool startStatus;
+bool instructionsStatus;
 
 
 Ball ball(0, 10, 0, 8);
@@ -61,8 +67,9 @@ int prevY;
 
 int time_past;
 
-Menu menu;
-
+StartMenu startMenu(windowX, windowY);
+InstructionsMenu instructionsMenu(windowX, windowY);
+PauseMenu pauseMenu(windowX, windowY);
 
 float lightPos[] =
 	{ 50, 700, 1, 1 };
@@ -91,12 +98,43 @@ void keyboard(unsigned char key, int _x, int _y) {
     //     exit(0);
     // }
 
-    if (key  == ' '){
+    if (key  == ' ' && !startStatus){
         pauseStatus = !pauseStatus;
     }
 }
 
 void mouse(int button, int state, int x, int y){
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        if (startStatus) {
+            if (startMenu.instructionsClicked(x, y)) { // switch to instructions menu
+                startStatus = false;
+                instructionsStatus = true;
+            } else if (startMenu.quitClicked(x, y)) { // quit program
+                exit(0);
+            } else if (startMenu.level1Clicked(x, y)) {
+                startStatus = false;
+                //instructionsStatus = false;
+                pauseStatus = false;
+            }
+            // menu.startClick(x, windowY - y);
+            /* if instructions button pressed -> change startStatus to false, instructionsStatus to true
+            if quit button pressed -> exit(0)
+            level1 button pressed -> startStatus = false (will need to acc load level later on)
+            */
+        } else if (instructionsStatus) {
+            if (instructionsMenu.backClicked(x, y)) {
+                instructionsStatus = false;
+                startStatus = true;
+            }
+        }
+
+        // if (pauseStatus && !startStatus) {
+
+        // }
+        
+    }
+
+    glutPostRedisplay();
     //mouse left click-jump
 }
 
@@ -257,8 +295,16 @@ void display(void)
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat3);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat3);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 100);
+    
+    if (startStatus) {
+        pauseStatus = true; // prevent movement of other things
+        startMenu.display();
+    } else if (instructionsStatus) {
+        pauseStatus = true; // prevent movement of other things
+        instructionsMenu.display();
+    } else {
+        //graphics objects here
 
-    glPushMatrix();
         glPushMatrix();
             glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
             glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif2);
@@ -270,9 +316,7 @@ void display(void)
             glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
             */
         glPopMatrix();
-        ball.displayAsset();
-    glPopMatrix();
-    glFlush();
+        glFlush();
 
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
@@ -310,11 +354,12 @@ void display(void)
     
 
     if (pauseStatus) {
-        menu.display(windowX, windowY);
+        pauseMenu.display();
     }
 
 
-    displayFPS();
+        displayFPS();
+    }
 
     glutSwapBuffers();
 
@@ -327,6 +372,8 @@ void init(){
     refreshRate = 120;
     frameTime = 0;
 
+    startStatus = true;
+    //instructionsStatus = true;
 
     temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
     temp_scene_objs.push_back(&temp_floor);
@@ -381,6 +428,7 @@ int main(int argc, char** argv)
 
     //callbacks
     glutKeyboardFunc(keyboard);
+    glutMouseFunc(mouse);
     glutPassiveMotionFunc(passive);
     glutSpecialFunc(special);
     glutReshapeFunc(handleReshape);
