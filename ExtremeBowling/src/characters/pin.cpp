@@ -9,3 +9,7 @@ void Pin::collisionAnimation()
 {
 
 }
+
+bool Pin::checkCollision(){
+    return collided;
+}
