@@ -253,9 +253,9 @@ void display(void)
     
         
     //graphics objects here
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat3);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat3);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat3);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 100);
 
     glPushMatrix();
