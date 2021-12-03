@@ -18,10 +18,12 @@
 #include <map>
 #include <random>
 
+// #include "ioFuncs.h"
 #include "characters/ball.h"
 #include "misc/camera.h"
 #include "characters/boomba.h"
 #include "characters/sweeper.h"
+#include "misc/material.cpp"
 #include "misc/menu.h"
 
 using namespace std;
@@ -59,15 +61,25 @@ int time_past;
 
 Menu menu;
 
-// lighting values
-GLfloat lightPos[] ={ 50, 700, 1.5, 1 };
+
+float lightPos[] =
+	{ 50, 700, 1, 1 };
 float lightPos2[] = {0,0,0,1};
 float lightAmb[] = { 1, 1, 1, 1 };
-float lightDif[] = { 1, 1, 1, 1 };
+float lightDif[] = { 0.8, 0.8, 0.8, 1 };
+float lightDif2[] = { 1, 1, 1, 1 };
 float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
-float lightSphereRadius = 0.2;
 
-//static Material material;
+float ambMat2[4] = {0.5,0.5,0.5,1};
+float diffMat2[4] = {0,1,0,1};
+float specMat2[4] = {0,1,0,1};
+
+float ambMat[4] = {0.05f,0.0f,0.0f,1.0f};
+float diffMat[4] = {0.5f,0.4f,0.4f,1.0f};
+float specMat[4] = {0.7f,0.04f,0.04f,1.0f};
+
+static Material material;
+
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
     //     exit(0);
@@ -79,9 +91,7 @@ void keyboard(unsigned char key, int _x, int _y) {
 }
 
 void mouse(int button, int state, int x, int y){
-    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
-        ball.jump();
-    }
+    //mouse left click-jump
 }
 
 void motion(int x, int y){
@@ -237,17 +247,26 @@ void display(void)
     
         
     //graphics objects here
-    
+
     glPushMatrix();
         glPushMatrix();
-            //glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
-            //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-            
+            glLightfv(GL_LIGHT0, GL_POSITION, lightPos2);
+            glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif2);
+            glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
+            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
         glPopMatrix();
         ball.displayAsset();
     glPopMatrix();
     glFlush();
 
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat2);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 27);
 
     //glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glColor3f(1,0,0);
@@ -312,6 +331,7 @@ void handleReshape(int w, int h) {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glShadeModel(GL_SMOOTH);
+    
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -322,7 +342,7 @@ void handleReshape(int w, int h) {
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
-    //material = RED_RUBBER;
+
 }
 
 
@@ -342,7 +362,6 @@ int main(int argc, char** argv)
 
     //callbacks
     glutKeyboardFunc(keyboard);
-    glutMouseFunc(mouse);
     glutPassiveMotionFunc(passive);
     glutSpecialFunc(special);
     glutReshapeFunc(handleReshape);
