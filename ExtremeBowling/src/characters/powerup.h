@@ -35,7 +35,7 @@ class PowerUp : public Asset {
         void defaultAnimation(); // can have box slowly rotate or hover up and down
         void collisionAnimation(); // only call this when player collides
         void powerUpType(); // will let player class know which type of power up to apply
-        //using Asset::Asset;
+        using Asset::Asset;
         bool checkCollision();
 };
 
