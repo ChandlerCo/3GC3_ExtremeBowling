@@ -34,9 +34,13 @@ class Floor {
         Floor();
         Floor(vector<string> csv, float tile_size, float friction, float x, float z);
         static Floor fromJson(json floor_json);
-        static Floor fromFile(string filename); // REMOVE
-        vector<PhysicsObject3D *> getPointers();
+        void getPointers(vector<PhysicsObject3D *> & p_tiles);
+        float spawnX();
+        float spawnY();
+        float spawnZ();
+        float getTileSize();
         void drawFloor();
+        void clearTiles();
 };
 
 #endif

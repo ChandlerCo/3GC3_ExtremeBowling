@@ -1,8 +1,5 @@
 #include "physics_3D.h"
 
-#define GRAVITY (-9.81f)
-#define MAX_SPD 1000
-#define ZERO 0.0000001
 
 Collider3D::Collider3D()
 {
@@ -289,6 +286,7 @@ PhysicsObject3D::PhysicsObject3D()
     acc_friction = 0;
 
     id = 0;
+    local_id = 0;
     collider = Collider3D();
     collided.clear(); 
 }
@@ -308,8 +306,23 @@ PhysicsObject3D::PhysicsObject3D(float p_x, float p_y, float p_z, int i, float f
     acc_friction = 0;
 
     id = 0;
+    local_id = 0;
     collider = Collider3D();
     collided.clear(); 
+}
+float PhysicsObject3D::getX()
+{
+    return pos.x;
+}
+
+float PhysicsObject3D::getY()
+{
+    return pos.y;
+}
+
+float PhysicsObject3D::getZ()
+{
+    return pos.z;
 }
 
 Point3D PhysicsObject3D::getPos()
@@ -347,6 +360,11 @@ int PhysicsObject3D::getId()
     return id;
 }
 
+int PhysicsObject3D::getLocalId()
+{
+    return local_id;
+}
+
 vector<Collision> PhysicsObject3D::getCollided()
 {
     return collided;
@@ -355,6 +373,11 @@ vector<Collision> PhysicsObject3D::getCollided()
 void PhysicsObject3D::setId(int object_id)
 {
     id = object_id;
+}
+
+void PhysicsObject3D::setLocalId(int object_id)
+{
+    local_id = object_id;
 }
 
 void PhysicsObject3D::setPosition(float x, float y, float z)

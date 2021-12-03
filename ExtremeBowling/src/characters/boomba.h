@@ -15,11 +15,14 @@ the player bounce off of the Boomba and lose pins, or a life.
 
 class Boomba : public Enemy {
     public:
-        Boomba(float inX, float inY, float inZ);
-        float moveXBy;
+        Boomba(float inX, float inY, float inZ, float endX, float endY, float endZ, int id);
+        // float moveXBy;
 
         void animate();
         void collisionAnimation();
+        //float inY;
+        static int hitBall(void* context, Vec3D deflection, void* obj);
+        static vector<Boomba> fromJson(vector<json> jsonData, float tileSize);
 };
 
 #endif

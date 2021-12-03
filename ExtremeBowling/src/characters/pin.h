@@ -12,9 +12,11 @@ class Pin : public Asset {
     private:
         bool collided;
     public:
-        Pin(float inX, float inY, float inZ);
+        Pin(float inX, float inY, float inZ, int local_id);
         void collisionAnimation();
         bool checkCollision();
+        static int hitBall(void* context, Vec3D deflection, void* obj);
+        static vector<Pin> fromJson(vector<json> jsonData, float tileSize);
 };
 
 #endif

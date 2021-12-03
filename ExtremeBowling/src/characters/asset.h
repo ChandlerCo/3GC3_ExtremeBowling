@@ -6,8 +6,10 @@
 #include "../misc/physics_3D.h"
 #include "../misc/mathlib_3D.h"
 #include "character_ids.h"
+#include "../third_party/json.hpp"
 
 using namespace std;
+using json = nlohmann::json;
 
 class Asset {
     protected:

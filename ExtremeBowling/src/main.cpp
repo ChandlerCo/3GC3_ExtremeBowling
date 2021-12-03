@@ -19,10 +19,11 @@
 #include <random>
 
 #include "characters/ball.h"
-#include "misc/camera.h"
 #include "characters/boomba.h"
 #include "characters/sweeper.h"
+#include "misc/camera.h"
 #include "misc/menu.h"
+#include "misc/level.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -50,7 +51,7 @@ int initNumOfBoombas = 5;
 float boombaDistToFloor = 5;
 int initNumOfSweepers = 5;
 float sweeperDistToFloor = 5;
-//int initNumOfEnemies = initNumOfBoombas + initNumOfSweepers;
+//Level level1("map1");
 
 int prevX;
 int prevY;
@@ -300,15 +301,15 @@ void init(){
     temp_floor.addBoxCollider(400, 2, 400, 0, 0, 0);
     temp_scene_objs.push_back(&temp_floor);
 
-    for (int i = 0; i < initNumOfBoombas; i++) {
-        enemies.push_back(new Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
-        temp_scene_objs.push_back(enemies.at(i)->getPhysicsPointer()); // so that ball will check for collisions
-    }
+    // for (int i = 0; i < initNumOfBoombas; i++) {
+    //     enemies.push_back(new Boomba(enemyX(generator), boombaDistToFloor, enemyZ(generator))); // can change boombaDistToFloor later
+    //     temp_scene_objs.push_back(enemies.at(i)->getPhysicsPointer()); // so that ball will check for collisions
+    // }
 
-    for (int i = 0; i < initNumOfSweepers; i++) {
-        enemies.push_back(new Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
-        temp_scene_objs.push_back(enemies.at(i + initNumOfBoombas)->getPhysicsPointer());
-    }
+    // for (int i = 0; i < initNumOfSweepers; i++) {
+    //     enemies.push_back(new Sweeper(enemyX(generator), sweeperDistToFloor, enemyZ(generator)));
+    //     temp_scene_objs.push_back(enemies.at(i + initNumOfBoombas)->getPhysicsPointer());
+    // }
 
     time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }

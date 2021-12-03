@@ -1,13 +1,14 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+#ifndef LEVEL_H
+#define LEVEL_H
 
 #include <vector>
-#include "levelMap.h"
+
 #include "../characters/boomba.h"
 #include "../characters/pin.h"
 #include "../characters/powerup.h"
 #include "../characters/sweeper.h"
 #include "../characters/ball.h"
+#include "floor.h"
 
 
 using namespace std;
@@ -17,38 +18,31 @@ class Level {
     private:
         int startLocation[2]; // x,y coordinates
         int endLocation[3]; //x,y and radius
-
         int score;
         int currentTime; //current time in ms
 
-        vector <PowerUp> powerUpSpawn; //might make different ones if there are different powerups
-        vector <Pin> pinSpawn;
-        vector <Boomba> boombaSpawn;
-        vector <Sweeper> sweeperSpawn;
+        vector <PowerUp> powerUps;
+        vector <Pin> pins;
+        vector <Boomba> boombas;
+        vector <Sweeper> sweepers;
 
         Ball ball;
-        LevelMap map; //needs to be implemented still
+        Floor map; //needs to be implemented still
 
         int powerUpStart;
 
-        
-        void powerUpDelete();
-            //if currentTime - powerUpStart > 10
-            //this->ball.deletePowerUp();
-        void pinDelete();
-            //same as above for pins
-        
-        void checkBall();
-            //if ball y < -10
-            //ball.respawn();
-        void deleteCollisions();
-            //for the power vectors, pin vector if collided = true, delete
-            //if power up check collisions = true
-            //powerup start = currentTime
-        
+        string levelFilename;
+        int highScore;
+        int floorLength;
 
+        vector<PhysicsObject3D *> worldObjects;
+
+        void saveHighScore(); // called by endLevel() 
     public:
-        Level(); 
+
+        bool ended;
+
+        Level(string filename); 
         /*
             create a new ball object
             load map - call constructor
@@ -58,14 +52,15 @@ class Level {
             init enemies and powerups and pins
 
         */
-        void runLevel();
+        void runLevel(int timePassed);
             //run physics
             //update time
-            //check collisions
-            //powerupdelete called
+            //check power ups
+            //check collisions/delete where appropriate
+            //clear overdue powerups
             
 
-        void endLevel();
+        bool endLevel(); //return true if good ending, return false if bad ending
 
         /*
             called if ball.finished() = true;
@@ -79,7 +74,35 @@ class Level {
 
         int getScore(); //calculates and returns score -- put in the corner of the level
 
+        int getHighScore(); //get high score in json
+
 
 };
 
 #endif
+
+/*
+    put in timer func, run end screen for 10 seconds, go back to start menu
+    or press smth to go back to start 
+    
+    if level.ended = true
+        currentscore = level.getScore
+        highscore = level.getHighScore
+
+        if(endLevel()){
+
+            Your Score is currentScore
+            if currentScore > highScore
+                congrats new high score
+        } else {
+            game over ...
+        }
+        
+        delete currentLevel
+
+
+    global variable for menu function called currentLevel
+    currentLevel = Level("map1.json")
+
+
+*/

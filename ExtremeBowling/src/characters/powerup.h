@@ -17,7 +17,7 @@ class PowerUp : public Asset {
         create id, load obj based on id, behaviour based on id
         - gain a life
             +1 to the life score
-        - increase/ decrease size of bowling ball
+        - increase size of bowling ball
             gl scale
             adjust bounding box size
 
@@ -25,17 +25,17 @@ class PowerUp : public Asset {
             alpha blending
             ghost mode in physics
         
-        -4th powerup 
-            reset powerup
             */
-        std::string type[4]; // do we need to store types as strings?
+        int type;
     public:
-        // PowerUp(float inX, float inY, float inZ);
+        PowerUp(float inX, float inY, float inZ, int type, int local_id);
         void defaultAnimation(); // can have box slowly rotate or hover up and down
         void collisionAnimation(); // only call this when player collides
-        void powerUpType(); // will let player class know which type of power up to apply
+        int powerUpType(); // will let player class know which type of power up to apply
         using Asset::Asset;
         bool checkCollision();
+        static int hitBall(void* context, Vec3D deflection, void* obj);
+        static vector<PowerUp> fromJson(vector<json> jsonData, float tileSize);
 };
 
 #endif

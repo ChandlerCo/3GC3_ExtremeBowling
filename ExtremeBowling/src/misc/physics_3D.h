@@ -9,6 +9,10 @@
 
 #include "mathlib_3D.h"
 
+#define GRAVITY (-18.6f)
+#define MAX_SPD 1000
+#define ZERO 0.0000001
+
 using namespace std;
 
 enum class Shape {
@@ -73,6 +77,7 @@ private:
     float acc_friction;
     
     int id;
+    int local_id;
     
     vector<Collision> collided;       // when an object collides with another object, they can add some value to collided to know what they collided with 
     map<int, Callback> callbacks;
@@ -82,6 +87,9 @@ public:
     PhysicsObject3D(float p_x, float p_y, float p_z, int i = 1, float f = 0);
 
     // getters
+    float getX();
+    float getY();
+    float getZ();
     Point3D getPos();
     Vec3D getVel();
     Rot3D getRot();
@@ -89,10 +97,12 @@ public:
     bool isMoveable();
     float getSurfaceFriction();
     int getId();
+    int getLocalId();
     vector<Collision> getCollided();
 
     // setters
     void setId(int object_id);
+    void setLocalId(int object_id);
     void setPosition(float x, float y, float z);
     void setVelocity(float x, float y, float z);
     void setRotation(float x, float y, float z, float a);

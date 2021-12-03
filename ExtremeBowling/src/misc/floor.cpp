@@ -31,9 +31,9 @@ Tile::Tile(float x, float z, float size, float friction, int tile_type, float r_
 
     switch (tile_type)
     {
-        case static_cast<int>(CharacterId::checkpoint):
-            physics.addCallback(static_cast<int>(CharacterId::ball), &hitBall, this);
-        case static_cast<int>(CharacterId::finish):
+        case CHECKPOINT:
+            physics.addCallback(BALL, &hitBall, this);
+        case FINISH:
             physics.setId(tile_type);
             break;
         default:
@@ -47,10 +47,10 @@ void Tile::setGraphics()
     graphics = Graphics("tile");
     switch (physics.getId())
     {
-        case static_cast<int>(CharacterId::checkpoint):
+        case CHECKPOINT:
             // set graphics to be checkpoint tile (maybe change texture used?)
             break;
-        case static_cast<int>(CharacterId::finish):
+        case FINISH:
             // set graphics to be checkpoint tile (maybe change texture used?)
             break;
         default:
@@ -65,7 +65,7 @@ int Tile::hitBall(void* context, Vec3D deflection, void* obj)
     // disable the checkpoint so that it doesnt keep getting reset
     // It also prevents someone from going backwards in the map and beign reset to an earlier checkpoint
     t->physics.setId(0);
-    t->physics.removeCallback(static_cast<int>(CharacterId::ball));
+    t->physics.removeCallback(BALL);
     t->setGraphics();
 
     return 0;
@@ -112,12 +112,12 @@ Floor::Floor(vector<string> csv, float tile_size, float friction, float x, float
                 if (c.compare("S") == 0)
                 {
                     spawn = Point3D(t_x, SPAWN_HEIGHT, t_z);
-                    tile_type = static_cast<int>(CharacterId::checkpoint);
+                    tile_type = CHECKPOINT;
                 }
                 else if (c.compare("C") == 0)
-                    tile_type = static_cast<int>(CharacterId::checkpoint);
+                    tile_type = CHECKPOINT;
                 else if (c.compare("F") == 0)
-                    tile_type = static_cast<int>(CharacterId::finish);
+                    tile_type = FINISH;
                 
                 c = values.at(1);
                 if (c.compare(" ") == 0)
@@ -141,31 +141,47 @@ Floor Floor::fromJson(json floor_json)
     return Floor(csv, tile_size, default_friction, 0, 0);
 }
 
-vector<PhysicsObject3D *> Floor::getPointers()
+void Floor::getPointers(vector<PhysicsObject3D *> & p_tiles)
 {
-    vector<PhysicsObject3D *> p_tiles;
 
     for (Tile *t : floor_tiles)
         p_tiles.push_back(t->getPhysicsPointer());
 
-    return p_tiles;
 }
 
-// REMOVE - implement json file loading in level class
-Floor Floor::fromFile(string filename)
+float Floor::spawnX()
 {
-    ifstream f(filename);
+    return spawn.x;
+}
 
-    if (f)
+float Floor::spawnY()
+{
+    return spawn.y;
+}
+
+float Floor::spawnZ()
+{
+    return spawn.z;
+}
+
+float Floor::getTileSize()
+{
+    return size;
+}
+
+void Floor::clearTiles()
+{
+    for(Tile* p_tile : floor_tiles)
     {
-        json level_data;
-        f >> level_data;
+        delete p_tile;
+    }
+    floor_tiles.clear();
+}
 
-        json floor_data = level_data.find("Floor").value();
-        float default_friction = floor_data.find("DEFAULT_FRICTION").value();
-        float tile_size = floor_data.find("TILE_SIZE").value();
-        vector<string> csv = floor_data.find("CSV").value();
-
-        return Floor(csv, tile_size, default_friction, 0, 0);
+void Floor::drawFloor()
+{
+    for (Tile* tile : floor_tiles)
+    {
+        tile->displayAsset();
     }
 }

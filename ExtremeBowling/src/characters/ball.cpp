@@ -7,15 +7,21 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->physics.setSurfaceFriction(1);
     this->physics.addSphereCollider(radius * 2, 0, 0, 0);
     
-    this->physics.setId(static_cast<int>(CharacterId::ball));
+    this->physics.setId(BALL);
 
-    this->physics.addCallback(static_cast<int>(CharacterId::boomba), &hitBoomba, this);
-    this->physics.addCallback(static_cast<int>(CharacterId::sweeper), &hitSweeper, this);
-    this->physics.addCallback(static_cast<int>(CharacterId::checkpoint), &hitCheckpoint, this);
+    this->physics.addCallback(BOOMBA, &hitBoomba, this);
+    this->physics.addCallback(SWEEPER, &hitSweeper, this);
+    
+    this->physics.addCallback(CHECKPOINT, &hitCheckpoint, this);
+    this->physics.addCallback(FINISH, &hitFinish, this);
 
     this->graphics = Graphics("ball");
-    obj_scalar = 3;
+    this->radius = radius;
     this->lives = 3;
+    this->obj_scalar = 4;
+    this->powerUpType = NO_POWERUP;
+
+    this->finishedStatus = false;
 }
 
 void Ball::runPhysics(float time, vector<PhysicsObject3D*> world_objs)
@@ -29,11 +35,58 @@ void Ball::runPhysics(float time, vector<PhysicsObject3D*> world_objs)
 
 void Ball::activatePowerUp(PowerUp powerup)
 {
-    this->active_power_up = powerup;
+    if(powerup.powerUpType() == ADD_LIVES){
+        this->lives += 1;
+        this->powerUpType = ADD_LIVES;
+
+    }else if(powerup.powerUpType() == HALF_SIZE){
+        this->powerUpType = HALF_SIZE;
+        this->radius/= 2;
+        this->physics.setPosition(physics.getPos().x,physics.getPos().y, physics.getPos().z);
+        this->obj_scalar/=2;
+
+    }else if(powerup.powerUpType() == GHOST_MODE){
+        this->powerUpType = GHOST_MODE;
+        //alpha blending on
+    }
 }
+
+void Ball::clearPowerUp(){
+
+    if(this->powerUpType == HALF_SIZE){
+        this->radius*= 2;
+        this->physics.setPosition(physics.getPos().x,physics.getPos().y + this->radius/2, physics.getPos().z);
+        this->obj_scalar*=2;
+    }
+
+    this->powerUpType = NO_POWERUP;
+}
+
 
 void Ball::jump(){
     this->physics.addVelocity(0,50,0);
+}
+
+bool Ball::respawn(){
+    this->physics.setPosition(lastCheckpoint.x,radius,lastCheckpoint.z);
+    this->lives--;
+
+    if(lives == 0){
+        return false;
+    } else{
+        return true;
+    }
+
+}
+
+bool Ball::finished()
+{
+    return finishedStatus;
+}
+
+
+int Ball::getLives(){
+    this->lives;
 }
 
 int Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
@@ -60,14 +113,16 @@ int Ball::hitCheckpoint(void* context, Vec3D deflection, void* obj)
     Ball* b = static_cast<Ball*>(context);
     PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     // set ball's last checkpoint to obj position
+    b->lastCheckpoint.x = other->getX();
+    b->lastCheckpoint.z = other->getZ();
     
     return 0;
 }
 
-int Ball::hitPowerUp(void* context, Vec3D deflection, void* obj)
+int Ball::hitFinish(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
-    PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
-
+    b->finishedStatus = true;
+    
     return 0;
 }
