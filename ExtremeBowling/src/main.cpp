@@ -75,12 +75,12 @@ float ambMat2[4] = {0.5,0.5,0.5,1};
 float diffMat2[4] = {0,1,0,1};
 float specMat2[4] = {0,1,0,1};
 
-float ambMat[4] = {0.1745f, 0.01175f, 0.01175f, 0.55f};
-float diffMat[4] = {0.61424f, 0.04136f, 0.04136f, 0.55f};
+float ambMat[4] = {0.1745f, 0, 0.11, 0.55f};
+float diffMat[4] = {1,0,0.51, 0.55f};
 float specMat[4] = {0.727811f, 0.626959f, 0.626959f, 0.55f };
 
-float ambMat3[4] = {0.105882f, 0.058824f, 0.113725f, 1.0f};
-float diffMat3[4] = {0.427451f, 0.470588f, 0.541176f, 1.0f};
+float ambMat3[4] = {0, 0, 1, 1.0f};
+float diffMat3[4] = {1,1,1, 1.0f};
 float specMat3[4] = {0.333333f, 0.333333f, 0.521569f, 1.0f};
 
 static Material material;
