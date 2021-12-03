@@ -416,6 +416,11 @@ void PhysicsObject3D::addSphereCollider(float size, float off_x, float off_y, fl
     collider = Collider3D(Shape::sphere, &pos, &rot, size, size, size, off_x, off_y, off_z);
 }
 
+void PhysicsObject3D::addVelocity(float x, float y, float z)
+{
+    vel = vel.addVec(Vec3D(x, y, z));
+}
+
 void PhysicsObject3D::addAcceleration(float x, float y, float z)
 {
     acc = acc.addVec(Vec3D(x, y, z));

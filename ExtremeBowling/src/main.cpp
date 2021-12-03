@@ -18,7 +18,6 @@
 #include <map>
 #include <random>
 
-// #include "ioFuncs.h"
 #include "characters/ball.h"
 #include "misc/camera.h"
 #include "characters/boomba.h"
@@ -80,7 +79,9 @@ void keyboard(unsigned char key, int _x, int _y) {
 }
 
 void mouse(int button, int state, int x, int y){
-    //mouse left click-jump
+    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+        ball.jump();
+    }
 }
 
 void motion(int x, int y){
@@ -341,6 +342,7 @@ int main(int argc, char** argv)
 
     //callbacks
     glutKeyboardFunc(keyboard);
+    glutMouseFunc(mouse);
     glutPassiveMotionFunc(passive);
     glutSpecialFunc(special);
     glutReshapeFunc(handleReshape);

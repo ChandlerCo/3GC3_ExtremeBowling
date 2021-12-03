@@ -19,3 +19,7 @@ void PowerUp::powerUpType()
 {
     
 }
+
+bool PowerUp::checkCollision(){
+    return collided;
+}

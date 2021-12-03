@@ -9,9 +9,12 @@ the map is reset.
 */
 
 class Pin : public Asset {
+    private:
+        bool collided;
     public:
         Pin(float inX, float inY, float inZ);
         void collisionAnimation();
+        bool checkCollision();
 };
 
 #endif
