@@ -10,6 +10,8 @@ the map is reset. They will have a similar look to the Mario kart power up boxes
 */
 
 class PowerUp : public Asset {
+    protected:
+        bool collided;
     private:
         /* Store type of powerups:
         create id, load obj based on id, behaviour based on id
@@ -33,6 +35,7 @@ class PowerUp : public Asset {
         void collisionAnimation(); // only call this when player collides
         void powerUpType(); // will let player class know which type of power up to apply
         using Asset::Asset;
+        bool checkCollision();
 };
 
 #endif

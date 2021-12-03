@@ -11,9 +11,11 @@ class Enemy : public Asset {
         float inX;
         float inY;
         float inZ;
+        bool collided;
     public:
         Enemy(float inX, float inY, float inZ);
         virtual void animate();
+        bool checkCollision();
 };
 
 #endif
