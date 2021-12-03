@@ -38,6 +38,7 @@ bool pauseStatus;
 
 
 Ball ball(0, 10, 0, 8);
+PowerUp powerup(40,10,4);
 Camera ballCam(100);
 
 PhysicsObject3D temp_floor(0, -1, 0, 1, 0.1);    // PLACEHOLDER
@@ -77,6 +78,10 @@ float specMat2[4] = {0,1,0,1};
 float ambMat[4] = {0.1745f, 0.01175f, 0.01175f, 0.55f};
 float diffMat[4] = {0.61424f, 0.04136f, 0.04136f, 0.55f};
 float specMat[4] = {0.727811f, 0.626959f, 0.626959f, 0.55f };
+
+float ambMat3[4] = {0.105882f, 0.058824f, 0.113725f, 1.0f};
+float diffMat3[4] = {0.427451f, 0.470588f, 0.541176f, 1.0f};
+float specMat3[4] = {0.333333f, 0.333333f, 0.521569f, 1.0f};
 
 static Material material;
 
@@ -250,7 +255,7 @@ void display(void)
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 76);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 100);
 
     glPushMatrix();
         glPushMatrix();
@@ -293,8 +298,15 @@ void display(void)
         for (Enemy * i : enemies) {
             i->displayAsset();
         }
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambMat3);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffMat3);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specMat3);
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 9.8);
+        powerup.displayAsset();
     glPopMatrix();
     glFlush();
+
+    
 
     if (pauseStatus) {
         menu.display(windowX, windowY);
