@@ -44,7 +44,7 @@ Tile::Tile(float x, float z, float size, float friction, int tile_type, float r_
 
 void Tile::setGraphics()
 {
-    graphics = Graphics("tile");
+    graphics = Graphics("untitled");
     switch (physics.getId())
     {
         case CHECKPOINT:
@@ -130,6 +130,7 @@ Floor::Floor(vector<string> csv, float tile_size, float friction, float x, float
         }
         row++;
     }
+    cout << "num tiles: " << floor_tiles.size() << endl;
 }
 
 Floor Floor::fromJson(json floor_json)
@@ -178,7 +179,7 @@ void Floor::clearTiles()
     floor_tiles.clear();
 }
 
-void Floor::drawFloor()
+void Floor::displayFloor()
 {
     for (Tile* tile : floor_tiles)
     {

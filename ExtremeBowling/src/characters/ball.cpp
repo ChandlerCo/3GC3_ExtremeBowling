@@ -24,7 +24,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->finishedStatus = false;
 }
 
-void Ball::runPhysics(float time, vector<PhysicsObject3D*> world_objs)
+void Ball::runPhysics(float time, vector<PhysicsObject3D*> &world_objs)
 {
     this->physics.updatePhysics(time, true, world_objs);
 

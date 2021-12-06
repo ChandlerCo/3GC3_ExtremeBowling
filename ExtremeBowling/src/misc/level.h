@@ -60,6 +60,8 @@ class Level {
             //clear overdue powerups
             
 
+        void displayAssets();
+
         bool endLevel(); //return true if good ending, return false if bad ending
 
         /*
@@ -76,7 +78,11 @@ class Level {
 
         int getHighScore(); //get high score in json
 
-
+        int getBallX();
+        int getBallY();
+        int getBallZ();
+        void ballJump();
+        void ballMove(Vec3D direction);
 };
 
 #endif

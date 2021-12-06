@@ -71,8 +71,8 @@ To Do
                     menu - save high score to json
 
         ball 
-            jump stuff
-            lives
+            jump stuff --done
+            lives -- done
             score
 
     Chandler
@@ -98,7 +98,6 @@ To Do
     make power up classes
         chandler will do physics stuff
         thomas will do level related stuff
-
 
 
     Stuff for later:

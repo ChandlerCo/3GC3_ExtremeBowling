@@ -39,7 +39,7 @@ class Floor {
         float spawnY();
         float spawnZ();
         float getTileSize();
-        void drawFloor();
+        void displayFloor();
         void clearTiles();
 };
 

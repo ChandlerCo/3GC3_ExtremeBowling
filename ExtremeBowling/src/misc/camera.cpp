@@ -60,6 +60,25 @@ void Camera::changePosition(float x, float y, float z){
     this->updatePosition();
 }
 
+Vec3D Camera::getForward()
+{
+    return Vec3D(centre[0] - position[0], 0, centre[2] - position[2]).normalize();
+}
+
+Vec3D Camera::getBackward()
+{
+    return Vec3D(position[0] - centre[0], 0, position[2] - centre[2]).normalize();
+}
+
+Vec3D Camera::getLeft()
+{
+    return Vec3D(0,1,0).crossProd(getForward());
+}
+
+Vec3D Camera::getRight()
+{
+    return Vec3D(0,1,0).crossProd(getBackward());
+}
 
 float Camera::getX(){
     return this->position[0];
