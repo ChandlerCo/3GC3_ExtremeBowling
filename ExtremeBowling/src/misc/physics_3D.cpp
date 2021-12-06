@@ -462,7 +462,7 @@ void PhysicsObject3D::removeCallback(int i)
 // updatePhysics
 // friction: applies a friction force slowing down the object. set to 0 if not wanted
 // time: time passed since last call in ms
-void PhysicsObject3D::updatePhysics(float time, bool gravity, vector<PhysicsObject3D *> objs)
+void PhysicsObject3D::updatePhysics(float time, bool gravity, vector<PhysicsObject3D *> &objs)
 {
     time = time / 1000;     // convert to seconds
 
