@@ -44,7 +44,7 @@ bool Graphics::loadObj(string filename,
     
     if( file == NULL ){
         //char tmp[256];
-        printf("Impossible to open file %s from\n", filename);
+        printf("Impossible to open file %s from\n", filename.c_str());
          return false;
     }
 
