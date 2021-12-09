@@ -23,7 +23,6 @@
 #include "characters/boomba.h"
 #include "characters/sweeper.h"
 #include "misc/camera.h"
-#include "misc/material.cpp"
 #include "misc/level.h"
 
 #include "menu/menu.h"
@@ -91,7 +90,7 @@ float ambMat3[4] = {0, 0, 1, 1.0f};
 float diffMat3[4] = {1,1,1, 1.0f};
 float specMat3[4] = {0.333333f, 0.333333f, 0.521569f, 1.0f};
 
-static Material material;
+
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {

@@ -23,6 +23,7 @@ class Graphics {
         vector <Vec3D> normals;
 
         void displayAsset(Rot3D r);
+        GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
 
 };
 
