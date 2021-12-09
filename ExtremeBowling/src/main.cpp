@@ -19,9 +19,9 @@
 #include <random>
 
 // #include "ioFuncs.h"
-#include "characters/ball.h"
-#include "characters/boomba.h"
-#include "characters/sweeper.h"
+//#include "characters/ball.h"
+//#include "characters/boomba.h"
+//#include "characters/sweeper.h"
 #include "misc/camera.h"
 #include "misc/level.h"
 

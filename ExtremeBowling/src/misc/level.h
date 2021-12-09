@@ -8,6 +8,7 @@
 #include "../characters/powerup.h"
 #include "../characters/sweeper.h"
 #include "../characters/ball.h"
+#include "graphics.h"
 #include "floor.h"
 
 

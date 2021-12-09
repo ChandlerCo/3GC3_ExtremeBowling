@@ -157,6 +157,7 @@ void Level::runLevel(int timePassed){
 void Level::displayAssets(){
 
     for(Boomba &i : boombas){
+        
         i.displayAsset();//add materials
     }
 
@@ -164,13 +165,15 @@ void Level::displayAssets(){
         i.displayAsset();
     }
     for(Pin &i : pins){
+        //glBindTexture(GL_TEXTURE_2D, Graphics::textures[1]);
         i.displayAsset();
     }
     for(PowerUp &i : powerUps){
         i.displayAsset();
     }
-
+    //glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
     this->ball.displayAsset();
+    //glBindTexture(GL_TEXTURE_2D, 0);
     this->map.displayFloor();
 
 }

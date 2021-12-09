@@ -27,6 +27,7 @@ using namespace std;
 #define GOLD {{0.24725f, 0.2245f, 0.0645f, 1.0f}, {0.34615f, 0.3143f, 0.0903f, 1.0f}, {0.797357f, 0.723991f, 0.208006f, 1.0f}, 83.2f}
 #define OBSIDIAN {{0.05375f, 0.05f, 0.06625f, 0.82f}, {0.18275f, 0.17f, 0.22525f, 0.82f}, {0.332741f, 0.328634f, 0.346435f, 0.82f}, 38.4f}
 
+
 struct Material {
     float amb[4];
     float diff[4];
@@ -43,13 +44,23 @@ class Graphics {
             vector <Vec3D> & out_uvs,
             vector <Vec3D> & out_normals 
         );
+        static GLuint textures[3];
+        static GLubyte *bowling, *red, *white;
+        static int width, height, max;
+        float lightPos[4];
+        float lightPos2[4];
+        float lightAmb[4];
+        float lightDif[4];
+        float lightDif2[4];
+        float lightSpc[4];
         Material mat;
         vector <Vec3D> vertices; 
         vector <Vec3D> uvs; //texture mapping
         vector <Vec3D> normals;
 
+        static void initTextures();
         void displayAsset(Rot3D r);
-        GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
+        static GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
 
 };
 

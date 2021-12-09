@@ -181,10 +181,68 @@ GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
     return img;
 }
 
+static void initTextures()
+{
+    
+    // Enable texturing
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_GEN_S);
+	glEnable(GL_TEXTURE_GEN_T);
+	glGenTextures(3, Graphics::textures);
+
+    // Set up first texture for ball
+	glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
+	Graphics::bowling = Graphics::LoadPPM((char*)"../ppm/bowling.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
+		0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::bowling);
+
+    // Set up second texture for red (pin)
+	glBindTexture(GL_TEXTURE_2D, Graphics::textures[1]);
+	Graphics::red = Graphics::LoadPPM((char*)"../ppm/red_1.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
+		0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::red);
+
+    // Set up third texture for white(pin)
+	glBindTexture(GL_TEXTURE_2D, Graphics::textures[2]);
+	Graphics::white = Graphics::LoadPPM((char*)"../ppm/white.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
+		0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::white);
+    
+    // Remove texture binding for now
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 
 void Graphics::displayAsset(Rot3D r)
 {
+    float lightPos[] ={ 50, 700, 1, 1 };
+    float lightPos2[] = {0,0,0,1};
+    float lightAmb[] = { 1, 1, 1, 1 };
+    float lightDif[] = { 0.8, 0.8, 0.8, 1 };
+    float lightDif2[] = { 1, 1, 1, 1 };
+    float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
     
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat.amb);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat.diff);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat.spec);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat.shine);
 
 	glPushMatrix();
         glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());
