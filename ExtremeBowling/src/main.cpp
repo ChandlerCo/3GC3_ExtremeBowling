@@ -29,6 +29,7 @@
 #include "menu/startMenu.h"
 #include "menu/instructionsMenu.h"
 #include "menu/pauseMenu.h"
+#include "menu/endMenu.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -40,6 +41,7 @@ int windowY = 800;
 bool pauseStatus;
 bool startStatus;
 bool instructionsStatus;
+bool endStatus;
 
 bool showFPS;
 
@@ -55,6 +57,7 @@ Camera ballCam(10);
 StartMenu startMenu(windowX, windowY);
 InstructionsMenu instructionsMenu(windowX, windowY);
 PauseMenu pauseMenu(windowX, windowY);
+EndMenu endMenu(windowX, windowY);
 
 Level currentLevel("src/levels/map1.json");
 // Level level1;
