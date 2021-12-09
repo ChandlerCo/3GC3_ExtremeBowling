@@ -35,37 +35,32 @@ Level::Level(string filename){
 
         vector<json> boombas_data = enemies_data.find("Boombas").value();
         this->boombas = Boomba::fromJson(boombas_data, this->map.getTileSize());
-        for (Boomba &i : boombas)
+        for (Boomba *i : boombas)
         {
-            this->worldObjects.push_back(i.getPhysicsPointer());
+            this->worldObjects.push_back(i->getPhysicsPointer());
         }
 
         vector<json> sweepers_data = enemies_data.find("Sweepers").value();
         this->sweepers = Sweeper::fromJson(sweepers_data, this->map.getTileSize());
-        for(Sweeper &i: sweepers){
-            this->worldObjects.push_back(i.getPhysicsPointer());
+        for(Sweeper *i: sweepers){
+            this->worldObjects.push_back(i->getPhysicsPointer());
         }
 
         vector<json> pins_data = level_data.find("Pins").value();
         this->pins = Pin::fromJson(pins_data, this->map.getTileSize());
-        for(Pin &i: pins){
-            this->worldObjects.push_back(i.getPhysicsPointer());
+        for(Pin *i: pins){
+            this->worldObjects.push_back(i->getPhysicsPointer());
         }
-        for (Pin &i : pins)
-        {
-            this->worldObjects.push_back(i.getPhysicsPointer());
-        for(PowerUp &i: powerUps){
-            this->worldObjects.push_back(i.getPhysicsPointer());
-        }        }
 
         vector<json> powerups_data = level_data.find("PowerUps").value();
         this->powerUps = PowerUp::fromJson(powerups_data, this->map.getTileSize());
-        for (PowerUp &i : powerUps)
+        for (PowerUp *i : powerUps)
         {
-            this->worldObjects.push_back(i.getPhysicsPointer());
+            this->worldObjects.push_back(i->getPhysicsPointer());
         }
 
         this->ball = Ball(this->map.spawnX(),this->map.spawnY(), this->map.spawnZ(), 5);
+        this->ball.init();
 
         highScore = level_data.find("HighScore").value();
     }
@@ -76,47 +71,93 @@ Level::Level(string filename){
 }
 
 void Level::runLevel(int timePassed){
-    cout << "Entered runLevel\n";
-    cout << "Size of physics pointer vector: " << worldObjects.size() << endl;
     this->ball.runPhysics(timePassed, worldObjects); //time passed will be the same argument as is previously called, need chandler to advise
-    cout << "Done physics\n";
+
     this->currentTime += timePassed;
 
     
-    for(Sweeper &i : sweepers){
-        i.animate();
+    for(Sweeper *i : sweepers){
+        i->animate();
     }
 
-    for(Boomba &i : boombas){
-        i.animate();
+    for(Boomba *i : boombas){
+        i->animate();
     }
-    
-    cout <<  "Done Animations" << endl;
-    for(PowerUp &i : powerUps){
-        if(i.checkCollision() == true){
+
+    for (vector<PowerUp*>::iterator it = powerUps.begin(); it != powerUps.end(); it++)
+    {
+        if((*it)->checkCollision() == true){
             this->powerUpStart = currentTime;
-            this->ball.activatePowerUp(i);
+            this->ball.activatePowerUp(*(*it));
 
-            cout << "Deleting Physics Pointers" << endl;
             //WARNING --- DON'T TRY TO UNDERSTAND THIS
-            int localID = i.getPhysicsPointer()->getLocalId();
-            int objectID = i.getPhysicsPointer()->getId();
+            int localID = (*it)->getPhysicsPointer()->getLocalId();
+            int objectID = (*it)->getPhysicsPointer()->getId();
             
             this->worldObjects.erase(std::remove_if(
             this->worldObjects.begin() + this->floorLength, this->worldObjects.end(), //start at number of tiles
             [localID, objectID](PhysicsObject3D * &j){
                 return (j->getLocalId() == localID && j->getId() == objectID);
             }), this->worldObjects.end());
+
+            // delete object
+            delete *it;
+
+            // remove from powerUps
+            powerUps.erase(it);
         }
     }
-    cout << "Done checking power ups\n";
-    for(Pin &i : pins){
-        if(i.checkCollision() == true){
+
+    for (vector<Pin*>::iterator it = pins.begin(); it != pins.end(); it++)
+    {
+        if((*it)->checkCollision() == true){
             this->score += 1;
 
             //WARNING --- DON'T TRY TO UNDERSTAND THIS
-            int localID = i.getPhysicsPointer()->getLocalId();
-            int objectID = i.getPhysicsPointer()->getId();
+            int localID = (*it)->getPhysicsPointer()->getLocalId();
+            int objectID = (*it)->getPhysicsPointer()->getId();
+            
+            this->worldObjects.erase(std::remove_if(
+            this->worldObjects.begin() + this->floorLength, this->worldObjects.end(), //start at number of tiles
+            [localID, objectID](PhysicsObject3D * &j){
+                return (j->getLocalId() == localID && j->getId() == objectID);
+            }), this->worldObjects.end());
+
+            // delete object
+            delete *it;
+
+            // remove from powerUps
+            pins.erase(it);
+        }
+    }
+    /*
+    for(PowerUp *i : powerUps){
+        if(i->checkCollision() == true){
+            this->powerUpStart = currentTime;
+            this->ball.activatePowerUp(i);
+
+            // erase from worldObjects
+            //WARNING --- DON'T TRY TO UNDERSTAND THIS
+            int localID = i->getPhysicsPointer()->getLocalId();
+            int objectID = i->getPhysicsPointer()->getId();
+            
+            this->worldObjects.erase(std::remove_if(
+            this->worldObjects.begin() + this->floorLength, this->worldObjects.end(), //start at number of tiles
+            [localID, objectID](PhysicsObject3D * &j){
+                return (j->getLocalId() == localID && j->getId() == objectID);
+            }), this->worldObjects.end());
+
+            
+        }
+    }
+    //cout << "Done checking power ups\n";
+    for(Pin *i : pins){
+        if(i->checkCollision() == true){
+            this->score += 1;
+
+            //WARNING --- DON'T TRY TO UNDERSTAND THIS
+            int localID = i->getPhysicsPointer()->getLocalId();
+            int objectID = i->getPhysicsPointer()->getId();
 
             this->worldObjects.erase(std::remove_if(
             this->worldObjects.begin() + this->floorLength, this->worldObjects.end(), //start at number of tiles
@@ -125,7 +166,7 @@ void Level::runLevel(int timePassed){
             }), this->worldObjects.end());
         }
     }
-    cout << "Done checking pins\n";
+    //cout << "Done checking pins\n";
     //checking and clearing collisions
     powerUps.erase(std::remove_if(
         powerUps.begin(), powerUps.end(), 
@@ -138,7 +179,8 @@ void Level::runLevel(int timePassed){
         [](Pin &i){
             return i.checkCollision();
         }), pins.end());
-    cout << "Done erasing stuff\n";
+    */
+    //cout << "Done erasing stuff\n";
     //clearing powerups
     if(currentTime - powerUpStart > 10000){
         ball.clearPowerUp();
@@ -151,25 +193,24 @@ void Level::runLevel(int timePassed){
         }
 
     }
-    cout << "Exit runLevel\n";
+    //cout << "Exit runLevel\n";
 }
 
 void Level::displayAssets(){
 
-    for(Boomba &i : boombas){
-        
-        i.displayAsset();//add materials
+    for(Boomba* i : boombas){
+        i->displayAsset();//add materials
     }
 
-    for(Sweeper &i : sweepers){
-        i.displayAsset();
+    for(Sweeper* i : sweepers){
+        i->displayAsset();
     }
-    for(Pin &i : pins){
+    for(Pin* i : pins){
         //glBindTexture(GL_TEXTURE_2D, Graphics::textures[1]);
-        i.displayAsset();
+        i->displayAsset();
     }
-    for(PowerUp &i : powerUps){
-        i.displayAsset();
+    for(PowerUp* i : powerUps){
+        i->displayAsset();
     }
     //glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
     this->ball.displayAsset();
@@ -186,10 +227,21 @@ int Level::getScore(){
 
 bool Level::endLevel(){
     int lives = ball.getLives();
+
+    for(Boomba* i : boombas)
+        delete i;
+    for(Sweeper* i : sweepers)
+        delete i;
+    for(PowerUp* i : powerUps)
+        delete i;
+    for(Pin* i : pins)
+        delete i;
+
     this->boombas.clear();
+    this->sweepers.clear();
+    this->powerUps.clear();
     this->pins.clear();
     this->map.clearTiles();   
-    this->powerUps.clear();
 
     if(this->getScore() > this->highScore){
         this->saveHighScore();
@@ -218,15 +270,15 @@ void Level::saveHighScore()
 }
 
 //gameplay methods
-int Level::getBallX(){
+float Level::getBallX(){
     return this->ball.getX();
 }
 
-int Level::getBallY(){
+float Level::getBallY(){
     return this->ball.getY();
 }
 
-int Level::getBallZ(){
+float Level::getBallZ(){
     return this->ball.getZ();
 }
 
@@ -235,8 +287,8 @@ void Level::ballJump(){
 }
 
 void Level::ballMove(Vec3D direction){
-    int mult = 30;
-    direction.multiply(mult);
+    int mult = 50;
+    direction.normalize().multiply(mult);
     ball.accelerate(direction.x, direction.y, direction.z);
 }
 

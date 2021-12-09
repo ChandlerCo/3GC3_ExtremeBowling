@@ -5,15 +5,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
 {
     this->physics.setInteraction(Reaction::kinetic);
     this->physics.setSurfaceFriction(1);
-    this->physics.addSphereCollider(radius * 2, 0, 0, 0);
-    
     this->physics.setId(BALL);
-
-    this->physics.addCallback(BOOMBA, &hitBoomba, this);
-    this->physics.addCallback(SWEEPER, &hitSweeper, this);
-    
-    this->physics.addCallback(CHECKPOINT, &hitCheckpoint, this);
-    this->physics.addCallback(FINISH, &hitFinish, this);
 
     this->graphics = Graphics("ball");
     this->radius = radius;
@@ -22,6 +14,16 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->powerUpType = NO_POWERUP;
 
     this->finishedStatus = false;
+}
+
+void Ball::init()
+{
+    this->physics.addSphereCollider(radius * 2, 0, 0, 0);
+    
+    this->physics.addCallback(BOOMBA, &hitBoomba, this);
+    this->physics.addCallback(SWEEPER, &hitSweeper, this);
+    this->physics.addCallback(CHECKPOINT, &hitCheckpoint, this);
+    this->physics.addCallback(FINISH, &hitFinish, this);
 }
 
 void Ball::runPhysics(float time, vector<PhysicsObject3D*> &world_objs)
@@ -69,6 +71,7 @@ void Ball::jump(){
 
 bool Ball::respawn(){
     this->physics.setPosition(lastCheckpoint.x,radius,lastCheckpoint.z);
+    this->physics.setVelocity(0,0,0);
     this->lives--;
 
     if(lives == 0){
@@ -91,8 +94,8 @@ int Ball::getLives(){
 
 int Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
 {
-    Ball* b = static_cast<Ball*>(context);
-    PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
+    //Ball* b = static_cast<Ball*>(context);
+    //PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     //b->physics.setVelocity(0, 20, 0);
     // if invincible, return -1
 
@@ -101,8 +104,8 @@ int Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
 
 int Ball::hitSweeper(void* context, Vec3D deflection, void* obj)
 {
-    Ball* b = static_cast<Ball*>(context);
-    PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
+    //Ball* b = static_cast<Ball*>(context);
+    //PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     //b->physics.setVelocity(0, 50, 0);
 
     return 0;

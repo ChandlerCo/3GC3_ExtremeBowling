@@ -92,17 +92,17 @@ int Boomba::hitBall(void* context, Vec3D deflection, void* obj)
     return 1;   // forces boomba to have a collision
 }
 
-vector<Boomba> Boomba::fromJson(vector<json> jsonData, float tileSize)
+vector<Boomba*> Boomba::fromJson(vector<json> jsonData, float tileSize)
 {
     int counter = 0;
-    vector<Boomba> boombas;
+    vector<Boomba*> boombas;
     for (json entry : jsonData)
     {
         float sX = (float)entry.find("start col").value() * tileSize;
         float sZ = (float)entry.find("start row").value() * tileSize;
         float eX = (float)entry.find("end col").value() * tileSize;
         float eZ = (float)entry.find("end row").value() * tileSize;
-        boombas.push_back(Boomba(sX, tileSize, sZ, eX, tileSize, eZ, counter));
+        boombas.push_back(new Boomba(sX, tileSize, sZ, eX, tileSize, eZ, counter));
         counter += 1;
     }
     return boombas;

@@ -27,15 +27,15 @@ int Pin::hitBall(void* context, Vec3D deflection, void* obj)
     return 0;
 }
 
-vector<Pin> Pin::fromJson(vector<json> jsonData, float tileSize)
+vector<Pin*> Pin::fromJson(vector<json> jsonData, float tileSize)
 {
     int counter = 0;
-    vector<Pin> pins;
+    vector<Pin*> pins;
     for (json entry : jsonData)
     {
         float sX = (float)entry.find("row").value() * tileSize;
         float sZ = (float)entry.find("col").value() * tileSize;
-        pins.push_back(Pin(sX, tileSize, sZ, counter));
+        pins.push_back(new Pin(sX, tileSize, sZ, counter));
         counter += 1;
     }
     return pins;

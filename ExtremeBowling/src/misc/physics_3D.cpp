@@ -34,6 +34,9 @@ Point3D Collider3D::calculatePos()
 
 Vec3D Collider3D::collide(Collider3D col)
 {
+    if (p_pos == 0 || p_rot == 0 || col.p_pos == 0 || col.p_rot == 0)
+        return Vec3D();
+
     if (collider_type == Shape::box)
     {
         if (col.collider_type == Shape::box)
@@ -494,12 +497,6 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, vector<PhysicsObje
     {
         for (vector<PhysicsObject3D *>::iterator it = objs.begin(); it < objs.end(); it++)
         {
-            
-            //if (!isMoveable() && (*it)->isMoveable())      // if this object is immovable but the other object is
-            //    (*it)->collisionImmovable(this);
-            //else if (isMoveable() && !(*it)->isMoveable()) // if this object is movable and other object is immovable
-            //    collisionImmovable(*it);
-            //else if (isMoveable() && (*it)->isMoveable())  // if both objects are movable
             collision(*it);
         }
 
@@ -551,6 +548,8 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     // the length of ref_normal is the length the two objects should be separated by in order to stop overlapping
     Vec3D ref_normal = collider.collide(other_obj->collider);
 
+    //if (other_obj->getId() != 0 && other_obj->getId() < 30)
+    //    cout << "ID: " << other_obj->getId() << " reflection: " << ref_normal.length() << " " << other_obj->collider.p_pos << " " << &other_obj->pos << endl;
     if (ref_normal.length() == 0)
         return;
 
@@ -602,35 +601,6 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
         other_obj->vel = other_obj->vel.addVec(vel_1);
     }
 }
-/*
-void PhysicsObject3D::collisionImmovable(PhysicsObject3D *other_obj)
-{
-    Vec3D ref_normal = collider.collide(other_obj->collider);
-    
-    if (ref_normal.length() == 0)
-        return;
-
-    // ref_normal is normal of reflection plane that both objects should move away from
-    // this means it is the direction the two objects should move in order to move away from each other
-    // the length of ref_normal is the length the two objects should be separated by in order to stop overlapping
-    
-    if (other_obj->getInteraction() != Reaction::ghost)
-    {
-        acc_friction = max(other_obj->getSurfaceFriction() * surface_friction, acc_friction);
-
-        // Move point so that it no longer touches the immovable object
-        pos = ref_normal.multiply(-1).movePoint(pos);
-        // Modify velocity so that it is not going into the other object
-        if (ref_normal.dotProd(vel) > 0)
-            vel = vel.addVec(ref_normal.project(vel).multiply(-1.9 + acc_friction));
-    }
-    // add to collided vector
-    runCallback(other_obj->getId(), ref_normal.multiply(-1), other_obj);
-    other_obj->runCallback(getId(), ref_normal, other_obj);
-
-    // callbacks
-}
-*/
 
 int PhysicsObject3D::runCallback(int id, Vec3D deflection, void* obj)
 {

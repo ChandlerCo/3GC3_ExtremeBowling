@@ -38,16 +38,16 @@ int PowerUp::hitBall(void* context, Vec3D deflection, void* obj)
     return 0;
 }
 
-vector<PowerUp> PowerUp::fromJson(vector<json> jsonData, float tileSize)
+vector<PowerUp*> PowerUp::fromJson(vector<json> jsonData, float tileSize)
 {
     int counter = 0;
-    vector<PowerUp> powerups;
+    vector<PowerUp*> powerups;
     for (json entry : jsonData)
     {
         float sX = (float)entry.find("row").value() * tileSize;
         float sZ = (float)entry.find("col").value() * tileSize;
         int pwType = entry.find("type").value();
-        powerups.push_back(PowerUp(sX, tileSize, sZ, pwType, counter));
+        powerups.push_back(new PowerUp(sX, tileSize, sZ, pwType, counter));
         counter += 1;
     }
     return powerups;

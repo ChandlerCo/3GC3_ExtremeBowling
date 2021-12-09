@@ -66,7 +66,7 @@ private:
 
 class PhysicsObject3D{
 private:
-    Point3D pos;
+    //Point3D pos;
     Vec3D vel;
     Vec3D acc;
     Rot3D rot;
@@ -82,6 +82,7 @@ private:
     vector<Collision> collided;       // when an object collides with another object, they can add some value to collided to know what they collided with 
     map<int, Callback> callbacks;
 public:
+    Point3D pos;
     Collider3D collider;
     PhysicsObject3D();
     PhysicsObject3D(float p_x, float p_y, float p_z, int i = 1, float f = 0);

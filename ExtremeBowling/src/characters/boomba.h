@@ -22,7 +22,7 @@ class Boomba : public Enemy {
         void collisionAnimation();
         //float inY;
         static int hitBall(void* context, Vec3D deflection, void* obj);
-        static vector<Boomba> fromJson(vector<json> jsonData, float tileSize);
+        static vector<Boomba*> fromJson(vector<json> jsonData, float tileSize);
 };
 
 #endif

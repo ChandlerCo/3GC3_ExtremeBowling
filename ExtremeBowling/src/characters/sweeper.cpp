@@ -51,18 +51,18 @@ int Sweeper::hitBall(void* context, Vec3D deflection, void* obj)
     return 0;
 }
 
-vector<Sweeper> Sweeper::fromJson(vector<json> jsonData, float tileSize)
+vector<Sweeper*> Sweeper::fromJson(vector<json> jsonData, float tileSize)
 {
     int counter = 0;
-    vector<Sweeper> sweeper;
+    vector<Sweeper*> sweepers;
     for (json entry : jsonData)
     {
         float sX = (float)entry.find("start col").value() * tileSize;
         float sZ = (float)entry.find("start row").value() * tileSize;
         float eX = (float)entry.find("end col").value() * tileSize;
         float eZ = (float)entry.find("end row").value() * tileSize;
-        sweeper.push_back(Sweeper(sX, tileSize, sZ, eX, tileSize, eZ, counter));
+        sweepers.push_back(new Sweeper(sX, tileSize, sZ, eX, tileSize, eZ, counter));
         counter += 1;
     }
-    return sweeper;
+    return sweepers;
 }

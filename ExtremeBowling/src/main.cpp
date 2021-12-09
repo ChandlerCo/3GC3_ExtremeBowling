@@ -218,8 +218,8 @@ void display(void)
     glLoadIdentity();
     
     gluLookAt(
-        10,10,10, // ballCam.getX(),    ballCam.getY(),    ballCam.getZ(),
-        0,0,0,//currentLevel.getBallX(),currentLevel.getBallY(),currentLevel.getBallZ(),
+        ballCam.getX(),    ballCam.getY(),    ballCam.getZ(),
+        currentLevel.getBallX(),currentLevel.getBallY(),currentLevel.getBallZ(),
         0,1,0
     );
 

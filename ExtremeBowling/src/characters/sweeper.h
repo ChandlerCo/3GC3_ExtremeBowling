@@ -19,7 +19,7 @@ class Sweeper : public Enemy {
         void animate();
         // collision animation? 
         static int hitBall(void* context, Vec3D deflection, void* obj);
-        static vector<Sweeper> fromJson(vector<json> jsonData, float tileSize);
+        static vector<Sweeper*> fromJson(vector<json> jsonData, float tileSize);
 };
 
 #endif

@@ -35,7 +35,7 @@ class PowerUp : public Asset {
         using Asset::Asset;
         bool checkCollision();
         static int hitBall(void* context, Vec3D deflection, void* obj);
-        static vector<PowerUp> fromJson(vector<json> jsonData, float tileSize);
+        static vector<PowerUp*> fromJson(vector<json> jsonData, float tileSize);
 };
 
 #endif

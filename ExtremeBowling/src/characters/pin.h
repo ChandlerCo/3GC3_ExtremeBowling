@@ -16,7 +16,7 @@ class Pin : public Asset {
         void collisionAnimation();
         bool checkCollision();
         static int hitBall(void* context, Vec3D deflection, void* obj);
-        static vector<Pin> fromJson(vector<json> jsonData, float tileSize);
+        static vector<Pin*> fromJson(vector<json> jsonData, float tileSize);
 };
 
 #endif

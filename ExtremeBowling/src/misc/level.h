@@ -22,10 +22,10 @@ class Level {
         int score;
         int currentTime; //current time in ms
 
-        vector <PowerUp> powerUps;
-        vector <Pin> pins;
-        vector <Boomba> boombas;
-        vector <Sweeper> sweepers;
+        vector <PowerUp*> powerUps;
+        vector <Pin*> pins;
+        vector <Boomba*> boombas;
+        vector <Sweeper*> sweepers;
 
         Ball ball;
         Floor map; //needs to be implemented still
@@ -79,9 +79,9 @@ class Level {
 
         int getHighScore(); //get high score in json
 
-        int getBallX();
-        int getBallY();
-        int getBallZ();
+        float getBallX();
+        float getBallY();
+        float getBallZ();
         void ballJump();
         void ballMove(Vec3D direction);
 };
