@@ -1,17 +1,35 @@
 #include "level.h"
 #include <algorithm>
 
+
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
+#  include <GLUT/glut.h>
+#else
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+#  include <GL/freeglut.h>
+#endif
+
+#include <iostream>
+
+using namespace std;
+
 Level::Level(string filename){
+
     levelFilename = filename;
     ifstream f(levelFilename);
 
-    if (f)
+    if (f.is_open())
     {
         json level_data;
         f >> level_data;
         this->map = Floor::fromJson(level_data.find("Floor").value());
         map.getPointers(this->worldObjects);
         this->floorLength = worldObjects.size();
+
     
         json enemies_data = level_data.find("Enemies").value();
 
@@ -47,28 +65,39 @@ Level::Level(string filename){
             this->worldObjects.push_back(i.getPhysicsPointer());
         }
 
-
         this->ball = Ball(this->map.spawnX(),this->map.spawnY(), this->map.spawnZ(), 5);
-
 
         highScore = level_data.find("HighScore").value();
     }
     
 
     this->currentTime = 0;
+
 }
 
 void Level::runLevel(int timePassed){
+    cout << "Entered runLevel\n";
+    cout << "Size of physics pointer vector: " << worldObjects.size() << endl;
     this->ball.runPhysics(timePassed, worldObjects); //time passed will be the same argument as is previously called, need chandler to advise
+    cout << "Done physics\n";
     this->currentTime += timePassed;
 
-
     
+    for(Sweeper &i : sweepers){
+        i.animate();
+    }
+
+    for(Boomba &i : boombas){
+        i.animate();
+    }
+    
+    cout <<  "Done Animations" << endl;
     for(PowerUp &i : powerUps){
         if(i.checkCollision() == true){
             this->powerUpStart = currentTime;
             this->ball.activatePowerUp(i);
 
+            cout << "Deleting Physics Pointers" << endl;
             //WARNING --- DON'T TRY TO UNDERSTAND THIS
             int localID = i.getPhysicsPointer()->getLocalId();
             int objectID = i.getPhysicsPointer()->getId();
@@ -78,14 +107,12 @@ void Level::runLevel(int timePassed){
             [localID, objectID](PhysicsObject3D * &j){
                 return (j->getLocalId() == localID && j->getId() == objectID);
             }), this->worldObjects.end());
-
         }
     }
-
+    cout << "Done checking power ups\n";
     for(Pin &i : pins){
         if(i.checkCollision() == true){
             this->score += 1;
-
 
             //WARNING --- DON'T TRY TO UNDERSTAND THIS
             int localID = i.getPhysicsPointer()->getLocalId();
@@ -98,7 +125,7 @@ void Level::runLevel(int timePassed){
             }), this->worldObjects.end());
         }
     }
-
+    cout << "Done checking pins\n";
     //checking and clearing collisions
     powerUps.erase(std::remove_if(
         powerUps.begin(), powerUps.end(), 
@@ -111,7 +138,7 @@ void Level::runLevel(int timePassed){
         [](Pin &i){
             return i.checkCollision();
         }), pins.end());
-
+    cout << "Done erasing stuff\n";
     //clearing powerups
     if(currentTime - powerUpStart > 10000){
         ball.clearPowerUp();
@@ -124,7 +151,31 @@ void Level::runLevel(int timePassed){
         }
 
     }
+    cout << "Exit runLevel\n";
 }
+
+void Level::displayAssets(){
+
+    for(Boomba &i : boombas){
+        i.displayAsset();//add materials
+    }
+
+    for(Sweeper &i : sweepers){
+        i.displayAsset();
+    }
+    for(Pin &i : pins){
+        i.displayAsset();
+    }
+    for(PowerUp &i : powerUps){
+        i.displayAsset();
+    }
+
+    this->ball.displayAsset();
+    this->map.displayFloor();
+
+}
+
+
 
 int Level::getScore(){
     return score*100 - currentTime/1000 + 1000;
@@ -162,3 +213,27 @@ void Level::saveHighScore()
     std::ofstream o(levelFilename);
     o << std::setw(4) << j << std::endl;
 }
+
+//gameplay methods
+int Level::getBallX(){
+    return this->ball.getX();
+}
+
+int Level::getBallY(){
+    return this->ball.getY();
+}
+
+int Level::getBallZ(){
+    return this->ball.getZ();
+}
+
+void Level::ballJump(){
+    this->ball.jump();
+}
+
+void Level::ballMove(Vec3D direction){
+    int mult = 30;
+    direction.multiply(mult);
+    ball.accelerate(direction.x, direction.y, direction.z);
+}
+

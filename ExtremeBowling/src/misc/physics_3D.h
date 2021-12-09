@@ -125,7 +125,7 @@ public:
     // modifiers
     void addVelocity(float x, float y, float z);
     void addAcceleration(float x, float y, float z);
-    void updatePhysics(float time, bool gravity, vector<PhysicsObject3D *> objs = {});
+    void updatePhysics(float time, bool gravity, vector<PhysicsObject3D *> &objs);
     
     void reflect(Vec3D ref_normal, float scale);
     

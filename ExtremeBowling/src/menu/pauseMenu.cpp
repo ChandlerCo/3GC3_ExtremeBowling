@@ -20,7 +20,7 @@ void PauseMenu::display()
         centerText(underlineTitle, font, windowHeight*0.205);
 
         // Unpause game text 
-        string unpause = "Press space to unpause game.";
+        string unpause = "Press space to resume game.";
         Menu::centerText(unpause, font, windowHeight*0.80);
         
     glPopMatrix();

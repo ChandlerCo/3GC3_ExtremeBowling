@@ -1,3 +1,5 @@
+#include "graphics.h"
+
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #  include <OpenGL/gl.h>
@@ -9,18 +11,19 @@
 #  include <GL/freeglut.h>
 #endif
 
-#include "graphics.h"
+
 
 using namespace std;
 
 
 Graphics::Graphics(){}
 
-Graphics::Graphics(string filename){
+Graphics::Graphics(string filename, Material m){
     loadObj(filename, 
             this->vertices,
             this->uvs,
             this->normals);
+    mat = m;
 }
 
 bool Graphics::loadObj(string filename,
@@ -40,7 +43,8 @@ bool Graphics::loadObj(string filename,
 
     
     if( file == NULL ){
-        printf("Impossible to open the file !\n");
+        //char tmp[256];
+        printf("Impossible to open file %s from\n", filename);
          return false;
     }
 
@@ -180,6 +184,8 @@ GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
 
 void Graphics::displayAsset(Rot3D r)
 {
+
+
 	glPushMatrix();
         glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());
 		glBegin(GL_TRIANGLES);

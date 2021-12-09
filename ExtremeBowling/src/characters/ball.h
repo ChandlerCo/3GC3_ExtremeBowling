@@ -9,7 +9,7 @@ class Ball : public Asset{
     public:
         using Asset::Asset;
         Ball(float x, float y, float z, float radius);
-        void runPhysics(float time, vector<PhysicsObject3D*> world_objs);
+        void runPhysics(float time, vector<PhysicsObject3D*> &world_objs);
         void activatePowerUp(PowerUp powerup); // needs to be redefined
         void clearPowerUp(); //needs to be defined
         void jump();
