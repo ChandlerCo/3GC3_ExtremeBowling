@@ -184,7 +184,7 @@ GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
 
 void Graphics::displayAsset(Rot3D r)
 {
-
+    
 
 	glPushMatrix();
         glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());

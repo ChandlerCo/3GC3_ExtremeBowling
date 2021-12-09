@@ -1,9 +1,21 @@
-
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
+#  include <GLUT/glut.h>
+#else
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+#  include <GL/freeglut.h>
+#endif
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
 #include <vector>
 #include <cstring>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include <string>
 #include "mathlib_3D.h"
 
