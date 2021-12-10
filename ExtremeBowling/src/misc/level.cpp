@@ -198,6 +198,18 @@ void Level::runLevel(int timePassed){
 
 void Level::displayAssets(){
 
+    float lightPos[] ={ 50, 700, 5, 1 };
+    float lightPos2[] = {0,0,0,1};
+    float lightAmb[] = { 1, 1, 1, 1 };
+    float lightDif[] = { 0.8, 0.8, 0.8, 1 };
+    float lightDif2[] = { 1, 1, 1, 1 };
+    float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
+    
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
+
     for(Boomba* i : boombas){
         i->displayAsset();//add materials
     }
@@ -287,8 +299,12 @@ void Level::ballJump(){
 }
 
 void Level::ballMove(Vec3D direction){
-    int mult = 50;
-    direction.normalize().multiply(mult);
-    ball.accelerate(direction.x, direction.y, direction.z);
+    int mult = 10;
+
+    //Vec3D vel = direction.multiply(10);
+    Vec3D acc = direction.multiply(mult);
+    
+    //ball.addVelocity(vel.x, vel.y, vel.z);
+    ball.accelerate(acc.x, acc.y, acc.z);
 }
 

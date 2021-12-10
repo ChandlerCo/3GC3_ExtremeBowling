@@ -59,7 +59,12 @@ void Asset::velocity(float x, float y, float z)
 {
     this->physics.setVelocity(x, y, z);
 }
-
+/*
+void Asset::addVelocity(float x, float y, float z)
+{
+    this->physics.addVelocity(x, y, z);
+}
+*/
 void Asset::accelerate(float x, float y, float z)
 {
     this->physics.addAcceleration(x, y, z);

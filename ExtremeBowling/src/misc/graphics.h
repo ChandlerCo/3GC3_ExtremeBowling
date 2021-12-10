@@ -38,7 +38,7 @@ struct Material {
 class Graphics {
     public:
         Graphics();
-        Graphics(string filename, Material m=OBSIDIAN);
+        Graphics(string filename, Material m=GOLD);
         bool loadObj(string filename,
             vector <Vec3D> & out_vertices,
             vector <Vec3D> & out_uvs,
@@ -47,18 +47,13 @@ class Graphics {
         static GLuint textures[3];
         static GLubyte *bowling, *red, *white;
         static int width, height, max;
-        float lightPos[4];
-        float lightPos2[4];
-        float lightAmb[4];
-        float lightDif[4];
-        float lightDif2[4];
-        float lightSpc[4];
+        
         Material mat;
         vector <Vec3D> vertices; 
         vector <Vec3D> uvs; //texture mapping
         vector <Vec3D> normals;
 
-        static void initTextures();
+        // static void initTextures();
         void displayAsset(Rot3D r);
         static GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
 

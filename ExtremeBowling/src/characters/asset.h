@@ -27,6 +27,7 @@ class Asset {
 
         void position(float x, float y, float z);
         void velocity(float x, float y, float z);
+        void addVelocity(float x, float y, float z);
         void accelerate(float x, float y, float z);
         void runPhysics(float time, bool gravity = false, vector<PhysicsObject3D *> objs = {});
 

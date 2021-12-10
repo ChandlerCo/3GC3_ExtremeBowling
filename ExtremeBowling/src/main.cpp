@@ -18,10 +18,6 @@
 #include <map>
 #include <random>
 
-// #include "ioFuncs.h"
-//#include "characters/ball.h"
-//#include "characters/boomba.h"
-//#include "characters/sweeper.h"
 #include "misc/camera.h"
 #include "misc/level.h"
 
@@ -52,15 +48,15 @@ int time_past;
 int prevX;
 int prevY;
 
-Camera ballCam(10);
+Camera ballCam(40);
 
 StartMenu startMenu(windowX, windowY);
 InstructionsMenu instructionsMenu(windowX, windowY);
 PauseMenu pauseMenu(windowX, windowY);
 EndMenu endMenu(windowX, windowY);
 
-Level currentLevel("src/levels/map1.json");
-// Level level1;
+Level* currentLevel;
+Level level1("src/levels/map1.json");
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
@@ -86,14 +82,26 @@ void mouse(int button, int state, int x, int y){
                 exit(0);
             } else if (startMenu.level1Clicked(x, y)) {
                 startStatus = false;
-                //instructionsStatus = false;
                 pauseStatus = false;
-            }
+                currentLevel = &level1;
+            } 
+            // else if (startMenu.level2Clicked(x, y)) {
+            //     startStatus = false;
+            //     pauseStatus = false;
+            //     currentLevel = &level2;
+            // }
+            // else if (startMenu.level3Clicked(x, y)) {
+            //     startStatus = false;
+            //     pauseStatus = false;
+            //     currentLevel = &level3;
+            // }
         } else if (instructionsStatus) {
             if (instructionsMenu.backClicked(x, y)) {
                 instructionsStatus = false;
                 startStatus = true;
             }
+        } else { // else if !pauseStatus ? 
+            currentLevel->ballJump();
         }
     }
 
@@ -139,16 +147,16 @@ void passive(int x, int y){
 void special(int key, int x, int y){
     if(!pauseStatus){
         if (key == GLUT_KEY_UP){
-            currentLevel.ballMove(ballCam.getForward());
+            currentLevel->ballMove(ballCam.getForward());
         }
         if (key == GLUT_KEY_DOWN){
-            currentLevel.ballMove(ballCam.getBackward());
+            currentLevel->ballMove(ballCam.getBackward());
         }
         if (key == GLUT_KEY_RIGHT){
-            currentLevel.ballMove(ballCam.getRight());
+            currentLevel->ballMove(ballCam.getRight());
         }
         if (key == GLUT_KEY_LEFT){
-            currentLevel.ballMove(ballCam.getLeft());
+            currentLevel->ballMove(ballCam.getLeft());
         }
 
     }
@@ -162,8 +170,8 @@ void FPS (int val){
     time_past = time_current; 
 
     if(!pauseStatus){
-        currentLevel.runLevel(d_time);
-        ballCam.changePosition(currentLevel.getBallX(),currentLevel.getBallY(),currentLevel.getBallZ());
+        currentLevel->runLevel(d_time);
+        ballCam.changePosition(currentLevel->getBallX(),currentLevel->getBallY(),currentLevel->getBallZ());
     }
 
     glutPostRedisplay();
@@ -213,39 +221,36 @@ void displayFPS(){
 
 void display(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    gluLookAt(
+
+    if (startStatus) {
+        pauseStatus = true; // prevent movement of other things
+        startMenu.display();
+    } else if (instructionsStatus) {
+        pauseStatus = true; // prevent movement of other things
+        instructionsMenu.display();
+    } else if (pauseStatus) {
+        pauseMenu.display();
+    } else {
+        if(showFPS){
+            displayFPS();     
+        }
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective(70, windowX/windowY, 1, 1000);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+
+        gluLookAt(
         ballCam.getX(),    ballCam.getY(),    ballCam.getZ(),
-        currentLevel.getBallX(),currentLevel.getBallY(),currentLevel.getBallZ(),
+        currentLevel->getBallX(),currentLevel->getBallY(),currentLevel->getBallZ(),
         0,1,0
-    );
+        );
 
+        currentLevel->displayAssets();
+    }
 
-    // if (startStatus) {
-    //     pauseStatus = true; // prevent movement of other things
-    //     startMenu.display();
-    // } else if (instructionsStatus) {
-    //     pauseStatus = true; // prevent movement of other things
-    //     instructionsMenu.display();
-    // } else {
-    //     //graphics objects here
-    //     glDisable(GL_LIGHTING);
-    //     glColor3f(1, 0, 1);
-    //     glPushMatrix();
-    //     //
-    //     glutSolidCube(1);
-
-    //     glPopMatrix();
-        
-    //     if (pauseStatus) {
-    //         pauseMenu.display();
-    //     }
-    //     displayFPS();
-    // }
-    currentLevel.displayAssets();
     glFlush();
     glutSwapBuffers();
 
@@ -253,6 +258,11 @@ void display(void)
 
 void init(){
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    pauseStatus = true;
     windowX = 800;
     windowY = 800;
     refreshRate = 120;
@@ -266,9 +276,9 @@ void init(){
 void handleReshape(int w, int h) {
     windowX = w;
     windowY = h;
-    // glEnable(GL_LIGHTING);
-    // glEnable(GL_LIGHT0);
-    // glShadeModel(GL_SMOOTH);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glShadeModel(GL_SMOOTH);
     
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);

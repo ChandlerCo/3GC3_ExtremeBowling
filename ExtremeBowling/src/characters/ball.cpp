@@ -7,7 +7,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->physics.setSurfaceFriction(1);
     this->physics.setId(BALL);
 
-    this->graphics = Graphics("ball");
+    this->graphics = Graphics("bowlingball", OBSIDIAN);
     this->radius = radius;
     this->lives = 3;
     this->obj_scalar = 4;
@@ -66,7 +66,7 @@ void Ball::clearPowerUp(){
 
 
 void Ball::jump(){
-    this->physics.addVelocity(0,50,0);
+    this->physics.addVelocity(0,10,0);
 }
 
 bool Ball::respawn(){

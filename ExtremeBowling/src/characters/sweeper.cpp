@@ -5,7 +5,7 @@ Sweeper::Sweeper(float inX, float inY, float inZ, float endX, float endY, float 
     speed = 1.0;
 
     //this->moveZBy = 1;
-    this->graphics = Graphics("pin"); //we change this later
+    this->graphics = Graphics("pindraft"); //we change this later
 
     this->physics.addBoxCollider(10, 10, 30, 0, 0, 15);
     this->physics.setId(SWEEPER);

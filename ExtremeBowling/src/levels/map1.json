@@ -2,7 +2,7 @@
     "Name": "Map 1",
     "HighScore": 0,
     "Floor": {
-        "DEFAULT_FRICTION": 0.3,
+        "DEFAULT_FRICTION": 0.1,
         "TILE_SIZE": 8,
         "ROWS": 100,
         "COLUMNS": 11,

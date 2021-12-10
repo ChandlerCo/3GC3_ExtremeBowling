@@ -2,7 +2,7 @@
 
 Pin::Pin(float inX, float inY, float inZ, int local_id) : Asset(inX, inY, inZ)
 {
-    this->graphics = Graphics("pin");
+    this->graphics = Graphics("pindraft");
     this->physics.setId(PIN);
     this->physics.setLocalId(local_id);
 

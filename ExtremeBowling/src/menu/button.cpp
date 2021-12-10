@@ -35,7 +35,7 @@ void Button::display()
 void Button::centerText(string text, void* font)
 {
     float textWidth = 0;
-    for (int i = 0; i < text.size(); i++) {
+    for (int i = 0; i < (int) text.size(); i++) {
         textWidth += glutBitmapWidth(font, text[i]);
     }
     // If font is ever changed this will needed to be changed as well, or reshape

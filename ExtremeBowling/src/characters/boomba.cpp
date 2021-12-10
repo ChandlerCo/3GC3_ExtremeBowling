@@ -12,8 +12,8 @@ Boomba::Boomba(float inX, float inY, float inZ, float endX, float endY, float en
 
     this->physics.addCallback(BALL, &hitBall, this);
 
-    this->graphics = Graphics("boomba");
-    this->obj_scalar = 0.5;
+    this->graphics = Graphics("pindraft");
+    this->obj_scalar = 1;
 
     // this->moveXBy = 0.5;
 }
@@ -58,6 +58,13 @@ void Boomba::animate()
         physics.setPosition(physics.getPos().x + speed*backwardDir.x, physics.getPos().y + speed*backwardDir.y, physics.getPos().z + speed*backwardDir.z);
     }
 
+    /*
+    Point3D target = startPos;
+    if(movingToEnd)
+        target = endPos;
+
+    physics.setVelocity(Vec3D::createVector(physics.getPos(), target).normalize().multiply(2));
+    */
 
     // if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 10) {
     //     physics.addRelativeRotation(0, 1, 0, 180);

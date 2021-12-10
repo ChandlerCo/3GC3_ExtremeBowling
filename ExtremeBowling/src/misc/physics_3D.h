@@ -10,7 +10,7 @@
 #include "mathlib_3D.h"
 
 #define GRAVITY (-18.6f)
-#define MAX_SPD 1000
+#define MAX_SPD 1000000
 #define ZERO 0.0000001
 
 using namespace std;

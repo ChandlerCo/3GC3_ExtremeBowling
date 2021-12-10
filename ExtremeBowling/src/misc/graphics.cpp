@@ -180,7 +180,7 @@ GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
     
     return img;
 }
-
+/*
 static void initTextures()
 {
     
@@ -224,20 +224,10 @@ static void initTextures()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
+*/
 void Graphics::displayAsset(Rot3D r)
 {
-    float lightPos[] ={ 50, 700, 1, 1 };
-    float lightPos2[] = {0,0,0,1};
-    float lightAmb[] = { 1, 1, 1, 1 };
-    float lightDif[] = { 0.8, 0.8, 0.8, 1 };
-    float lightDif2[] = { 1, 1, 1, 1 };
-    float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
-    
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
+
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat.amb);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat.diff);
@@ -246,7 +236,7 @@ void Graphics::displayAsset(Rot3D r)
 
 	glPushMatrix();
         glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());
-		glBegin(GL_TRIANGLES);
+		glBegin(GL_QUADS);
 		// render each triangle
 		for (int i = 0; i < this->vertices.size() ; i++) {
 			glVertex3f(this->vertices.at(i).x, this->vertices.at(i).y, this->vertices.at(i).z);

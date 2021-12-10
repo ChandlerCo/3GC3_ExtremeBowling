@@ -27,7 +27,7 @@ Tile::Tile(float x, float z, float size, float friction, int tile_type, float r_
 {
     physics.setRotation(r_x, r_y, r_z, r_a);
     physics.setSurfaceFriction(friction);
-    physics.addCubeCollider(size, 0, 0, 0);
+    physics.addBoxCollider(size, 0.1, size, 0, 0, 0);
 
     switch (tile_type)
     {
@@ -44,7 +44,8 @@ Tile::Tile(float x, float z, float size, float friction, int tile_type, float r_
 
 void Tile::setGraphics()
 {
-    graphics = Graphics("untitled");
+    this->obj_scalar = 1;
+    graphics = Graphics("floor");
     switch (physics.getId())
     {
         case CHECKPOINT:

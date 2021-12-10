@@ -1,5 +1,6 @@
 #include "physics_3D.h"
-
+#include <iostream>
+#include <stdio.h>
 
 Collider3D::Collider3D()
 {
@@ -468,9 +469,10 @@ void PhysicsObject3D::removeCallback(int i)
 void PhysicsObject3D::updatePhysics(float time, bool gravity, vector<PhysicsObject3D *> &objs)
 {
     time = time / 1000;     // convert to seconds
+    //std::cout << "friction: " << acc_friction << " acc: " << acc.length() << std::endl;
 
     // ------------------- deceleration due to friction -------------------------
-    acc_friction = min(acc_friction * time, 1.0f);
+    acc_friction = min(acc_friction * time, 0.75f);
 
     vel = vel.multiply(1-acc_friction); // calculate change in velocity
 
@@ -590,14 +592,14 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     {
         pos = ref_normal.multiply(-1).movePoint(pos);
         if (ref_normal.dotProd(vel) > 0)
-            vel = vel.addVec(vel_1.multiply(-1.9 + acc_friction));
+            vel = vel.addVec(vel_1.multiply(-1.5 + acc_friction));
         vel = vel.addVec(vel_2);
     }
     else if (bounce_2)
     {
         other_obj->pos = ref_normal.movePoint(other_obj->pos);
         if (ref_normal.dotProd(other_obj->vel) < 0)
-            other_obj->vel = other_obj->vel.addVec(vel_2.multiply(-1.9 + acc_friction));
+            other_obj->vel = other_obj->vel.addVec(vel_2.multiply(-1.5 + acc_friction));
         other_obj->vel = other_obj->vel.addVec(vel_1);
     }
 }
