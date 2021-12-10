@@ -30,9 +30,12 @@
 using namespace std;
 using namespace std::chrono;
 
+#define DEFAULT_SIZE_X 800
+#define DEFAULT_SIZE_Y 800
+
 int refreshRate;
-int windowX = 800; // need to initialize this first here for menu parameters
-int windowY = 800;
+int windowX = DEFAULT_SIZE_X; // need to initialize this first here for menu parameters
+int windowY = DEFAULT_SIZE_Y;
 
 bool pauseStatus;
 bool startStatus;
@@ -263,8 +266,8 @@ void init(){
     glLoadIdentity();
 
     pauseStatus = true;
-    windowX = 800;
-    windowY = 800;
+    windowX = DEFAULT_SIZE_X;
+    windowY = DEFAULT_SIZE_Y;
     refreshRate = 120;
     frameTime = 0;
     showFPS = true;
