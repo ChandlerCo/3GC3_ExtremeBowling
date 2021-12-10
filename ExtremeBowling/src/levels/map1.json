@@ -122,18 +122,18 @@
                 "end col":3
             }, 
             {
-                "start row": 0, 
+                "start row": 6, 
                 "start col": 3,
-                "end row": 5, 
+                "end row": 12, 
                 "end col":3
             }
         ],
         "Sweepers": [
             {
                 "start row": 0, 
-                "start col": 3,
+                "start col": 7,
                 "end row": 5, 
-                "end col":3
+                "end col":5
             } 
         ]
     },

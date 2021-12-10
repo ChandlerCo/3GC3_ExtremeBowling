@@ -22,7 +22,7 @@ Enemy::Enemy(float inX, float inY, float inZ, float endX, float endY, float endZ
     backwardDir = backwardDir.normalize();
 }
 
-void Enemy::animate() {}
+void Enemy::animate(float time) {}
 
 bool Enemy::checkCollision(){
     return collided;

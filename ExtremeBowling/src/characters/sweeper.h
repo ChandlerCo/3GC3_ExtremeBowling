@@ -16,7 +16,7 @@ class Sweeper : public Enemy {
         // float moveZBy;
 
         //virtual void animate() override;
-        void animate();
+        void animate(float time);
         // collision animation? 
         static int hitBall(void* context, Vec3D deflection, void* obj);
         static vector<Sweeper*> fromJson(vector<json> jsonData, float tileSize);

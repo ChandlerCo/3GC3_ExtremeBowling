@@ -25,7 +25,7 @@ class Enemy : public Asset {
         bool collided;
     public:
         Enemy(float inX, float inY, float inZ, float endX, float endY, float endZ, int id);
-        virtual void animate();
+        virtual void animate(float time);
         bool checkCollision();
         //virtual static int hitBall(void* context, Vec3D deflection, void* obj);
 };

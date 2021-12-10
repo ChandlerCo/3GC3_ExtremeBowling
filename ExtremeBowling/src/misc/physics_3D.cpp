@@ -575,8 +575,9 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     Vec3D vel_2 = ref_normal.project(other_obj->vel);
 
     // calculate friction
-    acc_friction = max(other_obj->getSurfaceFriction() * surface_friction, acc_friction);
-    other_obj->setAccFriction(acc_friction);
+    float collision_friction = other_obj->getSurfaceFriction() * surface_friction;
+    acc_friction = max(collision_friction, acc_friction);
+    other_obj->setAccFriction(collision_friction);
 
     // two collision
     if (bounce_1 && bounce_2)
@@ -592,14 +593,14 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     {
         pos = ref_normal.multiply(-1).movePoint(pos);
         if (ref_normal.dotProd(vel) > 0)
-            vel = vel.addVec(vel_1.multiply(-1.5 + acc_friction));
+            vel = vel.addVec(vel_1.multiply(-1.9 + collision_friction));
         vel = vel.addVec(vel_2);
     }
     else if (bounce_2)
     {
         other_obj->pos = ref_normal.movePoint(other_obj->pos);
         if (ref_normal.dotProd(other_obj->vel) < 0)
-            other_obj->vel = other_obj->vel.addVec(vel_2.multiply(-1.5 + acc_friction));
+            other_obj->vel = other_obj->vel.addVec(vel_2.multiply(-1.9 + collision_friction));
         other_obj->vel = other_obj->vel.addVec(vel_1);
     }
 }

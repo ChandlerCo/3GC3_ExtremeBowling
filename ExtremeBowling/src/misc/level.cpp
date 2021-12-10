@@ -77,11 +77,11 @@ void Level::runLevel(int timePassed){
 
     
     for(Sweeper *i : sweepers){
-        i->animate();
+        i->animate(timePassed);
     }
 
     for(Boomba *i : boombas){
-        i->animate();
+        i->animate(timePassed);
     }
 
     for (vector<PowerUp*>::iterator it = powerUps.begin(); it != powerUps.end(); it++)

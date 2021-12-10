@@ -2,35 +2,37 @@
 
 Sweeper::Sweeper(float inX, float inY, float inZ, float endX, float endY, float endZ, int id) : Enemy(inX, inY, inZ, endX, endY, endZ, id)
 {
-    speed = 1.0;
+    speed = 5;
 
     //this->moveZBy = 1;
     this->graphics = Graphics("pindraft"); //we change this later
 
-    this->physics.addBoxCollider(10, 10, 30, 0, 0, 15);
+    this->physics.addBoxCollider(20, 5, 5, 0, 0, 0);
     this->physics.setId(SWEEPER);
     this->physics.setLocalId(id);
 
     this->physics.addCallback(BALL, &hitBall, this);
+
+    Vec3D dir = Vec3D::createVector(startPos, endPos);
+    this->physics.setRotation(0, 1, 0, atan2(dir.x, dir.z) * 180.0f / M_PI);
 }
 
-void Sweeper::animate() 
+void Sweeper::animate(float time) 
 {
     //std::cout << "sweeper animate" << std::endl;
 
-    if (physics.getPos().distanceTo(startPos) >= startPos.distanceTo(endPos)) {
-        physics.addRelativeRotation(0, 1, 0, 180);
-        movingToEnd = false;
-    } else if (physics.getPos().distanceTo(endPos) >= endPos.distanceTo(startPos)) {
-        physics.addRelativeRotation(0, 1, 0, 180);
-        movingToEnd = true;
-    }
+    Point3D target = startPos;
+    if(movingToEnd)
+        target = endPos;
+    
+    if (physics.getPos().distanceTo(target) < 0.1)
+        movingToEnd = !movingToEnd;
 
-    if (movingToEnd) { 
-        physics.setPosition(physics.getPos().x + speed*forwardDir.x, physics.getPos().y + speed*forwardDir.y, physics.getPos().z + speed*forwardDir.z);
-    } else {
-        physics.setPosition(physics.getPos().x + speed*backwardDir.x, physics.getPos().y + speed*backwardDir.y, physics.getPos().z + speed*backwardDir.z);
-    }
+    Vec3D vel = Vec3D::createVector(physics.getPos(), target).normalize().multiply(speed);
+    physics.setVelocity(vel.x, 0, vel.z);
+
+    vector<PhysicsObject3D*> empty;
+    physics.updatePhysics(time, false, empty);
 
     // if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 50) {
     //     physics.addRelativeRotation(0, 1, 0, 180); 
