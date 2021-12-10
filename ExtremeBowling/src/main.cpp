@@ -30,8 +30,8 @@
 using namespace std;
 using namespace std::chrono;
 
-#define DEFAULT_SIZE_X 800
-#define DEFAULT_SIZE_Y 800
+#define DEFAULT_SIZE_X 600
+#define DEFAULT_SIZE_Y 600
 
 int refreshRate;
 int windowX = DEFAULT_SIZE_X; // need to initialize this first here for menu parameters
@@ -59,7 +59,7 @@ PauseMenu pauseMenu(windowX, windowY);
 EndMenu endMenu(windowX, windowY);
 
 Level* currentLevel;
-Level level1("src/levels/map1.json");
+Level level1("src/levels/map2.json");
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {

@@ -68,6 +68,9 @@ Level::Level(string filename){
 
     this->currentTime = 0;
 
+    this->ended = false;
+    this->score = 0;
+    this->powerUpStart = 0;
 }
 
 void Level::runLevel(int timePassed){
@@ -84,6 +87,7 @@ void Level::runLevel(int timePassed){
         i->animate(timePassed);
     }
 
+    vector<vector<PowerUp*>::iterator> deletePowerUps;
     for (vector<PowerUp*>::iterator it = powerUps.begin(); it != powerUps.end(); it++)
     {
         if((*it)->checkCollision() == true){
@@ -104,10 +108,15 @@ void Level::runLevel(int timePassed){
             delete *it;
 
             // remove from powerUps
-            powerUps.erase(it);
+            deletePowerUps.push_back(it);
         }
     }
+    for (vector<PowerUp*>::iterator it : deletePowerUps)
+    {
+        powerUps.erase(it);
+    }
 
+    vector<vector<Pin*>::iterator> deletePins;
     for (vector<Pin*>::iterator it = pins.begin(); it != pins.end(); it++)
     {
         if((*it)->checkCollision() == true){
@@ -127,8 +136,12 @@ void Level::runLevel(int timePassed){
             delete *it;
 
             // remove from powerUps
-            pins.erase(it);
+            deletePins.push_back(it);
         }
+    }
+    for (vector<Pin*>::iterator it : deletePins)
+    {
+        pins.erase(it);
     }
     /*
     for(PowerUp *i : powerUps){
