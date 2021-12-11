@@ -59,7 +59,7 @@ PauseMenu pauseMenu(windowX, windowY);
 EndMenu endMenu(windowX, windowY);
 
 Level* currentLevel;
-Level level1("src/levels/map2.json");
+Level level1("src/levels/map1.json");
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
