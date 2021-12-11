@@ -238,7 +238,19 @@ void Level::displayAssets(){
         i->displayAsset();
     }
     //glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
-    this->ball.displayAsset();
+    if (ball.blend) 
+    {
+        glEnable(GL_BLEND);					// Turn Blending On
+		glDisable(GL_DEPTH_TEST);			// Turn Depth Testing Off
+        this->ball.displayAsset();
+    } else 
+    {
+        glDisable(GL_BLEND);					// Turn Blending Off
+		glEnable(GL_DEPTH_TEST);				// Turn Depth Testing On
+        this->ball.displayAsset();
+    }
+    
+    
     //glBindTexture(GL_TEXTURE_2D, 0);
     this->map.displayFloor();
 

@@ -16,6 +16,7 @@ class Ball : public Asset{
         void jump();
         bool respawn();
         bool finished();
+        bool blend;
         int getLives();
         
         static int hitBoomba(void* context, Vec3D deflection, void* obj);

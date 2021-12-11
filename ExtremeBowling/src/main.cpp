@@ -282,6 +282,8 @@ void handleReshape(int w, int h) {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glShadeModel(GL_SMOOTH);
+    glColor4f(1.0f,1.0f,1.0f,0.5f);		// Full Brightness, 50% Alpha
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE);	// blending function for translucency based on source alpha value
     
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);

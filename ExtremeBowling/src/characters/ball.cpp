@@ -52,7 +52,7 @@ void Ball::activatePowerUp(PowerUp powerup)
     }else if(powerup.powerUpType() == GHOST_MODE){
         this->powerUpType = GHOST_MODE;
         this->physics.setInteraction(Reaction::ghost);
-        //alpha blending on
+        this->blend = true;
     }
 }
 
