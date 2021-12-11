@@ -33,11 +33,12 @@ void Ball::runPhysics(float time, vector<PhysicsObject3D*> &world_objs)
 
     // rotate ball
     Vec3D rot_axis = Vec3D(0, 1, 0).crossProd(this->physics.getVel());
-    this->physics.addRotation(rot_axis.x, 0, rot_axis.z, this->physics.getVel().length()* time * 0.0072f);
+    this->physics.addRotation(rot_axis.x, 0, rot_axis.z, this->physics.getVel().length() * time * 0.18f / (M_PI * radius));
 }
 
 void Ball::activatePowerUp(PowerUp powerup)
 {
+    clearPowerUp();
     if(powerup.powerUpType() == ADD_LIVES){
         this->lives += 1;
         this->powerUpType = ADD_LIVES;

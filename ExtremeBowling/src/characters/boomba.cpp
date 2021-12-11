@@ -101,7 +101,7 @@ void Boomba::animate(float time)
 
     // for rotation: if enemy is another bowling ball, use this. otherwise, use above section
     Vec3D rot_axis = Vec3D(0, 1, 0).crossProd(this->physics.getVel());
-    physics.addRotation(rot_axis.x, 0, rot_axis.z, this->physics.getVel().length()* time * 0.072f);
+    physics.addRotation(rot_axis.x, 0, rot_axis.z, this->physics.getVel().length()* time * 0.019f);
     
 
     // if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 10) {
