@@ -222,6 +222,7 @@ void Level::displayAssets(){
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
+    //Graphics::initTextures();
 
     for(Boomba* i : boombas){
         i->displayAsset();//add materials
@@ -251,7 +252,7 @@ void Level::displayAssets(){
     }
     
     
-    //glBindTexture(GL_TEXTURE_2D, 0);
+    //glBindTexture(GL_TEXTURE_2D, Graphics::textures[2]);
     this->map.displayFloor();
 
 }
