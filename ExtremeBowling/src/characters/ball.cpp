@@ -20,10 +20,11 @@ void Ball::init()
 {
     this->physics.addSphereCollider(this->radius * 2, 0, 0, 0);
     
-    this->physics.addCallback(BOOMBA, &hitBoomba, this);
-    this->physics.addCallback(SWEEPER, &hitSweeper, this);
+    //this->physics.addCallback(BOOMBA, &hitBoomba, this);
+    //this->physics.addCallback(SWEEPER, &hitSweeper, this);
     this->physics.addCallback(CHECKPOINT, &hitCheckpoint, this);
     this->physics.addCallback(FINISH, &hitFinish, this);
+    this->physics.addCallback(FLOOR, &hitFloor, this);
 }
 
 void Ball::runPhysics(float time, vector<PhysicsObject3D*> &world_objs)
@@ -50,6 +51,7 @@ void Ball::activatePowerUp(PowerUp powerup)
 
     }else if(powerup.powerUpType() == GHOST_MODE){
         this->powerUpType = GHOST_MODE;
+        this->physics.setInteraction(Reaction::ghost);
         //alpha blending on
     }
 }
@@ -62,7 +64,7 @@ void Ball::clearPowerUp(){
         this->physics.addSphereCollider(this->radius * 2, 0, 0, 0);
         this->obj_scalar *=2;
     }
-
+    this->physics.setInteraction(Reaction::kinetic);
     this->powerUpType = NO_POWERUP;
 }
 
@@ -126,7 +128,7 @@ int Ball::hitCheckpoint(void* context, Vec3D deflection, void* obj)
     b->lastCheckpoint.x = other->getX();
     b->lastCheckpoint.z = other->getZ();
     
-    return 0;
+    return 1;
 }
 
 int Ball::hitFinish(void* context, Vec3D deflection, void* obj)
@@ -134,5 +136,10 @@ int Ball::hitFinish(void* context, Vec3D deflection, void* obj)
     Ball* b = static_cast<Ball*>(context);
     b->finishedStatus = true;
     
-    return 0;
+    return 1;
+}
+
+int Ball::hitFloor(void* context, Vec3D deflection, void* obj)
+{
+    return 1;
 }

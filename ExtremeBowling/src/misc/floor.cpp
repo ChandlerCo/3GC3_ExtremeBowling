@@ -28,17 +28,11 @@ Tile::Tile(float x, float z, float size, float friction, int tile_type, float r_
     physics.setRotation(r_x, r_y, r_z, r_a);
     physics.setSurfaceFriction(friction);
     physics.addBoxCollider(size, 0.1, size, 0, 0, 0);
+    physics.setId(tile_type);
+    
+    if (tile_type == CHECKPOINT)
+        physics.addCallback(BALL, &hitBall, this);
 
-    switch (tile_type)
-    {
-        case CHECKPOINT:
-            physics.addCallback(BALL, &hitBall, this);
-        case FINISH:
-            physics.setId(tile_type);
-            break;
-        default:
-            break;
-    }
     setGraphics();
 }
 
@@ -109,7 +103,7 @@ Floor::Floor(vector<string> csv, float tile_size, float friction, float x, float
             c = values.at(0);
             if (c.compare("0") != 0)
             {
-                tile_type = 0;
+                tile_type = FLOOR;
                 if (c.compare("S") == 0)
                 {
                     spawn = Point3D(t_x, SPAWN_HEIGHT, t_z);

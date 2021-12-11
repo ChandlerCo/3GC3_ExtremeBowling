@@ -131,8 +131,9 @@ int Boomba::hitBall(void* context, Vec3D deflection, void* obj)
 {
     Boomba* e = static_cast<Boomba*>(context);
     PhysicsObject3D* ball = static_cast<PhysicsObject3D*>(obj);
-    // dont collide if ball is in ghost mode
-    if (ball->powerUpType == GHOST_MODE)
+    
+    // dont deflect if ball is in ghost mode
+    if (ball->getInteraction() == Reaction::ghost)
         return 0;
     
     deflection.y = 0;
@@ -142,7 +143,7 @@ int Boomba::hitBall(void* context, Vec3D deflection, void* obj)
     e->deflect = deflection;
     e->physics.addVelocity(-e->deflect.x/3.0f, 0, -e->deflect.z/3.0f);
 
-    return 0;   // forces boomba to have a collision
+    return 0;
 }
 
 vector<Boomba*> Boomba::fromJson(vector<json> jsonData, float tileSize)

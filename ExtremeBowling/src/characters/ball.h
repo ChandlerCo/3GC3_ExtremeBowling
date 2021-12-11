@@ -22,6 +22,7 @@ class Ball : public Asset{
         static int hitSweeper(void* context, Vec3D deflection, void* obj);
         static int hitCheckpoint(void* context, Vec3D deflection, void* obj);
         static int hitFinish(void* context, Vec3D deflection, void* obj);
+        static int hitFloor(void* context, Vec3D deflection, void* obj);
     private:
         Point3D lastCheckpoint;
         int lives;

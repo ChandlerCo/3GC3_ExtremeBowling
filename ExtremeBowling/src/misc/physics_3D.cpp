@@ -557,14 +557,14 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
 
     // check reaction type
     bool bounce_1 = isMoveable() && other_obj->getInteraction() != Reaction::ghost;
-    bool bounce_2 = other_obj->isMoveable();
+    bool bounce_2 = other_obj->isMoveable() && getInteraction() != Reaction::ghost;
 
     // run callbacks and get reaction override
     // -1 means force no collision
     //  0 means use default collision
     //  1 means force collision
     int force_1 = runCallback(other_obj->getId(), ref_normal.multiply(-1), other_obj);
-    int force_2 = other_obj->runCallback(getId(), ref_normal, other_obj);
+    int force_2 = other_obj->runCallback(getId(), ref_normal, this);
     
     // compute reaction types for both objects
     bounce_1 = (bounce_1 && force_1 == 0) || force_1 == 1;
