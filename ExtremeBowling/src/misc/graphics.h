@@ -44,6 +44,7 @@ class Graphics {
             vector <Vec3D> & out_uvs,
             vector <Vec3D> & out_normals 
         );
+        void setMaterial(Material m);
         static GLuint textures[3];
         static GLubyte *bowling, *red, *white;
         static int width, height, max;

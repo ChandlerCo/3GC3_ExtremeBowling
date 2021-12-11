@@ -30,8 +30,8 @@
 using namespace std;
 using namespace std::chrono;
 
-#define DEFAULT_SIZE_X 600
-#define DEFAULT_SIZE_Y 600
+#define DEFAULT_SIZE_X 800
+#define DEFAULT_SIZE_Y 800
 
 int refreshRate;
 int windowX = DEFAULT_SIZE_X; // need to initialize this first here for menu parameters

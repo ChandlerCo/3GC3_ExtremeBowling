@@ -49,6 +49,11 @@ int Sweeper::hitBall(void* context, Vec3D deflection, void* obj)
     Sweeper* e = static_cast<Sweeper*>(context);
     
     e->collided = true;
+    
+    deflection.y = 0;
+    deflection = deflection.normalize().multiply(10);
+
+    e->physics.addVelocity(-deflection.x, 0, -deflection.z);
 
     return 0;
 }

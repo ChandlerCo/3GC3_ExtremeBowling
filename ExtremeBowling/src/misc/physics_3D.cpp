@@ -593,14 +593,14 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     {
         pos = ref_normal.multiply(-1).movePoint(pos);
         if (ref_normal.dotProd(vel) > 0)
-            vel = vel.addVec(vel_1.multiply(-1.9 + collision_friction));
+            vel = vel.addVec(vel_1.multiply(-1.5 + collision_friction));
         vel = vel.addVec(vel_2);
     }
     else if (bounce_2)
     {
         other_obj->pos = ref_normal.movePoint(other_obj->pos);
         if (ref_normal.dotProd(other_obj->vel) < 0)
-            other_obj->vel = other_obj->vel.addVec(vel_2.multiply(-1.9 + collision_friction));
+            other_obj->vel = other_obj->vel.addVec(vel_2.multiply(-1.5 + collision_friction));
         other_obj->vel = other_obj->vel.addVec(vel_1);
     }
 }

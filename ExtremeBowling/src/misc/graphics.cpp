@@ -127,6 +127,11 @@ bool Graphics::loadObj(string filename,
     return true;
 }
 
+void Graphics::setMaterial(Material m)
+{
+    mat = m;
+}
+
 GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
 {
     GLubyte* img;

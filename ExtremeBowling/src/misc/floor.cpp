@@ -1,6 +1,6 @@
 #include "floor.h"
 
-#define SPAWN_HEIGHT 30
+#define SPAWN_HEIGHT 15
 
 vector<string> split(string str, string delimiter=" ")
 {
@@ -44,12 +44,15 @@ void Tile::setGraphics()
     {
         case CHECKPOINT:
             // set graphics to be checkpoint tile (maybe change texture used?)
+            graphics.setMaterial(SILVER);
             break;
         case FINISH:
             // set graphics to be checkpoint tile (maybe change texture used?)
+            graphics.setMaterial(GOLD);
             break;
         default:
             // set graphics to be normal tile
+            graphics.setMaterial(BRONZE);
             break;
     }
 }

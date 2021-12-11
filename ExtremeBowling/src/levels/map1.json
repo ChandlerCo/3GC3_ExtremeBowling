@@ -124,14 +124,14 @@
             {
                 "start row": 6, 
                 "start col": 3,
-                "end row": 5, 
-                "end col": 3
+                "end row": 15, 
+                "end col": 5
             }
         ],
         "Sweepers": [
             {
-                "start row": 0, 
-                "start col": 7,
+                "start row": 5, 
+                "start col": 9,
                 "end row": 5, 
                 "end col": 3
             } 
@@ -139,14 +139,14 @@
     },
     "Pins": [
         {
-            "row": 0, 
-            "col": 3
+            "row": 5, 
+            "col": 6
         }
     ],
     "PowerUps": [
         {
-            "row": 0, 
-            "col": 3,
+            "row": 20, 
+            "col": 5,
             "type": 11
         } 
     ]
