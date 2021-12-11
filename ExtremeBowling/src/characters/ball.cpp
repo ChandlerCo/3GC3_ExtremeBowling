@@ -10,7 +10,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->graphics = Graphics("bowlingball", OBSIDIAN);
     this->radius = radius;
     this->lives = 3;
-    this->obj_scalar = 4;
+    this->obj_scalar = radius;
     this->powerUpType = NO_POWERUP;
 
     this->finishedStatus = false;
@@ -18,7 +18,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
 
 void Ball::init()
 {
-    this->physics.addSphereCollider(radius * 2, 0, 0, 0);
+    this->physics.addSphereCollider(this->radius * 2, 0, 0, 0);
     
     this->physics.addCallback(BOOMBA, &hitBoomba, this);
     this->physics.addCallback(SWEEPER, &hitSweeper, this);
@@ -43,9 +43,10 @@ void Ball::activatePowerUp(PowerUp powerup)
 
     }else if(powerup.powerUpType() == HALF_SIZE){
         this->powerUpType = HALF_SIZE;
-        this->radius/= 2;
+        this->radius /= 2.0f;
         this->physics.setPosition(physics.getPos().x,physics.getPos().y, physics.getPos().z);
-        this->obj_scalar/=2;
+        this->physics.addSphereCollider(this->radius * 2, 0, 0, 0);
+        this->obj_scalar /= 2.0f;
 
     }else if(powerup.powerUpType() == GHOST_MODE){
         this->powerUpType = GHOST_MODE;
@@ -56,9 +57,10 @@ void Ball::activatePowerUp(PowerUp powerup)
 void Ball::clearPowerUp(){
 
     if(this->powerUpType == HALF_SIZE){
-        this->radius*= 2;
+        this->radius *= 2;
         this->physics.setPosition(physics.getPos().x,physics.getPos().y + this->radius/2, physics.getPos().z);
-        this->obj_scalar*=2;
+        this->physics.addSphereCollider(this->radius * 2, 0, 0, 0);
+        this->obj_scalar *=2;
     }
 
     this->powerUpType = NO_POWERUP;
@@ -66,7 +68,8 @@ void Ball::clearPowerUp(){
 
 
 void Ball::jump(){
-    this->physics.addVelocity(0,10,0);
+    if (physics.getPos().y <= radius + 0.5)
+        this->physics.addVelocity(0,30,0);
 }
 
 bool Ball::respawn(){
@@ -89,24 +92,28 @@ bool Ball::finished()
 
 
 int Ball::getLives(){
-    this->lives;
+    return this->lives;
 }
 
 int Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
 {
-    //Ball* b = static_cast<Ball*>(context);
+    Ball* b = static_cast<Ball*>(context);
     //PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     //b->physics.setVelocity(0, 20, 0);
     // if invincible, return -1
+    if (b->powerUpType == GHOST_MODE)
+        return -1;
 
     return 0;
 }
 
 int Ball::hitSweeper(void* context, Vec3D deflection, void* obj)
 {
-    //Ball* b = static_cast<Ball*>(context);
+    Ball* b = static_cast<Ball*>(context);
     //PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     //b->physics.setVelocity(0, 50, 0);
+    if (b->powerUpType == GHOST_MODE)
+        return -1;
 
     return 0;
 }

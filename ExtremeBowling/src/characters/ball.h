@@ -25,7 +25,7 @@ class Ball : public Asset{
     private:
         Point3D lastCheckpoint;
         int lives;
-        int radius;
+        float radius;
         int powerUpType;
         bool finishedStatus;
         

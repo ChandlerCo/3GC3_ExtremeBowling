@@ -131,6 +131,9 @@ int Boomba::hitBall(void* context, Vec3D deflection, void* obj)
 {
     Boomba* e = static_cast<Boomba*>(context);
     PhysicsObject3D* ball = static_cast<PhysicsObject3D*>(obj);
+    // dont collide if ball is in ghost mode
+    if (ball->powerUpType == GHOST_MODE)
+        return 0;
     
     deflection.y = 0;
     deflection = deflection.normalize().multiply(10);

@@ -3,7 +3,8 @@
 PowerUp::PowerUp(float inX, float inY, float inZ, int type, int local_id) : Asset(inX, inY, inZ)
 {
     this->graphics = Graphics("powerup");
-    //this->type = type; //type 1 is gain a life, type 2 is increase size, type 3 is ghost mode
+    this->physics.addCubeCollider(8, 0, 0, 0);
+    this->physics.setInteraction(Reaction::ghost);
     this->physics.setId(type);
     this->physics.setLocalId(local_id);
     this->obj_scalar = 5;
@@ -44,8 +45,8 @@ vector<PowerUp*> PowerUp::fromJson(vector<json> jsonData, float tileSize)
     vector<PowerUp*> powerups;
     for (json entry : jsonData)
     {
-        float sX = (float)entry.find("row").value() * tileSize;
-        float sZ = (float)entry.find("col").value() * tileSize;
+        float sX = (float)entry.find("col").value() * tileSize;
+        float sZ = (float)entry.find("row").value() * tileSize;
         int pwType = entry.find("type").value();
         powerups.push_back(new PowerUp(sX, tileSize, sZ, pwType, counter));
         counter += 1;
