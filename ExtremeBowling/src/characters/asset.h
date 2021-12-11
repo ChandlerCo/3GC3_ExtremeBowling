@@ -36,6 +36,8 @@ class Asset {
         float obj_scalar;
 
         virtual void displayAsset();
+
+        virtual ~Asset();
 };
 
 #endif

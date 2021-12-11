@@ -6,8 +6,8 @@ vector<string> split(string str, string delimiter=" ")
 {
     vector<string> words;
 
-    int next = 0;
-    int prev = 0;
+    size_t next = 0;
+    size_t prev = 0;
 
     while ((next = str.find(delimiter, prev)) != string::npos)
     {

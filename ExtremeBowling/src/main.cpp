@@ -194,32 +194,30 @@ void FPS (int val){
 
 void displayFPS(){
 
-    if (displayFPS){
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glLoadIdentity();
-        gluOrtho2D(0.0, windowX, 0.0, windowY);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0.0, windowX, 0.0, windowY);
 
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
 
-        glColor3f(0.0, 1.0, 0.0);
-        glRasterPos2i(10, windowY - 15);
+    glColor3f(0.0, 1.0, 0.0);
+    glRasterPos2i(10, windowY - 15);
 
-        string s = to_string(1000 / (frameTime+1));
-        void * font = GLUT_BITMAP_9_BY_15;
-        for (string::iterator i = s.begin(); i != s.end(); ++i)
-        {
-            char c = *i;
-            glutBitmapCharacter(font, c);
-        }
-        glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
-
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
+    string s = to_string(1000 / (frameTime+1));
+    void * font = GLUT_BITMAP_9_BY_15;
+    for (string::iterator i = s.begin(); i != s.end(); ++i)
+    {
+        char c = *i;
+        glutBitmapCharacter(font, c);
     }
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
 }
 
 void display(void)

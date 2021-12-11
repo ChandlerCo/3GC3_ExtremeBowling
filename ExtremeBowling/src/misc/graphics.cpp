@@ -243,7 +243,7 @@ void Graphics::displayAsset(Rot3D r)
         glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());
 		glBegin(GL_QUADS);
 		// render each triangle
-		for (int i = 0; i < this->vertices.size() ; i++) {
+		for (long unsigned int i = 0; i < this->vertices.size() ; i++) {
 			glVertex3f(this->vertices.at(i).x, this->vertices.at(i).y, this->vertices.at(i).z);
 			glNormal3f(this->normals.at(i).x, this->normals.at(i).y, this->normals.at(i).z);
 		}

@@ -109,3 +109,5 @@ void Asset::displayAsset()
         this->graphics.displayAsset(physics.getRot());
     glPopMatrix();
 }
+
+Asset::~Asset() {}
