@@ -64,7 +64,11 @@ void Ball::clearPowerUp(){
         this->physics.addSphereCollider(this->radius * 2, 0, 0, 0);
         this->obj_scalar *=2;
     }
-    this->physics.setInteraction(Reaction::kinetic);
+    else if (this->powerUpType == GHOST_MODE)
+    {
+        this->physics.setInteraction(Reaction::kinetic);
+        this->blend = false;
+    }
     this->powerUpType = NO_POWERUP;
 }
 

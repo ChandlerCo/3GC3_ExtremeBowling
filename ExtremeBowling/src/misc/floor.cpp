@@ -62,7 +62,7 @@ int Tile::hitBall(void* context, Vec3D deflection, void* obj)
     Tile* t = static_cast<Tile*>(context);
     // disable the checkpoint so that it doesnt keep getting reset
     // It also prevents someone from going backwards in the map and beign reset to an earlier checkpoint
-    t->physics.setId(0);
+    t->physics.setId(FLOOR);
     t->physics.removeCallback(BALL);
     t->setGraphics();
 
