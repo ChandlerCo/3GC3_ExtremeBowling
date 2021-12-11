@@ -2,13 +2,13 @@
 
 PowerUp::PowerUp(float inX, float inY, float inZ, int type, int local_id) : Asset(inX, inY, inZ)
 {
-    this->graphics = Graphics("powerup");
     this->physics.addCubeCollider(8, 0, 0, 0);
     this->physics.setInteraction(Reaction::ghost);
     this->physics.setId(type);
     this->physics.setLocalId(local_id);
-    this->obj_scalar = 5;
     this->physics.addCallback(BALL, &hitBall, this);
+
+    setGraphics();
 }
 
 void PowerUp::defaultAnimation()
@@ -28,6 +28,27 @@ int PowerUp::powerUpType()
 
 bool PowerUp::checkCollision(){
     return collided;
+}
+
+void PowerUp::setGraphics()
+{
+    this->obj_scalar = 5;
+    this->graphics = Graphics("powerup");
+    switch (physics.getId())
+    {
+        case ADD_LIVES:
+            // set graphics to be checkpoint tile (maybe change texture used?)
+            graphics.setMaterial(RUBY);
+            break;
+        case HALF_SIZE:
+            // set graphics to be checkpoint tile (maybe change texture used?)
+            graphics.setMaterial(EMERALD);
+            break;
+        case GHOST_MODE:
+            // set graphics to be normal tile
+            graphics.setMaterial(WHITE_RUBBER);
+            break;
+    }
 }
 
 int PowerUp::hitBall(void* context, Vec3D deflection, void* obj)

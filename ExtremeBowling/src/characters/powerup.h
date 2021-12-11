@@ -34,6 +34,7 @@ class PowerUp : public Asset {
         int powerUpType(); // will let player class know which type of power up to apply
         using Asset::Asset;
         bool checkCollision();
+        void setGraphics();
         static int hitBall(void* context, Vec3D deflection, void* obj);
         static vector<PowerUp*> fromJson(vector<json> jsonData, float tileSize);
 };

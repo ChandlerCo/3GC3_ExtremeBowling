@@ -211,12 +211,12 @@ void Level::runLevel(int timePassed){
 
 void Level::displayAssets(){
 
-    float lightPos[] ={ 50, 700, 5, 1 };
+    float lightPos[] ={ ball.getX(), 50, ball.getZ() - 5, 1 };
     //float lightPos2[] = {0,0,0,1};
     float lightAmb[] = { 1, 1, 1, 1 };
     float lightDif[] = { 0.8, 0.8, 0.8, 1 };
     //float lightDif2[] = { 1, 1, 1, 1 };
-    float lightSpc[] = { 0.35, 0.35, 0.35, 1 };
+    float lightSpc[] = { 1, 1, 1, 1 };
     
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);

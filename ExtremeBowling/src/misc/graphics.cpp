@@ -103,7 +103,7 @@ bool Graphics::loadObj(string filename,
     for( unsigned int i=0; i<vtxIndices.size(); i++ ){
         unsigned int vertexIndex = vtxIndices[i] - 1;
         if (vertexIndex < 0)
-			vertexIndex += vtxIndices.size() + 1;
+            vertexIndex += vtxIndices.size() + 1;
         Vec3D vertex = tempVertices[ vertexIndex ];
         out_vertices.push_back(vertex);
     }
@@ -111,7 +111,7 @@ bool Graphics::loadObj(string filename,
     for( unsigned int i=0; i<uvIndices.size(); i++ ){
         unsigned int uvIndex = uvIndices[i] - 1;
         if (uvIndex < 0)
-			uvIndex += uvIndices.size() + 1;
+            uvIndex += uvIndices.size() + 1;
         Vec3D uv = tempUV[ uvIndex ];
         out_uvs.push_back(uv);
     }
@@ -119,7 +119,7 @@ bool Graphics::loadObj(string filename,
     for( unsigned int i=0; i<nIndices.size(); i++ ){
         unsigned int normalIndex = nIndices[i] - 1;
         if (normalIndex < 0)
-			normalIndex += nIndices.size() + 1;
+            normalIndex += nIndices.size() + 1;
         Vec3D normal = tempNormals[ normalIndex ];
         out_normals.push_back(normal);
     }
@@ -190,43 +190,43 @@ static void initTextures()
 {
     
     // Enable texturing
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_TEXTURE_GEN_S);
-	glEnable(GL_TEXTURE_GEN_T);
-	glGenTextures(3, Graphics::textures);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_GEN_S);
+    glEnable(GL_TEXTURE_GEN_T);
+    glGenTextures(3, Graphics::textures);
 
     // Set up first texture for ball
-	glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
-	Graphics::bowling = Graphics::LoadPPM((char*)"../ppm/bowling.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
-		0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::bowling);
+    glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
+    Graphics::bowling = Graphics::LoadPPM((char*)"../ppm/bowling.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
+        0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::bowling);
 
     // Set up second texture for red (pin)
-	glBindTexture(GL_TEXTURE_2D, Graphics::textures[1]);
-	Graphics::red = Graphics::LoadPPM((char*)"../ppm/red_1.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
-		0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::red);
+    glBindTexture(GL_TEXTURE_2D, Graphics::textures[1]);
+    Graphics::red = Graphics::LoadPPM((char*)"../ppm/red_1.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
+        0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::red);
 
     // Set up third texture for white(pin)
-	glBindTexture(GL_TEXTURE_2D, Graphics::textures[2]);
-	Graphics::white = Graphics::LoadPPM((char*)"../ppm/white.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
-		0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::white);
+    glBindTexture(GL_TEXTURE_2D, Graphics::textures[2]);
+    Graphics::white = Graphics::LoadPPM((char*)"../ppm/white.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
+        0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::white);
     
     // Remove texture binding for now
-	glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 */
@@ -239,15 +239,15 @@ void Graphics::displayAsset(Rot3D r)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat.spec);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat.shine);
 
-	glPushMatrix();
+    glPushMatrix();
         glRotatef(r.getAngle(), r.getX(), r.getY(), r.getZ());
-		glBegin(GL_QUADS);
-		// render each triangle
-		for (long unsigned int i = 0; i < this->vertices.size() ; i++) {
-			glVertex3f(this->vertices.at(i).x, this->vertices.at(i).y, this->vertices.at(i).z);
-			glNormal3f(this->normals.at(i).x, this->normals.at(i).y, this->normals.at(i).z);
-		}
-		glEnd();
-	glPopMatrix();
+        glBegin(GL_TRIANGLES);
+        // render each triangle
+        for (long unsigned int i = 0; i < this->vertices.size() ; i++) {
+            glNormal3f(this->normals.at(i).x, this->normals.at(i).y, this->normals.at(i).z);
+            glVertex3f(this->vertices.at(i).x, this->vertices.at(i).y, this->vertices.at(i).z);
+        }
+        glEnd();
+    glPopMatrix();
 
 }
