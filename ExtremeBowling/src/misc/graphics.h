@@ -48,7 +48,7 @@ class Graphics {
         );
         void setMaterial(Material m);
         static GLuint textures[3];
-        static GLubyte *bowling, *red, *white;
+        static GLubyte *bowling, *red, *wood;
         static int width, height, max;
         
         Material mat;
@@ -59,6 +59,7 @@ class Graphics {
         // static void initTextures();
         void displayAsset(Rot3D r);
         static GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
+        static void initTextures();
 
 };
 

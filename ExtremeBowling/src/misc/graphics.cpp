@@ -205,7 +205,7 @@ static void initTextures()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
         0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::bowling);
 
-    // Set up second texture for red (pin)
+    // Set up second texture for pin(red)
     glBindTexture(GL_TEXTURE_2D, Graphics::textures[1]);
     Graphics::red = Graphics::LoadPPM((char*)"../ppm/red_1.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -215,15 +215,15 @@ static void initTextures()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
         0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::red);
 
-    // Set up third texture for white(pin)
+    // Set up third texture for floor (wood)
     glBindTexture(GL_TEXTURE_2D, Graphics::textures[2]);
-    Graphics::white = Graphics::LoadPPM((char*)"../ppm/white.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
+    Graphics::wood = Graphics::LoadPPM((char*)"../ppm/wood.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
-        0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::white);
+        0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::wood);
     
     // Remove texture binding for now
     glBindTexture(GL_TEXTURE_2D, 0);
