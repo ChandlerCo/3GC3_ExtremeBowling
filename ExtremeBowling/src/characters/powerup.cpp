@@ -8,12 +8,22 @@ PowerUp::PowerUp(float inX, float inY, float inZ, int type, int local_id) : Asse
     this->physics.setLocalId(local_id);
     this->physics.addCallback(BALL, &hitBall, this);
 
+    this->physics.setVelocity(0, 2, 0);
+    this->startHeight = inY - 0.5;
+    this->endHeight = inY + 3.5;
+
     setGraphics();
 }
 
-void PowerUp::defaultAnimation()
+void PowerUp::defaultAnimation(float time_ms)
 {
+    this->physics.addRotation(0, 1, 0, time_ms * 0.06);
 
+    if (this->physics.getY() > this->endHeight || this->physics.getY() < startHeight)
+        this->physics.setVelocity(this->physics.getVel().multiply(-1));
+
+    vector<PhysicsObject3D*> empty;
+    this->physics.updatePhysics(time_ms, false, empty);
 }
 
 void PowerUp::collisionAnimation()
@@ -32,7 +42,7 @@ bool PowerUp::checkCollision(){
 
 void PowerUp::setGraphics()
 {
-    this->obj_scalar = 5;
+    this->obj_scalar = 4;
     this->graphics = Graphics("powerup");
     switch (physics.getId())
     {

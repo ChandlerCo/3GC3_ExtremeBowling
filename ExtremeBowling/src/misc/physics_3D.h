@@ -105,6 +105,7 @@ public:
     void setId(int object_id);
     void setLocalId(int object_id);
     void setPosition(float x, float y, float z);
+    void setVelocity(Vec3D v);
     void setVelocity(float x, float y, float z);
     void setRotation(float x, float y, float z, float a);
     void addRotation(float x, float y, float z, float a);

@@ -389,9 +389,14 @@ void PhysicsObject3D::setPosition(float x, float y, float z)
     pos = Point3D(x, y ,z);
 }
 
+void PhysicsObject3D::setVelocity(Vec3D v)
+{
+    vel = v;
+}
+
 void PhysicsObject3D::setVelocity(float x, float y, float z)
 {
-    vel = Vec3D(x, y ,z);
+    setVelocity(Vec3D(x, y ,z));
 }
 
 void PhysicsObject3D::setRotation(float x, float y, float z, float a)

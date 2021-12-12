@@ -26,10 +26,11 @@ class PowerUp : public Asset {
             ghost mode in physics
         
             */
-        int type;
+        float startHeight;
+        float endHeight;
     public:
         PowerUp(float inX, float inY, float inZ, int type, int local_id);
-        void defaultAnimation(); // can have box slowly rotate or hover up and down
+        void defaultAnimation(float time_ms); // can have box slowly rotate or hover up and down
         void collisionAnimation(); // only call this when player collides
         int powerUpType(); // will let player class know which type of power up to apply
         using Asset::Asset;

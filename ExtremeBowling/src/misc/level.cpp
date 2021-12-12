@@ -93,6 +93,10 @@ void Level::runLevel(int timePassed){
         i->animate(timePassed);
     }
 
+    for(PowerUp *i : powerUps){
+        i->defaultAnimation(timePassed);
+    }
+
     vector<vector<PowerUp*>::iterator> deletePowerUps;
     for (vector<PowerUp*>::iterator it = powerUps.begin(); it != powerUps.end(); it++)
     {
