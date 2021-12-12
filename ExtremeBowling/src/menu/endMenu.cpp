@@ -2,7 +2,7 @@
 
 EndMenu::EndMenu(int windowX, int windowY) : Menu(windowX, windowY) 
 {
-    backToStart = Button(windowWidth*0.45, windowWidth*0.55, windowHeight*0.83, windowHeight*0.79, "Back to Start");
+    backToStart = Button(windowWidth*0.40, windowWidth*0.60, windowHeight*0.83, windowHeight*0.79, "Back to Start");
 }
 
 void EndMenu::display() 

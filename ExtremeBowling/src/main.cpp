@@ -260,15 +260,15 @@ void display(void)
     } else if (instructionsStatus) {
         pauseStatus = true; // prevent movement of other things
         instructionsMenu.display();
+    } else if (endStatus) {
+        pauseStatus = true;
+        endMenu.display();
     } else if (pauseStatus) {
         if(currentLevel.getBlend()){
             glDisable(GL_BLEND);
             glEnable(GL_DEPTH_TEST);
         }
         pauseMenu.display();
-    } else if (endStatus) {
-        pauseStatus = true;
-        endMenu.display();
     } else {
         if(showFPS){
             displayFPS();     
