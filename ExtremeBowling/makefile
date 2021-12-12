@@ -1,4 +1,4 @@
-PROGRAM_NAME = ExtremeBowling
+PROGRAM_NAME = ExtremeBowling.out
 
 BUILD_DIR ?= ./build
 SRC_DIRS ?= ./src
