@@ -28,6 +28,8 @@ void Level::init(string filename){
     {
         json level_data;
         f >> level_data;
+        f.close();
+
         this->map = Floor::fromJson(level_data.find("Floor").value());
         map.getPointers(this->worldObjects);
         this->floorLength = worldObjects.size();
@@ -270,11 +272,13 @@ void Level::saveHighScore()
     std::ifstream i(levelFilename);
     json j;
     i >> j;
+    i.close();
 
     j["HighScore"] = getScore();
     // write prettified JSON to another file
     std::ofstream o(levelFilename);
     o << std::setw(4) << j << std::endl;
+    o.close();
 }
 
 //gameplay methods

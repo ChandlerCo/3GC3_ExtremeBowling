@@ -124,6 +124,8 @@ bool Graphics::loadObj(string filename,
         out_normals.push_back(normal);
     }
 
+    fclose(file);
+
     return true;
 }
 
@@ -178,6 +180,7 @@ GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
         img[3*nm-3*i-2]=green*s;
         img[3*nm-3*i-1]=blue*s;
     }
+    fclose(fd);
     
     *width = n;
     *height = m;

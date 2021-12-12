@@ -30,6 +30,7 @@ class Ball : public Asset{
         float radius;
         int powerUpType;
         bool finishedStatus;
+        bool onGround;
         
 };
 
