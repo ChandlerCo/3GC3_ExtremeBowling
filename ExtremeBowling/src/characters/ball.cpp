@@ -12,7 +12,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->lives = 3;
     this->obj_scalar = radius;
     this->powerUpType = NO_POWERUP;
-
+    this->blend = false;
     this->finishedStatus = false;
 }
 
@@ -84,7 +84,7 @@ bool Ball::respawn(){
     this->physics.setVelocity(0,0,0);
     this->lives--;
 
-    if(lives == 0){
+    if(lives <= 0){
         return false;
     } else{
         return true;

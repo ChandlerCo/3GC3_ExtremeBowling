@@ -17,10 +17,8 @@ using namespace std;
 class Level {
     //note if we have a map with a y dimension we can just adjust spawn at that location
     private:
-        int startLocation[2]; // x,y coordinates
-        int endLocation[3]; //x,y and radius
-        int score;
-        int currentTime; //current time in ms
+        string levelFilename;
+        int highScore;
 
         vector <PowerUp*> powerUps;
         vector <Pin*> pins;
@@ -29,21 +27,25 @@ class Level {
 
         Ball ball;
         Floor map; //needs to be implemented still
-
-        int powerUpStart;
-
-        string levelFilename;
-        int highScore;
+        
+        vector<PhysicsObject3D *> worldObjects;
+        
         int floorLength;
 
-        vector<PhysicsObject3D *> worldObjects;
+        int currentTime; //current time in ms
+        
+        int score;
+
+        int powerUpStart;
+        
+        bool ended;
 
         void saveHighScore(); // called by endLevel() 
     public:
 
-        bool ended;
-
-        Level(string filename); 
+        
+        Level();
+        void init(string filename); 
         /*
             create a new ball object
             load map - call constructor
@@ -76,7 +78,8 @@ class Level {
         */
 
         int getScore(); //calculates and returns score -- put in the corner of the level
-
+        int getLives();
+        int getTime();
         int getHighScore(); //get high score in json
 
         float getBallX();
@@ -84,6 +87,10 @@ class Level {
         float getBallZ();
         void ballJump();
         void ballMove(Vec3D direction);
+
+        bool getBlend();
+
+        bool getEnded();
 };
 
 #endif
@@ -110,6 +117,4 @@ class Level {
 
     global variable for menu function called currentLevel
     currentLevel = Level("map1.json")
-
-
 */

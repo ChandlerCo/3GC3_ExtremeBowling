@@ -7,6 +7,9 @@ class EndMenu : public Menu {
     public:
         EndMenu(int windowX, int windowY);
         void display();
+        bool backToStartClicked(int x, int y);
+    private:
+        Button backToStart;
 };
 
 

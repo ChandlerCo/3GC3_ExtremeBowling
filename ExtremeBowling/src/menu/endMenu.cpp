@@ -1,6 +1,9 @@
 #include "endMenu.h"
 
-EndMenu::EndMenu(int windowX, int windowY) : Menu(windowX, windowY) {}
+EndMenu::EndMenu(int windowX, int windowY) : Menu(windowX, windowY) 
+{
+    backToStart = Button(windowWidth*0.45, windowWidth*0.55, windowHeight*0.83, windowHeight*0.79, "Back to Start");
+}
 
 void EndMenu::display() 
 {
@@ -19,7 +22,14 @@ void EndMenu::display()
         string underlineTitle = "____________";
         Menu::centerText(underlineTitle, font, windowHeight*0.205);
 
+        backToStart.display();
+
     glPopMatrix();
 
     Menu::endMenu();
+}
+
+bool EndMenu::backToStartClicked(int x, int y) 
+{
+    return backToStart.clicked(x, y);
 }

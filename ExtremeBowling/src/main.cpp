@@ -58,8 +58,8 @@ InstructionsMenu instructionsMenu(windowX, windowY);
 PauseMenu pauseMenu(windowX, windowY);
 EndMenu endMenu(windowX, windowY);
 
-Level* currentLevel;
-Level level1("src/levels/map1.json");
+Level currentLevel;
+//Level level1("src/levels/map1.json");
 
 void keyboard(unsigned char key, int _x, int _y) {
     // if (key == 'q') {
@@ -75,7 +75,7 @@ void keyboard(unsigned char key, int _x, int _y) {
     }
 }
 
-void mouse(int button, int state, int x, int y){
+void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (startStatus) {
             if (startMenu.instructionsClicked(x, y)) { // switch to instructions menu
@@ -86,30 +86,37 @@ void mouse(int button, int state, int x, int y){
             } else if (startMenu.level1Clicked(x, y)) {
                 startStatus = false;
                 pauseStatus = false;
-                currentLevel = &level1;
+                currentLevel.init("src/levels/map1.json");
             } 
             // else if (startMenu.level2Clicked(x, y)) {
             //     startStatus = false;
             //     pauseStatus = false;
-            //     currentLevel = &level2;
+            //     currentLevel = Level("src/levels/map2.json");
             // }
             // else if (startMenu.level3Clicked(x, y)) {
             //     startStatus = false;
             //     pauseStatus = false;
-            //     currentLevel = &level3;
+            //     currentLevel = Level("src/levels/map3.json");
             // }
         } else if (instructionsStatus) {
             if (instructionsMenu.backClicked(x, y)) {
                 instructionsStatus = false;
                 startStatus = true;
             }
+        } else if (endStatus) {
+            if (endMenu.backToStartClicked(x, y)) {
+                endStatus = false;
+                startStatus = true;
+            }
         } else { // else if !pauseStatus ? 
-            currentLevel->ballJump();
+            currentLevel.ballJump();
         }
+
+        
+
     }
 
     glutPostRedisplay();
-    //mouse left click-jump
 }
 
 void motion(int x, int y){
@@ -150,16 +157,16 @@ void passive(int x, int y){
 void special(int key, int x, int y){
     if(!pauseStatus){
         if (key == GLUT_KEY_UP){
-            currentLevel->ballMove(ballCam.getForward());
+            currentLevel.ballMove(ballCam.getForward());
         }
         if (key == GLUT_KEY_DOWN){
-            currentLevel->ballMove(ballCam.getBackward());
+            currentLevel.ballMove(ballCam.getBackward());
         }
         if (key == GLUT_KEY_RIGHT){
-            currentLevel->ballMove(ballCam.getRight());
+            currentLevel.ballMove(ballCam.getRight());
         }
         if (key == GLUT_KEY_LEFT){
-            currentLevel->ballMove(ballCam.getLeft());
+            currentLevel.ballMove(ballCam.getLeft());
         }
 
     }
@@ -173,9 +180,34 @@ void FPS (int val){
     time_past = time_current; 
 
     if(!pauseStatus){
-        currentLevel->runLevel(d_time);
-        ballCam.changePosition(currentLevel->getBallX(),currentLevel->getBallY(),currentLevel->getBallZ());
+        currentLevel.runLevel(d_time);
+        ballCam.changePosition(currentLevel.getBallX(),currentLevel.getBallY(),currentLevel.getBallZ());
+
+        if(currentLevel.getEnded()){
+            endStatus = true;
+            pauseStatus = true;
+            float currentScore = currentLevel.getScore();
+            float highScore = currentLevel.getHighScore();
+
+            if(currentLevel.endLevel()){
+                if(currentScore > highScore){
+                    // Victory Screen call congrats new high score
+                    endMenu.display();
+                } else {
+                    //Victory Screen
+                    endMenu.display();
+                }
+            } else {
+                endMenu.display();
+                //call game over menu
+            }            
+            currentLevel = Level();
+        }
+    
+    
     }
+
+
 
     glutPostRedisplay();
 
@@ -229,11 +261,24 @@ void display(void)
         pauseStatus = true; // prevent movement of other things
         instructionsMenu.display();
     } else if (pauseStatus) {
+        if(currentLevel.getBlend()){
+            glDisable(GL_BLEND);
+            glEnable(GL_DEPTH_TEST);
+        }
         pauseMenu.display();
+    } else if (endStatus) {
+        pauseStatus = true;
+        endMenu.display();
     } else {
         if(showFPS){
             displayFPS();     
         }
+
+        if(currentLevel.getBlend()){
+            glEnable(GL_BLEND);
+            glDisable(GL_DEPTH_TEST);
+        }
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -244,11 +289,11 @@ void display(void)
 
         gluLookAt(
         ballCam.getX(),    ballCam.getY(),    ballCam.getZ(),
-        currentLevel->getBallX(),currentLevel->getBallY(),currentLevel->getBallZ(),
+        currentLevel.getBallX(),currentLevel.getBallY(),currentLevel.getBallZ(),
         0,1,0
         );
 
-        currentLevel->displayAssets();
+        currentLevel.displayAssets();
     }
 
     glFlush();
@@ -274,7 +319,7 @@ void handleReshape(int w, int h) {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glShadeModel(GL_SMOOTH);
-    glColor4f(1.0f,1.0f,1.0f,0.5f);		// Full Brightness, 50% Alpha
+    glColor4f(1.0f,1.0f,1.0f,0.7f);		// Full Brightness, 50% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);	// blending function for translucency based on source alpha value
     
     glViewport(0, 0, (GLint)w, (GLint)h);

@@ -17,7 +17,9 @@
 
 using namespace std;
 
-Level::Level(string filename){
+Level::Level() {}
+
+void Level::init(string filename){
 
     levelFilename = filename;
     ifstream f(levelFilename);
@@ -145,57 +147,7 @@ void Level::runLevel(int timePassed){
     {
         pins.erase(it);
     }
-    /*
-    for(PowerUp *i : powerUps){
-        if(i->checkCollision() == true){
-            this->powerUpStart = currentTime;
-            this->ball.activatePowerUp(i);
 
-            // erase from worldObjects
-            //WARNING --- DON'T TRY TO UNDERSTAND THIS
-            int localID = i->getPhysicsPointer()->getLocalId();
-            int objectID = i->getPhysicsPointer()->getId();
-            
-            this->worldObjects.erase(std::remove_if(
-            this->worldObjects.begin() + this->floorLength, this->worldObjects.end(), //start at number of tiles
-            [localID, objectID](PhysicsObject3D * &j){
-                return (j->getLocalId() == localID && j->getId() == objectID);
-            }), this->worldObjects.end());
-
-            
-        }
-    }
-    //cout << "Done checking power ups\n";
-    for(Pin *i : pins){
-        if(i->checkCollision() == true){
-            this->score += 1;
-
-            //WARNING --- DON'T TRY TO UNDERSTAND THIS
-            int localID = i->getPhysicsPointer()->getLocalId();
-            int objectID = i->getPhysicsPointer()->getId();
-
-            this->worldObjects.erase(std::remove_if(
-            this->worldObjects.begin() + this->floorLength, this->worldObjects.end(), //start at number of tiles
-            [localID, objectID](PhysicsObject3D * &j){
-                return (j->getLocalId() == localID && j->getId() == objectID);
-            }), this->worldObjects.end());
-        }
-    }
-    //cout << "Done checking pins\n";
-    //checking and clearing collisions
-    powerUps.erase(std::remove_if(
-        powerUps.begin(), powerUps.end(), 
-        [](PowerUp &i){
-            return i.checkCollision();
-        }), powerUps.end());
-
-    pins.erase(std::remove_if(
-        pins.begin(), pins.end(), 
-        [](Pin &i){
-            return i.checkCollision();
-        }), pins.end());
-    */
-    //cout << "Done erasing stuff\n";
     //clearing powerups
     if(currentTime - powerUpStart > 10000){
         ball.clearPowerUp();
@@ -206,8 +158,11 @@ void Level::runLevel(int timePassed){
         if(!ball.respawn()){
             this->ended = true;
         }
-
     }
+
+    // check if ball reached the finish
+    if (this->ball.finished())
+        this->ended = true;
 }
 
 void Level::displayAssets(){
@@ -242,7 +197,7 @@ void Level::displayAssets(){
     //glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
     if (ball.blend) 
     {
-        cout << "enable blending\n";
+        //cout << "enable blending\n";
         glEnable(GL_BLEND);					// Turn Blending On
 		glDisable(GL_DEPTH_TEST);			// Turn Depth Testing Off
         this->ball.displayAsset();
@@ -259,10 +214,21 @@ void Level::displayAssets(){
 
 }
 
-
-
 int Level::getScore(){
-    return score*100 - currentTime/1000 + 1000;
+    return (score*100 - currentTime/1000 + 1000) * (ball.getLives() > 0);
+}
+
+int Level::getTime(){
+    return this->currentTime;
+}
+
+int Level::getLives(){
+    return ball.getLives();
+}
+
+bool Level::getEnded()
+{
+    return ended;
 }
 
 bool Level::endLevel(){
@@ -295,7 +261,9 @@ bool Level::endLevel(){
     
     
 }
-
+int Level::getHighScore(){
+    return this->highScore;
+}
 void Level::saveHighScore()
 {
     // read JSON file
@@ -336,3 +304,6 @@ void Level::ballMove(Vec3D direction){
     ball.accelerate(acc.x, acc.y, acc.z);
 }
 
+bool Level::getBlend(){
+    return this->ball.blend;
+}
