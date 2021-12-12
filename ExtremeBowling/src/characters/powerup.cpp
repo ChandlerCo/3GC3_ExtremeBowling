@@ -19,8 +19,10 @@ void PowerUp::defaultAnimation(float time_ms)
 {
     this->physics.addRotation(0, 1, 0, time_ms * 0.06);
 
-    if (this->physics.getY() > this->endHeight || this->physics.getY() < startHeight)
-        this->physics.setVelocity(this->physics.getVel().multiply(-1));
+    if (this->physics.getY() > this->endHeight)
+        this->physics.setVelocity(0, -2, 0);
+    else if (this->physics.getY() < this->startHeight)
+        this->physics.setVelocity(0, 2, 0);
 
     vector<PhysicsObject3D*> empty;
     this->physics.updatePhysics(time_ms, false, empty);

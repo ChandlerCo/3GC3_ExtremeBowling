@@ -18,7 +18,7 @@ using json = nlohmann::json;
 class Tile : public Asset {
     public:
         Tile();
-        Tile(float x, float z, float size, float friction, int tile_type, float r_a = 0, float r_x = 0, float r_y = 0, float r_z = 0);
+        Tile(float x, float y, float z, float size, float friction, int tile_type, float r_a = 0, float r_x = 0, float r_y = 0, float r_z = 0);
         void setGraphics();
         static int hitBall(void* context, Vec3D deflection, void* obj);
 };

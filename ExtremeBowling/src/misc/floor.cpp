@@ -1,6 +1,6 @@
 #include "floor.h"
 
-#define SPAWN_HEIGHT 15
+#define SPAWN_HEIGHT 10
 
 vector<string> split(string str, string delimiter=" ")
 {
@@ -23,7 +23,7 @@ Tile::Tile(): Asset()
 {
 }
 
-Tile::Tile(float x, float z, float size, float friction, int tile_type, float r_a, float r_x, float r_y, float r_z):Asset(x, 0, z)
+Tile::Tile(float x, float y, float z, float size, float friction, int tile_type, float r_a, float r_x, float r_y, float r_z):Asset(x, y, z)
 {
     physics.setRotation(r_x, r_y, r_z, r_a);
     physics.setSurfaceFriction(friction);
@@ -84,24 +84,28 @@ Floor::Floor(vector<string> csv, float tile_size, float friction, float x, float
     vector<string> values;
     string tile;
     string c;
+    vector<string> r;
 
     int row = 0;
     int col = 0;
 
     float t_x;
+    float t_y;
     float t_z;
 
     int tile_type;
     for (string line : csv)
     {
         str_row = split(line, ",");
+        //cout << "line: " << line << endl;
         col = 0;
         for (string tile : str_row)
         {
             t_x = x + size * col;
+            t_y = 0;
             t_z = z + size * row;
             
-            values = split(tile, "-");
+            values = split(tile, "|");
 
             c = values.at(0);
             if (c.compare("0") != 0)
@@ -118,10 +122,18 @@ Floor::Floor(vector<string> csv, float tile_size, float friction, float x, float
                     tile_type = FINISH;
                 
                 c = values.at(1);
+                if (c.compare(" ") != 0)
+                    t_y = stof(c);
+                
+                c = values.at(2);
                 if (c.compare(" ") == 0)
-                    floor_tiles.push_back(new Tile(t_x, t_z, size, friction, tile_type));
+                    floor_tiles.push_back(new Tile(t_x, t_y, t_z, size, friction, tile_type));
                 else
-                    floor_tiles.push_back(new Tile(t_x, t_z, size, stof(c), tile_type));
+                {
+                    r = split(c, "*");
+                    floor_tiles.push_back(new Tile(t_x, t_y, t_z, size, friction, tile_type, stof(r.at(0)), stof(r.at(1)), stof(r.at(2)), stof(r.at(3)) ));
+                }
+                    
             }
 
             col++;

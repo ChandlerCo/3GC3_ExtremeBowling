@@ -91,11 +91,11 @@ void mouse(int button, int state, int x, int y) {
                 pauseStatus = false;
                 currentLevel.init("src/levels/map1.json");
             } 
-            // else if (startMenu.level2Clicked(x, y)) {
-            //     startStatus = false;
-            //     pauseStatus = false;
-            //     currentLevel = Level("src/levels/map2.json");
-            // }
+            else if (startMenu.level2Clicked(x, y)) {
+                startStatus = false;
+                pauseStatus = false;
+                currentLevel.init("src/levels/map2.json");
+            }
             // else if (startMenu.level3Clicked(x, y)) {
             //     startStatus = false;
             //     pauseStatus = false;

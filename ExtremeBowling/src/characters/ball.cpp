@@ -30,7 +30,7 @@ void Ball::init()
 
 void Ball::runPhysics(float time, vector<PhysicsObject3D*> &world_objs)
 {
-    this->onGround = false;
+    this->onGround -= time;
     this->physics.updatePhysics(time, true, world_objs);
 
     // rotate ball
@@ -77,8 +77,11 @@ void Ball::clearPowerUp(){
 
 
 void Ball::jump(){
-    if (this->onGround)
+    if (this->onGround > 0)
+    {
         this->physics.addVelocity(0,20,0);
+        this->onGround = 0;
+    }
 }
 
 bool Ball::respawn(){
@@ -134,7 +137,7 @@ int Ball::hitCheckpoint(void* context, Vec3D deflection, void* obj)
     // set ball's last checkpoint to obj position
     b->lastCheckpoint.x = other->getX();
     b->lastCheckpoint.z = other->getZ();
-    b->onGround = true;
+    b->onGround = 125;
     return 1;
 }
 
@@ -142,13 +145,13 @@ int Ball::hitFinish(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
     b->finishedStatus = true;
-    b->onGround = true;
+    b->onGround = 125;
     return 1;
 }
 
 int Ball::hitFloor(void* context, Vec3D deflection, void* obj)
 {
     Ball* b = static_cast<Ball*>(context);
-    b->onGround = true;
+    b->onGround = 125;
     return 1;
 }
