@@ -222,7 +222,6 @@ void displayFPS(){
 
 void display(void)
 {
-
     if (startStatus) {
         pauseStatus = true; // prevent movement of other things
         startMenu.display();
@@ -258,11 +257,6 @@ void display(void)
 }
 
 void init(){
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
     pauseStatus = true;
     windowX = DEFAULT_SIZE_X;
     windowY = DEFAULT_SIZE_Y;
@@ -296,16 +290,15 @@ void handleReshape(int w, int h) {
 /* main function - program entry point */
 int main(int argc, char** argv)
 {
-    init();
 
     glutInit(&argc, argv);        //starts up GLUT
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
+
+    init();
+
     glutInitWindowSize(windowX, windowY);
     glutInitWindowPosition(300,300);
-
     glutCreateWindow("Extreme Bowling");    //creates the window
-
-    
 
     //callbacks
     glutKeyboardFunc(keyboard);

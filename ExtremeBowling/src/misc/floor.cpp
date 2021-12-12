@@ -128,7 +128,6 @@ Floor::Floor(vector<string> csv, float tile_size, float friction, float x, float
         }
         row++;
     }
-    cout << "num tiles: " << floor_tiles.size() << endl;
 }
 
 Floor Floor::fromJson(json floor_json)

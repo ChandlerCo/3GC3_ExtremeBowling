@@ -71,6 +71,8 @@ Level::Level(string filename){
     this->ended = false;
     this->score = 0;
     this->powerUpStart = 0;
+
+    
 }
 
 void Level::runLevel(int timePassed){
@@ -206,7 +208,6 @@ void Level::runLevel(int timePassed){
         }
 
     }
-    //cout << "Exit runLevel\n";
 }
 
 void Level::displayAssets(){
@@ -241,6 +242,7 @@ void Level::displayAssets(){
     //glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
     if (ball.blend) 
     {
+        cout << "enable blending\n";
         glEnable(GL_BLEND);					// Turn Blending On
 		glDisable(GL_DEPTH_TEST);			// Turn Depth Testing Off
         this->ball.displayAsset();
