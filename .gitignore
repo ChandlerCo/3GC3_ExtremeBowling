@@ -1,5 +1,5 @@
 ExtremeBowling
-settings.json
+.vscode
 *.aux
 *.log
 *.blg
