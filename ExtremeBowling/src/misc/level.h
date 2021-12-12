@@ -87,6 +87,7 @@ class Level {
         float getBallZ();
         void ballJump();
         void ballMove(Vec3D direction);
+        void ballReset();
 
         bool getBlend();
 

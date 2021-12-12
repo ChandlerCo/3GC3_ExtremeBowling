@@ -304,6 +304,13 @@ void Level::ballMove(Vec3D direction){
     ball.accelerate(acc.x, acc.y, acc.z);
 }
 
+void Level::ballReset()
+{
+    if(!ball.respawn()){
+        this->ended = true;
+    }
+}
+
 bool Level::getBlend(){
     return this->ball.blend;
 }

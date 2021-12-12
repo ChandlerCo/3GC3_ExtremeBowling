@@ -73,6 +73,9 @@ void keyboard(unsigned char key, int _x, int _y) {
     if (key  == ' ' && !startStatus){
         pauseStatus = !pauseStatus;
     }
+
+    if (key == 'r' && !pauseStatus) // change !pauseStatus to logic for running game
+        currentLevel.resetBall();
 }
 
 void mouse(int button, int state, int x, int y) {
