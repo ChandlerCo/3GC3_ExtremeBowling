@@ -215,13 +215,13 @@ void FPS (int val){
             if(currentLevel.endLevel()){
                 if(currentScore > highScore){
                     // Victory Screen call congrats new high score
-                    endMenu.display();
+                    endMenu.setText("STRIKE! New High Score!", currentScore);
                 } else {
                     //Victory Screen
-                    endMenu.display();
+                    endMenu.setText("Level Complete!", currentScore);
                 }
             } else {
-                endMenu.display();
+                endMenu.setText("GUTTER! You Lose!", currentScore);
                 //call game over menu
             }            
             currentLevel = Level();

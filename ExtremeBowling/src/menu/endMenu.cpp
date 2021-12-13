@@ -15,12 +15,13 @@ void EndMenu::display()
         void* font = GLUT_BITMAP_9_BY_15;
 
         // Game ended title
-        string title = "GAME OVER";
-        Menu::centerText(title, font, windowHeight*0.20);
+        Menu::centerText(message, font, windowHeight*0.20);
 
         // Underline the title
-        string underlineTitle = "____________";
+        string underlineTitle((int)message.size(), '_');
         Menu::centerText(underlineTitle, font, windowHeight*0.205);
+
+        Menu::centerText(score, font, windowHeight*0.4);
 
         backToStart.display();
 
@@ -32,4 +33,10 @@ void EndMenu::display()
 bool EndMenu::backToStartClicked(int x, int y) 
 {
     return backToStart.clicked(x, y);
+}
+
+void EndMenu::setText(string message, int score)
+{
+    this->message = message;
+    this->score = std::to_string(score);
 }
