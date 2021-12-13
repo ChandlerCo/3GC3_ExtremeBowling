@@ -163,34 +163,35 @@ void passive(int x, int y){
     prevY = y;
 }
 
+void windowEntry(int state){
+    if (state == GLUT_LEFT)
+        pauseStatus = true;
+}
+
 
 void special(int key, int x, int y){
-    //if(!pauseStatus){
-        if (key == GLUT_KEY_UP)
-            arrowKeys.toggleUp(true);
-        else if (key == GLUT_KEY_DOWN)
-            arrowKeys.toggleDown(true);
-        else if (key == GLUT_KEY_RIGHT)
-            arrowKeys.toggleRight(true);
-        else if (key == GLUT_KEY_LEFT)
-            arrowKeys.toggleLeft(true);
+    if (key == GLUT_KEY_UP)
+        arrowKeys.toggleUp(true);
+    else if (key == GLUT_KEY_DOWN)
+        arrowKeys.toggleDown(true);
+    else if (key == GLUT_KEY_RIGHT)
+        arrowKeys.toggleRight(true);
+    else if (key == GLUT_KEY_LEFT)
+        arrowKeys.toggleLeft(true);
 
-    //}
     glutPostRedisplay();
 }
 
 void specialUp(int key, int x, int y){
-    //if(!pauseStatus){
-        if (key == GLUT_KEY_UP)
-            arrowKeys.toggleUp(false);
-        else if (key == GLUT_KEY_DOWN)
-            arrowKeys.toggleDown(false);
-        else if (key == GLUT_KEY_RIGHT)
-            arrowKeys.toggleRight(false);
-        else if (key == GLUT_KEY_LEFT)
-            arrowKeys.toggleLeft(false);
+    if (key == GLUT_KEY_UP)
+        arrowKeys.toggleUp(false);
+    else if (key == GLUT_KEY_DOWN)
+        arrowKeys.toggleDown(false);
+    else if (key == GLUT_KEY_RIGHT)
+        arrowKeys.toggleRight(false);
+    else if (key == GLUT_KEY_LEFT)
+        arrowKeys.toggleLeft(false);
 
-    //}
     glutPostRedisplay();
 }
 
@@ -373,6 +374,7 @@ int main(int argc, char** argv)
     glutKeyboardFunc(keyboard);
     glutMouseFunc(mouse);
     glutPassiveMotionFunc(passive);
+    glutEntryFunc(windowEntry);
     glutSpecialFunc(special);
     glutSpecialUpFunc(specialUp);
     glutReshapeFunc(handleReshape);
