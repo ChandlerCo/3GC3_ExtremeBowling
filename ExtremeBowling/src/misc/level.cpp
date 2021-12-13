@@ -121,6 +121,7 @@ void Level::runLevel(int timePassed){
             deletePowerUps.push_back(it);
         }
     }
+    reverse(deletePowerUps.begin(), deletePowerUps.end());
     for (vector<PowerUp*>::iterator it : deletePowerUps)
     {
         powerUps.erase(it);
@@ -149,6 +150,7 @@ void Level::runLevel(int timePassed){
             deletePins.push_back(it);
         }
     }
+    reverse(deletePins.begin(), deletePins.end());
     for (vector<Pin*>::iterator it : deletePins)
     {
         pins.erase(it);
