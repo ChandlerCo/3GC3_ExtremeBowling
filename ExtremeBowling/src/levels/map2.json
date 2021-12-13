@@ -5,25 +5,29 @@
                 "end col": 10,
                 "end row": 6,
                 "start col": 7,
-                "start row": 8
+                "start row": 8,
+                "speed": 3
             },
             {
                 "end col": 8,
                 "end row": 9,
                 "start col": 10,
-                "start row": 13
+                "start row": 13,
+                "speed": 3
             },
             {
                 "end col": 7,
                 "end row": 21,
                 "start col": 7,
-                "start row": 15
+                "start row": 15,
+                "speed": 3
             },
             {
                 "end col": 7,
                 "end row": 57,
                 "start col": 3,
-                "start row": 57
+                "start row": 57,
+                "speed": 3
             }
         ],
         "Sweepers": [
@@ -54,7 +58,6 @@
         ]
     },
     "Floor": {
-        "COLUMNS": 3,
         "CSV": [
             "1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ",
             "1| | ,1| | ,1| | ,1| | ,1| | ,S| | ,1| | ,1| | ,1| | ,1| | ,1| | ",
@@ -158,7 +161,6 @@
             "0| | ,0| | ,0| | ,0| | ,1|2|30*-1*0*0,1|2|30*-1*0*0,1|2|30*-1*0*0,0| | ,0| | ,0| | ,0| | "
         ],
         "DEFAULT_FRICTION": 0.1,
-        "ROWS": 4,
         "TILE_SIZE": 8
     },
     "HighScore": 1962,

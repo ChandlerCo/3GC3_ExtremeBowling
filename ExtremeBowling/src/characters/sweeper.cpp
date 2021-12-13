@@ -7,7 +7,7 @@ Sweeper::Sweeper(float inX, float inY, float inZ, float endX, float endY, float 
     //this->moveZBy = 1;
     this->graphics = Graphics("pindraft"); //we change this later
 
-    this->physics.addBoxCollider(20, 5, 5, 0, 0, 0);
+    this->physics.addBoxCollider(24, 5, 5, 0, 0, 0);
     this->physics.setId(SWEEPER);
     this->physics.setLocalId(id);
 

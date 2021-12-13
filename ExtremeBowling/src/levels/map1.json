@@ -5,43 +5,50 @@
                 "end col": 1,
                 "end row": 7,
                 "start col": 6,
-                "start row": 7
+                "start row": 7,
+                "speed": 3
             },
             {
                 "end col": 5,
                 "end row": 9,
                 "start col": 9,
-                "start row": 7
+                "start row": 7,
+                "speed": 3
             },
             {
                 "end col": 8,
                 "end row": 11,
                 "start col": 4,
-                "start row": 10
+                "start row": 10,
+                "speed": 3
             },
             {
                 "end col": 7,
                 "end row": 18,
                 "start col": 4,
-                "start row": 13
+                "start row": 13,
+                "speed": 3
             },
             {
                 "end col": 8,
                 "end row": 73,
                 "start col": 10,
-                "start row": 70
+                "start row": 70,
+                "speed": 3
             },
             {
                 "end col": 8,
                 "end row": 91,
                 "start col": 10,
-                "start row": 81
+                "start row": 81,
+                "speed": 3
             },
             {
                 "end col": 4,
                 "end row": 85,
                 "start col": 1,
-                "start row": 82
+                "start row": 82,
+                "speed": 3
             }
         ],
         "Sweepers": [
@@ -78,7 +85,6 @@
         ]
     },
     "Floor": {
-        "COLUMNS": 11,
         "CSV": [
             "1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ",
             "1| | ,1| | ,1| | ,1| | ,1| | ,S| | ,1| | ,1| | ,1| | ,1| | ,1| | ",
@@ -186,7 +192,6 @@
             "0| | ,0| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,1| | ,0| | ,0| | "
         ],
         "DEFAULT_FRICTION": 0.1,
-        "ROWS": 100,
         "TILE_SIZE": 8
     },
     "HighScore": 1753,
