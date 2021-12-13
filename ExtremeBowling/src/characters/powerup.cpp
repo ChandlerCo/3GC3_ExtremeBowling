@@ -12,6 +12,8 @@ PowerUp::PowerUp(float inX, float inY, float inZ, int type, int local_id) : Asse
     this->startHeight = inY - 0.5;
     this->endHeight = inY + 3.5;
 
+    this->collided = false;
+
     setGraphics();
 }
 
