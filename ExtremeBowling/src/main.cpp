@@ -19,6 +19,7 @@
 #include <random>
 
 #include "misc/camera.h"
+#include "misc/direction_controller.h"
 #include "misc/level.h"
 
 #include "menu/menu.h"
@@ -59,6 +60,8 @@ InstructionsMenu instructionsMenu(windowX, windowY);
 PauseMenu pauseMenu(windowX, windowY);
 EndMenu endMenu(windowX, windowY);
 HudInterface hudInterface(windowX, windowY);
+
+DirectionController arrowKeys;
 
 Level currentLevel;
 //Level level1("src/levels/map1.json");
@@ -150,6 +153,9 @@ void passive(int x, int y){
         ballCam.orbitHorizontal(x - prevX);
         ballCam.orbitVertical(y - prevY);
 
+        arrowKeys.setForward(ballCam.getForward());
+        arrowKeys.setRightward(ballCam.getRight());
+
         prevX = x;
         prevY = y;
     }
@@ -161,18 +167,29 @@ void passive(int x, int y){
 
 void special(int key, int x, int y){
     if(!pauseStatus){
-        if (key == GLUT_KEY_UP){
-            currentLevel.ballMove(ballCam.getForward());
-        }
-        if (key == GLUT_KEY_DOWN){
-            currentLevel.ballMove(ballCam.getBackward());
-        }
-        if (key == GLUT_KEY_RIGHT){
-            currentLevel.ballMove(ballCam.getRight());
-        }
-        if (key == GLUT_KEY_LEFT){
-            currentLevel.ballMove(ballCam.getLeft());
-        }
+        if (key == GLUT_KEY_UP)
+            arrowKeys.toggleUp(true);
+        else if (key == GLUT_KEY_DOWN)
+            arrowKeys.toggleDown(true);
+        else if (key == GLUT_KEY_RIGHT)
+            arrowKeys.toggleRight(true);
+        else if (key == GLUT_KEY_LEFT)
+            arrowKeys.toggleLeft(true);
+
+    }
+    glutPostRedisplay();
+}
+
+void specialUp(int key, int x, int y){
+    if(!pauseStatus){
+        if (key == GLUT_KEY_UP)
+            arrowKeys.toggleUp(false);
+        else if (key == GLUT_KEY_DOWN)
+            arrowKeys.toggleDown(false);
+        else if (key == GLUT_KEY_RIGHT)
+            arrowKeys.toggleRight(false);
+        else if (key == GLUT_KEY_LEFT)
+            arrowKeys.toggleLeft(false);
 
     }
     glutPostRedisplay();
@@ -185,6 +202,7 @@ void FPS (int val){
     time_past = time_current; 
 
     if(!pauseStatus){
+        currentLevel.ballMove(arrowKeys.getDirection());
         currentLevel.runLevel(d_time);
         ballCam.changePosition(currentLevel.getBallX(),currentLevel.getBallY(),currentLevel.getBallZ());
 
@@ -357,6 +375,7 @@ int main(int argc, char** argv)
     glutMouseFunc(mouse);
     glutPassiveMotionFunc(passive);
     glutSpecialFunc(special);
+    glutSpecialUpFunc(specialUp);
     glutReshapeFunc(handleReshape);
     
     glutDisplayFunc(display);    //registers "display" as the display callback function
