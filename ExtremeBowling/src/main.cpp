@@ -26,6 +26,7 @@
 #include "menu/instructionsMenu.h"
 #include "menu/pauseMenu.h"
 #include "menu/endMenu.h"
+#include "menu/hudInterface.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -57,6 +58,7 @@ StartMenu startMenu(windowX, windowY);
 InstructionsMenu instructionsMenu(windowX, windowY);
 PauseMenu pauseMenu(windowX, windowY);
 EndMenu endMenu(windowX, windowY);
+HudInterface hudInterface(windowX, windowY);
 
 Level currentLevel;
 //Level level1("src/levels/map1.json");
@@ -297,6 +299,8 @@ void display(void)
         );
 
         currentLevel.displayAssets();
+
+        hudInterface.display(currentLevel.getLives(), currentLevel.getTime());
     }
 
     glFlush();

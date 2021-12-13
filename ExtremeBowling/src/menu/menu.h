@@ -14,12 +14,14 @@
 
 #include <string>
 #include "button.h"
+#include "PPM.h"
 using namespace std;
 
 class Menu {
     public:
         Menu(int windowX, int windowY);
         virtual void display();
+        virtual void display(int lives, int currentTime); // for hudInterface
     protected:
         float windowWidth; // need to store window size as float for centering text
         float windowHeight;

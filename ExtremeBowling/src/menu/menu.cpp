@@ -10,6 +10,8 @@ Menu::Menu(int windowX, int windowY)
 
 void Menu::display() {}
 
+void Menu::display(int lives, int currentTime) {} // for hudInterface
+
 // call this at beginning of display for each menu
 void Menu::initMenu()
 {
