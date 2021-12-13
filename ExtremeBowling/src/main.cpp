@@ -123,35 +123,32 @@ void mouse(int button, int state, int x, int y) {
         
 
     }
-
+    prevX = x;
+    prevY = y;
     glutPostRedisplay();
 }
 
 void motion(int x, int y){
-    if(x - prevX > 50 || y - prevY > 50){
-        prevX = x;
-        prevY = y;
-    }
     if(!pauseStatus){
-        ballCam.orbitHorizontal(x - prevX);
-        ballCam.orbitVertical(y - prevY);
+        ballCam.orbit(x - prevX, y - prevY);
+        //ballCam.orbitHorizontal(x - prevX);
+        //ballCam.orbitVertical(y - prevY);
 
         prevX = x;
         prevY = y;
     }
     if (x > windowX || x < 0 || y > windowY || y < 0) {
         pauseStatus = true; // if mouse outside window, game pauses
-    }  
+    } 
+    prevX = x;
+    prevY = y; 
 }
 
 void passive(int x, int y){
-    if(x - prevX > 50 || y - prevY > 50){
-        prevX = x;
-        prevY = y;
-    }
     if(!pauseStatus){
-        ballCam.orbitHorizontal(x - prevX);
-        ballCam.orbitVertical(y - prevY);
+        ballCam.orbit(x - prevX, y - prevY);
+        //ballCam.orbitHorizontal(x - prevX);
+        //ballCam.orbitVertical(y - prevY);
 
         arrowKeys.setForward(ballCam.getForward());
         arrowKeys.setRightward(ballCam.getRight());
@@ -162,11 +159,13 @@ void passive(int x, int y){
     if (x > windowX || x < 0 || y > windowY || y < 0) {
         pauseStatus = true; // if mouse outside window, game pauses
     }
+    prevX = x;
+    prevY = y;
 }
 
 
 void special(int key, int x, int y){
-    if(!pauseStatus){
+    //if(!pauseStatus){
         if (key == GLUT_KEY_UP)
             arrowKeys.toggleUp(true);
         else if (key == GLUT_KEY_DOWN)
@@ -176,12 +175,12 @@ void special(int key, int x, int y){
         else if (key == GLUT_KEY_LEFT)
             arrowKeys.toggleLeft(true);
 
-    }
+    //}
     glutPostRedisplay();
 }
 
 void specialUp(int key, int x, int y){
-    if(!pauseStatus){
+    //if(!pauseStatus){
         if (key == GLUT_KEY_UP)
             arrowKeys.toggleUp(false);
         else if (key == GLUT_KEY_DOWN)
@@ -191,7 +190,7 @@ void specialUp(int key, int x, int y){
         else if (key == GLUT_KEY_LEFT)
             arrowKeys.toggleLeft(false);
 
-    }
+    //}
     glutPostRedisplay();
 }
 

@@ -3,35 +3,54 @@
 #include <cmath>
 #include <iostream>
 
+
+Camera::Camera(){
+    this->sensitivity = 180.0f / 400.0f;
+    this->distance = 50;
+
+    this->focus = Point3D();
+    this->pos = Point3D();
+
+    this->rot = Rot3D();
+
+    updatePosition();
+}
+
 Camera::Camera(float startDistance){
-    this->sensitivity = 50;
+    this->sensitivity = 180.0f / 400.0f;   // degrees to pixel ratio (how many pixels do you want to move to rotate 180)
     this->distance = startDistance;
-    for(int i = 0; i < 3; i++){
-        this->centre[i] = 0;
-    }
-    this->phi = M_PI/3 ;
-    this->theta = M_PI/3;
+
+    this->focus = Point3D();
+    this->pos = Point3D();
+
+    this->rot = Rot3D();
+    this->rot.addRotation(1, 0, 0, -30);
+    this->rot.addRotation(0, 1, 0, 45);
     updatePosition();
 }
 
 
 void Camera::updatePosition(){
-    
-    
-    this->position[0] = this->distance * sin(this->phi) * sin(this->theta) + this->centre[0];
-	this->position[1] = this->distance * cos(this->theta) + this->centre[1];
-	this->position[2] = this->distance * cos(this->phi) * sin(this->theta) + this->centre[2];
+    this->pos = Point3D(0, 0, this->distance);
+    this->rot.rotate3D(&this->pos);
+    this->pos = Vec3D(this->focus.x, this->focus.y, this->focus.z).movePoint(this->pos);
+}
+
+Vec3D Camera::focusDirection()
+{
+    return Vec3D::createVector(pos, focus).normalize();
 }
 
 void Camera::changeDistance(bool direction){
     if(direction){
-        this->distance +=1;
+        this->distance++;
     } else{
-        this->distance -=1;
+        this->distance--;
     }
+    this->distance = max(this->distance, 1.0f);
     updatePosition();
 }
-
+/*
 void Camera::orbitVertical(int amount){
     if((amount > 0 && theta < M_PI/2) || (amount < 0 && theta > M_PI/16) ){
         this->theta += M_PI*amount*sensitivity/10000;
@@ -45,29 +64,43 @@ void Camera::orbitHorizontal(int amount){
     
 
 }
+*/
+void Camera::orbit(int deltaX, int deltaY)
+{
+    if (deltaY != 0)
+    {
+        deltaY = -deltaY;
+        Vec3D axis = focusDirection().crossProd(Vec3D(0, -1, 0));
+        Point3D testPos = Point3D(0,0,1);
+        rot.rotate3D(&testPos);
+        float currentAngle = asin(testPos.y) * 180.0f / M_PI;
+        if (currentAngle + deltaY * this->sensitivity > 85)         // vertical upward limit
+            rot.addRotation(axis.x, axis.y, axis.z, 85 - currentAngle);
+        else if (currentAngle + deltaY * this->sensitivity < 2)     // vertical downward limit
+            rot.addRotation(axis.x, axis.y, axis.z, 2 - currentAngle);
+        else
+            rot.addRotation(axis.x, axis.y, axis.z, deltaY * this->sensitivity);
+    }
 
-void Camera::translate(float x, float y, float z){
-    this->centre[0] += x;
-    this->centre[1] += y;
-    this->centre[2] += z;
-    this->updatePosition();
+    if (deltaX != 0)
+        rot.addRotation(0, 1, 0, deltaX * this->sensitivity);
+    
+    updatePosition();
 }
 
 void Camera::changePosition(float x, float y, float z){
-    this->centre[0] = x;
-    this->centre[1] = y;
-    this->centre[2] = z;
+    this->focus = Point3D(x, y, z);
     this->updatePosition();
 }
 
 Vec3D Camera::getForward()
 {
-    return Vec3D(centre[0] - position[0], 0, centre[2] - position[2]).normalize();
+    return Vec3D(this->focus.x - this->pos.x, 0, this->focus.z - this->pos.z).normalize();
 }
 
 Vec3D Camera::getBackward()
 {
-    return Vec3D(position[0] - centre[0], 0, position[2] - centre[2]).normalize();
+    return Vec3D(this->pos.x - this->focus.x, 0, this->pos.z - this->focus.z).normalize();
 }
 
 Vec3D Camera::getLeft()
@@ -81,13 +114,13 @@ Vec3D Camera::getRight()
 }
 
 float Camera::getX(){
-    return this->position[0];
+    return this->pos.x;
 }
 
 float Camera::getY(){
-    return this->position[1];
+    return this->pos.y;
 }
 
 float Camera::getZ(){
-    return this->position[2];
+    return this->pos.z;
 }
