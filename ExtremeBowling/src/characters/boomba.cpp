@@ -1,8 +1,8 @@
 #include "boomba.h"
 
-Boomba::Boomba(float inX, float inY, float inZ, float endX, float endY, float endZ, int id) : Enemy(inX, inY, inZ, endX, endY, endZ, id)
+Boomba::Boomba(float inX, float inY, float inZ, float endX, float endY, float endZ, int id, float spd) : Enemy(inX, inY, inZ, endX, endY, endZ, id)
 {
-    speed = 3;
+    this->speed = spd;
 
     // initial rotation
     this->physics.setRotation(0, 1, 0, -90); // may have to change this? 
@@ -156,7 +156,8 @@ vector<Boomba*> Boomba::fromJson(vector<json> jsonData, float tileSize)
         float sZ = (float)entry.find("start row").value() * tileSize;
         float eX = (float)entry.find("end col").value() * tileSize;
         float eZ = (float)entry.find("end row").value() * tileSize;
-        boombas.push_back(new Boomba(sX, 3, sZ, eX, 3, eZ, counter));
+        float spd = (float)entry.find("speed").value();
+        boombas.push_back(new Boomba(sX, 3, sZ, eX, 3, eZ, counter, spd));
         counter += 1;
     }
     return boombas;

@@ -17,7 +17,7 @@ class Boomba : public Enemy {
     private:
         Vec3D deflect;
     public:
-        Boomba(float inX, float inY, float inZ, float endX, float endY, float endZ, int id);
+        Boomba(float inX, float inY, float inZ, float endX, float endY, float endZ, int id, float spd=3);
         // float moveXBy;
 
         void animate(float time);
