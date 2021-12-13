@@ -45,7 +45,7 @@ void HudInterface::display(int lives, int currentTime) // get num of lives left 
                 for (char& c : livesText) {
                     glutBitmapCharacter(font, c);
                 }
-                string currentTimeText = std::to_string(currentTime);
+                string currentTimeText = "Time: " + std::to_string(currentTime/1000) + " seconds";
                 float currentTimeTextWidth = 0;
                 for (int i = 0; i < (int) currentTimeText.size(); i++) {
                     currentTimeTextWidth += glutBitmapWidth(font, currentTimeText[i]);
