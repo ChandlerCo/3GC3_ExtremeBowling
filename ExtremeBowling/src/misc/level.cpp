@@ -173,6 +173,13 @@ void Level::runLevel(int timePassed){
 
 void Level::displayAssets(){
 
+    if (ball.blend) 
+    {
+        //cout << "enable blending\n";
+        glEnable(GL_BLEND);					// Turn Blending On
+		glDisable(GL_DEPTH_TEST);			// Turn Depth Testing Off
+    }
+
     float lightPos[] ={ ball.getX(), 50, ball.getZ() - 5, 1 };
     //float lightPos2[] = {0,0,0,1};
     float lightAmb[] = { 1, 1, 1, 1 };
@@ -200,23 +207,16 @@ void Level::displayAssets(){
     for(PowerUp* i : powerUps){
         i->displayAsset();
     }
-    //glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
-    if (ball.blend) 
-    {
-        //cout << "enable blending\n";
-        glEnable(GL_BLEND);					// Turn Blending On
-		glDisable(GL_DEPTH_TEST);			// Turn Depth Testing Off
-        this->ball.displayAsset();
-    } else 
-    {
-        glDisable(GL_BLEND);					// Turn Blending Off
-		glEnable(GL_DEPTH_TEST);				// Turn Depth Testing On
-        this->ball.displayAsset();
-    }
+        
+    this->ball.displayAsset();
+    
     
     
     //glBindTexture(GL_TEXTURE_2D, Graphics::textures[2]);
     this->map.displayFloor();
+
+    glDisable(GL_BLEND);					// Turn Blending Off
+	glEnable(GL_DEPTH_TEST);				// Turn Depth Testing On
 
 }
 
