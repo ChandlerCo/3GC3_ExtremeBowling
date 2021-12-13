@@ -4,16 +4,16 @@
             {
                 "end col": 7,
                 "end row": 91,
+                "speed": 20,
                 "start col": 3,
-                "start row": 78,
-                "speed": 20
+                "start row": 78
             },
             {
                 "end col": 6,
                 "end row": 79,
+                "speed": 20,
                 "start col": 3,
-                "start row": 94,
-                "speed": 20
+                "start row": 94
             }
         ],
         "Sweepers": [
@@ -149,7 +149,7 @@
         "DEFAULT_FRICTION": 0.1,
         "TILE_SIZE": 8
     },
-    "HighScore": 1847,
+    "HighScore": 0,
     "Name": "Map 3",
     "Pins": [
         {

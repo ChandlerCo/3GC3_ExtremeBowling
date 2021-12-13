@@ -4,30 +4,30 @@
             {
                 "end col": 10,
                 "end row": 6,
+                "speed": 3,
                 "start col": 7,
-                "start row": 8,
-                "speed": 3
+                "start row": 8
             },
             {
                 "end col": 8,
                 "end row": 9,
+                "speed": 3,
                 "start col": 10,
-                "start row": 13,
-                "speed": 3
+                "start row": 13
             },
             {
                 "end col": 7,
                 "end row": 21,
+                "speed": 3,
                 "start col": 7,
-                "start row": 15,
-                "speed": 3
+                "start row": 15
             },
             {
                 "end col": 7,
                 "end row": 57,
+                "speed": 3,
                 "start col": 3,
-                "start row": 57,
-                "speed": 3
+                "start row": 57
             }
         ],
         "Sweepers": [
@@ -163,7 +163,7 @@
         "DEFAULT_FRICTION": 0.1,
         "TILE_SIZE": 8
     },
-    "HighScore": 1962,
+    "HighScore": 0,
     "Name": "Map 2",
     "Pins": [
         {
