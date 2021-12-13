@@ -278,6 +278,7 @@ void displayFPS(){
 void display(void)
 {
     if (startStatus) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         pauseStatus = true; // prevent movement of other things
         startMenu.display();
     } else if (instructionsStatus) {
