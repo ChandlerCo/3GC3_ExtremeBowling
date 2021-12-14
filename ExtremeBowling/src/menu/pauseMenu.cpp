@@ -4,7 +4,9 @@ PauseMenu::PauseMenu(int windowX, int windowY) : Menu(windowX, windowY) {}
 
 void PauseMenu::display()
 {
-    Menu::initMenu();
+    start2D();
+
+    drawBackground();
 
     glPushMatrix();
 
@@ -25,5 +27,5 @@ void PauseMenu::display()
         
     glPopMatrix();
 
-    Menu::endMenu();
+    end2D();
 }

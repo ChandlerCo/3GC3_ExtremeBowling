@@ -7,7 +7,9 @@ InstructionsMenu::InstructionsMenu(int windowX, int windowY) : Menu(windowX, win
 
 void InstructionsMenu::display()
 {
-    Menu::initMenu();
+    start2D();
+
+    drawBackground();
 
     glPushMatrix();
 
@@ -43,7 +45,7 @@ void InstructionsMenu::display()
 
     glPopMatrix();
 
-    Menu::endMenu();
+    end2D();
 }
 
 bool InstructionsMenu::backClicked(int x, int y)

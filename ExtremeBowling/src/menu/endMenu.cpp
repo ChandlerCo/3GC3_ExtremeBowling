@@ -7,7 +7,9 @@ EndMenu::EndMenu(int windowX, int windowY) : Menu(windowX, windowY)
 
 void EndMenu::display() 
 {
-    Menu::initMenu();
+    start2D();
+
+    drawBackground();
 
     glPushMatrix();
 
@@ -27,7 +29,7 @@ void EndMenu::display()
 
     glPopMatrix();
 
-    Menu::endMenu();
+    end2D();
 }
 
 bool EndMenu::backToStartClicked(int x, int y) 

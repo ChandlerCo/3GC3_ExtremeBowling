@@ -46,11 +46,9 @@ void StartMenu::display()
         level3HighScore = level3_data.find("HighScore").value();
     }
 
-    // std::cout << level1HighScore << std::endl;
-    // std::cout << level2HighScore << std::endl;
-    // std::cout << level3HighScore << std::endl;
+    start2D();
 
-    Menu::initMenu();
+    drawBackground();
         
     glPushMatrix();
 
@@ -80,7 +78,7 @@ void StartMenu::display()
 
     glPopMatrix();
 
-    Menu::endMenu();
+    end2D();
 }
 
 bool StartMenu::level1Clicked(int x, int y)

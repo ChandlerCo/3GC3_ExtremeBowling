@@ -26,8 +26,9 @@ class Menu {
         float windowWidth; // need to store window size as float for centering text
         float windowHeight;
         void centerText(string text, void* font, float y);
-        void initMenu();
-        void endMenu();
+        void start2D();
+        void end2D();
+        void drawBackground();
 };
 
 #endif

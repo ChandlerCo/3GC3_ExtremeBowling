@@ -12,8 +12,7 @@ void Menu::display() {}
 
 void Menu::display(int lives, int currentTime) {} // for hudInterface
 
-// call this at beginning of display for each menu
-void Menu::initMenu()
+void Menu::start2D()
 {
     // we will be switching to 2d projection here
     glMatrixMode(GL_PROJECTION);
@@ -27,22 +26,26 @@ void Menu::initMenu()
             glDisable(GL_DEPTH_TEST);
             glLoadIdentity(); // reset modelview matrix state
             glDisable(GL_LIGHTING);
-            // draw menu background
-            glPushMatrix();
-                glColor3f(0.95, 0.95, 0.95);
-                glBegin(GL_QUADS);
-                    glVertex2f(windowWidth*0.15, windowHeight*0.15);
-                    glVertex2f(windowWidth*0.85, windowHeight*0.15);
-                    glVertex2f(windowWidth*0.85, windowHeight*0.85);
-                    glVertex2f(windowWidth*0.15, windowHeight*0.85);
-                glEnd();
-            glPopMatrix();
 }
 
-// call this at end of display for each menu
-void Menu::endMenu()
+
+void Menu::drawBackground()
 {
-    // switch back to 3d projection
+    // draw white background
+    glPushMatrix();
+        glColor3f(0.95, 0.95, 0.95);
+        glBegin(GL_QUADS);
+            glVertex2f(windowWidth*0.15, windowHeight*0.15);
+            glVertex2f(windowWidth*0.85, windowHeight*0.15);
+            glVertex2f(windowWidth*0.85, windowHeight*0.85);
+            glVertex2f(windowWidth*0.15, windowHeight*0.85);
+        glEnd();
+    glPopMatrix();
+}
+
+void Menu::end2D()
+{
+            // switch back to 3d projection
             glMatrixMode(GL_PROJECTION);
         glPopMatrix(); // retrieve projection matrix state
         glMatrixMode(GL_MODELVIEW);
