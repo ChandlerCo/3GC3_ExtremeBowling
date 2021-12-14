@@ -29,6 +29,11 @@ TODO
             if(!mouseCallback)
                 do other things like jump
 
+        Things:
+            - Glitching when mouse moved off screen 
+            - Update instructions? (Include goal of game?)
+            - Do we want to display anything else in end menu
+
 
     Chandler
         level design
