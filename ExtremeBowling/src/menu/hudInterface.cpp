@@ -1,11 +1,8 @@
 #include "hudInterface.h"
 
-HudInterface::HudInterface(int windowX, int windowY) : Menu(windowX, windowY) {
-    // this->graphics = Graphics("heart");
-    // heart.load("heart.ppm");
-}
+HudInterface::HudInterface(int windowX, int windowY) : Menu(windowX, windowY) {}
 
-void HudInterface::display(int lives, int currentTime) // get num of lives left and take in as a parameter
+void HudInterface::display(int lives, int currentTime)
 {
     // we will be switching to 2d projection here
     glMatrixMode(GL_PROJECTION);
@@ -55,9 +52,6 @@ void HudInterface::display(int lives, int currentTime) // get num of lives left 
                     glutBitmapCharacter(font, c);
                 }
 
-
-                //heart.draw(0, 0);
-
             glPopMatrix();
 
 
@@ -70,5 +64,3 @@ void HudInterface::display(int lives, int currentTime) // get num of lives left 
     glCullFace(GL_BACK);
     glEnable(GL_LIGHTING);
 }
-
-// will need to get # of lives and timer from main

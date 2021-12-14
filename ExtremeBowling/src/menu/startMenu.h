@@ -13,6 +13,9 @@ class StartMenu : public Menu {
         bool instructionsClicked(int x, int y);
         bool quitClicked(int x, int y);
     private:
+        int level1HighScore;
+        int level2HighScore;
+        int level3HighScore;
         Button level1;
         Button level2;
         Button level3;
