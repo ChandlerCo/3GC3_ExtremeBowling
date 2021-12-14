@@ -47,19 +47,19 @@ class Graphics {
             vector <Vec3D> & out_normals 
         );
         void setMaterial(Material m);
-        static GLuint textures[3];
-        static GLubyte *bowling, *red, *wood;
-        static int width, height, max;
+        GLuint textures[3];
+        GLubyte *bowling,*red, *wood;
+        int width1, height1, max1;
         
         Material mat;
         vector <Vec3D> vertices; 
         vector <Vec3D> uvs; //texture mapping
         vector <Vec3D> normals;
 
-        // static void initTextures();
+        
         void displayAsset(Rot3D r);
-        static GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
-        static void initTextures();
+        GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
+        void initTextures();
 
 };
 

@@ -106,7 +106,7 @@ void Asset::displayAsset()
         */
 
         glScalef(obj_scalar, obj_scalar, obj_scalar);
-
+         
         this->graphics.displayAsset(physics.getRot());
     glPopMatrix();
 }

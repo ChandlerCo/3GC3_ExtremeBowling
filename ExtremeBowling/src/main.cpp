@@ -316,7 +316,7 @@ void display(void)
         currentLevel.getBallX(),currentLevel.getBallY(),currentLevel.getBallZ(),
         0,1,0
         );
-
+                  
         currentLevel.displayAssets();
 
         hudInterface.display(currentLevel.getLives(), currentLevel.getTime());
@@ -382,7 +382,7 @@ int main(int argc, char** argv)
     
     glutDisplayFunc(display);    //registers "display" as the display callback function
 
-
+    
     glutTimerFunc(1000/refreshRate,FPS, 0);
 
     glEnable(GL_DEPTH_TEST);

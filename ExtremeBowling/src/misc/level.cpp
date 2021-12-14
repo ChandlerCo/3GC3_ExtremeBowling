@@ -174,7 +174,7 @@ void Level::runLevel(int timePassed){
 }
 
 void Level::displayAssets(){
-
+    
     if (ball.blend) 
     {
         //cout << "enable blending\n";
@@ -183,17 +183,15 @@ void Level::displayAssets(){
     }
 
     float lightPos[] ={ ball.getX(), 50, ball.getZ() - 5, 1 };
-    //float lightPos2[] = {0,0,0,1};
     float lightAmb[] = { 1, 1, 1, 1 };
     float lightDif[] = { 0.8, 0.8, 0.8, 1 };
-    //float lightDif2[] = { 1, 1, 1, 1 };
     float lightSpc[] = { 1, 1, 1, 1 };
     
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
-    //Graphics::initTextures();
+    
 
     for(Boomba* i : boombas){
         i->displayAsset();//add materials
@@ -209,12 +207,12 @@ void Level::displayAssets(){
     for(PowerUp* i : powerUps){
         i->displayAsset();
     }
-        
+    glBindTexture(GL_TEXTURE_2D, 0);
     this->ball.displayAsset();
     
     
     
-    //glBindTexture(GL_TEXTURE_2D, Graphics::textures[2]);
+    //glBindTexture(GL_TEXTURE_2D, textures[0]);
     this->map.displayFloor();
 
     glDisable(GL_BLEND);					// Turn Blending Off

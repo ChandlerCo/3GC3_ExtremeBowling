@@ -188,54 +188,44 @@ GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
     
     return img;
 }
-/*
-static void initTextures()
+
+void Graphics::initTextures()
 {
-    
-    // Enable texturing
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_TEXTURE_GEN_S);
-    glEnable(GL_TEXTURE_GEN_T);
-    glGenTextures(3, Graphics::textures);
+	
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_GEN_S);
+	glEnable(GL_TEXTURE_GEN_T);
+	glGenTextures(3, textures);
 
-    // Set up first texture for ball
-    glBindTexture(GL_TEXTURE_2D, Graphics::textures[0]);
-    Graphics::bowling = Graphics::LoadPPM((char*)"../ppm/bowling.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
-        0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::bowling);
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	GLubyte* wood = LoadPPM((char*)"../wood.ppm",&width1, &height1, &max1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, wood);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-    // Set up second texture for pin(red)
-    glBindTexture(GL_TEXTURE_2D, Graphics::textures[1]);
-    Graphics::red = Graphics::LoadPPM((char*)"../ppm/red_1.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
-        0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::red);
+	glBindTexture(GL_TEXTURE_2D, textures[1]);
+	GLubyte* bowling = LoadPPM((char*)"../bowling_1.ppm",&width1, &height1, &max1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, bowling);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-    // Set up third texture for floor (wood)
-    glBindTexture(GL_TEXTURE_2D, Graphics::textures[2]);
-    Graphics::wood = Graphics::LoadPPM((char*)"../ppm/wood.ppm", &Graphics::width, &Graphics::height, &Graphics::max);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Graphics::width, Graphics::height,
-        0, GL_RGB, GL_UNSIGNED_BYTE, Graphics::wood);
-    
-    // Remove texture binding for now
-    glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, textures[2]);
+	GLubyte* red = LoadPPM((char*)"../red_1.ppm",&width1, &height1, &max1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, red);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
-*/
+
 void Graphics::displayAsset(Rot3D r)
 {
-
+    
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat.amb);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat.diff);
