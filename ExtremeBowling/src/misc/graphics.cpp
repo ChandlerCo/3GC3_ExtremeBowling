@@ -19,6 +19,8 @@ using namespace std;
 GLuint Graphics::pinTexture = 0;
 GLuint Graphics::sweeperTexture = 0;
 GLuint Graphics::woodTexture = 0;
+GLuint Graphics::finishTexture = 0;
+GLuint Graphics::ballTexture = 0;
 
 Graphics::Graphics(){}
 
@@ -154,6 +156,13 @@ void Graphics::setTexture(int textureId)
             break;
         case WOOD_TEXTURE:
             this->texture = woodTexture;
+            break;
+        case FINISH_TEXTURE:
+            this->texture = finishTexture;
+            break;
+        case BALL_TEXTURE:
+            this->texture = ballTexture;
+            break;
         default:
             this->texture = 0;
             break;
@@ -293,11 +302,11 @@ GLuint Graphics::loadPPM(string filename, bool repeat){ // taken from tutorial w
 
 void Graphics::loadTextures()
 {   
-    
-    
     pinTexture = loadPPM("pin");
     sweeperTexture = loadPPM("SweeperCoat");
-    woodTexture = loadPPM("wooden", true);
+    woodTexture = loadPPM("woodFloor");
+    finishTexture = loadPPM("finish");
+    ballTexture = loadPPM("bowlingball");
 }
 
 // GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
