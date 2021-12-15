@@ -1,4 +1,5 @@
-#include "graphics.h"
+ #include "graphics.h"
+#include <iostream>
 
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -15,6 +16,8 @@
 
 using namespace std;
 
+GLuint Graphics::pinTexture = 0;
+GLuint Graphics::sweeperTexture = 0;
 
 Graphics::Graphics(){}
 
@@ -24,6 +27,9 @@ Graphics::Graphics(string filename, Material m){
             this->uvs,
             this->normals);
     mat = m;
+    this->texture = NO_TEXTURE;
+
+
 }
 
 bool Graphics::loadObj(string filename,
@@ -126,6 +132,7 @@ bool Graphics::loadObj(string filename,
 
     fclose(file);
 
+
     return true;
 }
 
@@ -134,99 +141,174 @@ void Graphics::setMaterial(Material m)
     mat = m;
 }
 
-GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
+void Graphics::setTexture(int textureId)
 {
-    GLubyte* img;
-    FILE *fd;
-    int n, m;
-    int  k, nm;
-    char c;
-    int i;
-    char b[100];
-    float s;
-    int red, green, blue;
-    
-    fd = fopen(file, "r");
-    fscanf(fd,"%[^\n] ",b);
-    if(b[0]!='P'|| b[1] != '3')
+    switch(textureId)
     {
+        case PIN_TEXTURE:
+            this->texture = pinTexture;
+            break;
+        case SWEEPER_TEXTURE:
+            this->texture = sweeperTexture;
+            break;
+        default:
+            this->texture = 0;
+            break;
+    }
+}
+
+GLuint Graphics::loadBMP(string filename){ // taken from tutorial website
+    unsigned char header[54];
+    unsigned int dataPos;
+    unsigned int width, height;
+    unsigned int imageSize;
+
+    unsigned char * data;
+
+    filename = "src/objects/" + filename + ".bmp";
+    FILE * file = fopen(filename.c_str(), "rb");
+
+    if (!file){printf("Image could not be opened\n"); return 0;}
+
+    if ( fread(header, 1, 54, file)!=54 ){ // If not 54 bytes read : problem
+        printf("Not a correct BMP file\n");
+        return false;
+    }
+    if ( fread(header, 1, 54, file)!=54 ){ // If not 54 bytes read : problem
+        printf("Not a correct BMP file\n");
+        return false;
+    }
+
+    dataPos    = *(int*)&(header[0x0A]);
+    imageSize  = *(int*)&(header[0x22]);
+    width      = *(int*)&(header[0x12]);
+    height     = *(int*)&(header[0x16]);
+
+
+    if (imageSize==0)    imageSize=width*height*3; // 3 : one byte for each Red, Green and Blue component
+    if (dataPos==0)      dataPos=54; // The BMP header is done that way
+
+
+    std::cout << "width " << width << std::endl;
+    std::cout << "height " << height << std::endl;
+    // Create a buffer
+    data = new unsigned char [imageSize];
+
+    // Read the actual data from the file into the buffer
+    fread(data,1,imageSize,file);
+
+    //Everything is in memory now, the file can be closed
+    fclose(file);
+
+    // Create one OpenGL texture
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+
+    // "Bind" the newly created texture : all future texture functions will modify this texture
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Give the image to OpenGL
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    return textureID;
+
+}
+
+void Graphics::loadTextures()
+{   
+    
+    
+    pinTexture = loadBMP("PinCoat");
+    sweeperTexture = loadBMP("SweeperCoat");
+}
+
+// GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
+// {
+//     GLubyte* img;
+//     FILE *fd;
+//     int n, m;
+//     int  k, nm;
+//     char c;
+//     int i;
+//     char b[100];
+//     float s;
+//     int red, green, blue;
+    
+//     fd = fopen(file, "r");
+//     fscanf(fd,"%[^\n] ",b);
+//     if(b[0]!='P'|| b[1] != '3')
+//     {
         
-        exit(0);
-    }
+//         exit(0);
+//     }
 
-    fscanf(fd, "%c",&c);
-    while(c == '#')
-    {
-        fscanf(fd, "%[^\n] ", b);
-        printf("%s\n",b);
-        fscanf(fd, "%c",&c);
-    }
-    ungetc(c,fd);
-    fscanf(fd, "%d %d %d", &n, &m, &k);
+//     fscanf(fd, "%c",&c);
+//     while(c == '#')
+//     {
+//         fscanf(fd, "%[^\n] ", b);
+//         printf("%s\n",b);
+//         fscanf(fd, "%c",&c);
+//     }
+//     ungetc(c,fd);
+//     fscanf(fd, "%d %d %d", &n, &m, &k);
     
-    printf("%d rows  %d columns  max value= %d\n",n,m,k);
+//     printf("%d rows  %d columns  max value= %d\n",n,m,k);
     
-    nm = n*m;
+//     nm = n*m;
     
-    img = (GLubyte*)(malloc(3*sizeof(GLuint)*nm));
+//     img = (GLubyte*)(malloc(3*sizeof(GLuint)*nm));
     
-    s=255.0/k;
+//     s=255.0/k;
     
     
-    for(i=0;i<nm;i++)
-    {
-        fscanf(fd,"%d %d %d",&red, &green, &blue );
-        img[3*nm-3*i-3]=red*s;
-        img[3*nm-3*i-2]=green*s;
-        img[3*nm-3*i-1]=blue*s;
-    }
-    fclose(fd);
+//     for(i=0;i<nm;i++)
+//     {
+//         fscanf(fd,"%d %d %d",&red, &green, &blue );
+//         img[3*nm-3*i-3]=red*s;
+//         img[3*nm-3*i-2]=green*s;
+//         img[3*nm-3*i-1]=blue*s;
+//     }
+//     fclose(fd);
     
-    *width = n;
-    *height = m;
-    *max = k;
+//     *width = n;
+//     *height = m;
+//     *max = k;
     
-    return img;
-}
+//     return img;
+// }
 
-void Graphics::initTextures()
-{
+// void Graphics::initTextures()
+// {
 	
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_TEXTURE_GEN_S);
-	glEnable(GL_TEXTURE_GEN_T);
-	glGenTextures(3, textures);
+// 	glEnable(GL_TEXTURE_2D);
+// 	glEnable(GL_TEXTURE_GEN_S);
+// 	glEnable(GL_TEXTURE_GEN_T);
+// 	glGenTextures(3, &texture);
 
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	GLubyte* wood = LoadPPM((char*)"../wood.ppm",&width1, &height1, &max1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, wood);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+// 	glBindTexture(GL_TEXTURE_2D, texture);
+// 	GLubyte* wood = LoadPPM((char*)"../wood.ppm",&width1, &height1, &max1);
+// 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, wood);
+// 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+// 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+// 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	GLubyte* bowling = LoadPPM((char*)"../bowling_1.ppm",&width1, &height1, &max1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, bowling);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+// }
 
-	glBindTexture(GL_TEXTURE_2D, textures[2]);
-	GLubyte* pin = LoadPPM((char*)"../Pin.ppm",&width1, &height1, &max1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, pin);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-}
+
 
 
 void Graphics::displayAsset(Rot3D r)
 {
     
-
+    if(texture != NO_TEXTURE){
+        glBindTexture(GL_TEXTURE_2D, texture);
+    } else {
+        glBindTexture(GL_TEXTURE_2D, NO_TEXTURE);
+    }
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat.amb);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat.diff);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat.spec);
@@ -238,6 +320,9 @@ void Graphics::displayAsset(Rot3D r)
         // render each triangle
         for (long unsigned int i = 0; i < this->vertices.size() ; i++) {
             glNormal3f(this->normals.at(i).x, this->normals.at(i).y, this->normals.at(i).z);
+            if(texture != NO_TEXTURE){
+                glTexCoord2f(uvs.at(i).x,uvs.at(i).y);
+            }
             glVertex3f(this->vertices.at(i).x, this->vertices.at(i).y, this->vertices.at(i).z);
         }
         glEnd();

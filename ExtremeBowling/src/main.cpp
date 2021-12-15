@@ -221,9 +221,9 @@ void FPS (int val){
                     endMenu.setText("Level Complete!", currentScore);
                 }
             } else {
-                endMenu.setText("GUTTER! You Lose!", currentScore);
+                endMenu.setText("GUTTER BALL! You Lose!", currentScore);
                 //call game over menu
-            }            
+            }
             currentLevel = Level();
         }
     
@@ -388,6 +388,10 @@ int main(int argc, char** argv)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+
+    glEnable(GL_TEXTURE_2D);
+
+    Graphics::loadTextures();
 
     glutMainLoop();
 

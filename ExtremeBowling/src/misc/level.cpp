@@ -201,7 +201,6 @@ void Level::displayAssets(){
         i->displayAsset();
     }
     for(Pin* i : pins){
-        //glBindTexture(GL_TEXTURE_2D, Graphics::textures[1]);
         i->displayAsset();
     }
     for(PowerUp* i : powerUps){

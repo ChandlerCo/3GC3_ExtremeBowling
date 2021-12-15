@@ -7,7 +7,7 @@ Sweeper::Sweeper(float inX, float inY, float inZ, float endX, float endY, float 
     //this->moveZBy = 1;
     this->graphics = Graphics("sweeper"); //we change this later
 
-    this->physics.addBoxCollider(24, 5, 5, 0, 0, 0);
+    this->physics.addBoxCollider(20, 8, 4, 0, 0, 2);
     this->physics.setId(SWEEPER);
     this->physics.setLocalId(id);
 
@@ -15,6 +15,7 @@ Sweeper::Sweeper(float inX, float inY, float inZ, float endX, float endY, float 
 
     Vec3D dir = Vec3D::createVector(startPos, endPos);
     this->physics.setRotation(0, 1, 0, atan2(dir.x, dir.z) * 180.0f / M_PI);
+    this->obj_scalar = 6;
 }
 
 void Sweeper::animate(float time) 

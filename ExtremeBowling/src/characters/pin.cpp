@@ -2,7 +2,8 @@
 
 Pin::Pin(float inX, float inY, float inZ, int local_id) : Asset(inX, inY, inZ)
 {
-    this->graphics = Graphics("pindraft");
+    this->graphics = Graphics("pin");
+    this->graphics.setTexture(PIN_TEXTURE);
 
     this->physics.addBoxCollider(4, 15, 4, 0, 0, 0);
     this->physics.setInteraction(Reaction::ghost);

@@ -32,6 +32,11 @@ using namespace std;
 #define EMERALD {{0.0215f, 0.1745f, 0.0215f, 0.55f}, {0.07568f, 0.61424f, 0.07568f, 0.55f}, {0.633f, 0.727811f, 0.633f, 0.55f}, 76.8f}
 #define WHITE_RUBBER {{0.45f, 0.45f, 0.45f, 1.0f}, {0.75f, 0.75f, 0.75f, 1.0f}, {0.75f, 0.75f, 0.75f, 1.0f}, 10.0f}
 
+#define NO_TEXTURE 0
+#define PIN_TEXTURE 1
+#define SWEEPER_TEXTURE 2
+#define BALL_TEXTURE 3
+
 struct Material {
     float amb[4];
     float diff[4];
@@ -40,6 +45,12 @@ struct Material {
 };
 
 class Graphics {
+
+    private:
+
+    static GLuint pinTexture, sweeperTexture;
+    static GLuint loadBMP(string filename);
+
     public:
         Graphics();
         Graphics(string filename, Material m=GOLD);
@@ -49,10 +60,9 @@ class Graphics {
             vector <Vec3D> & out_normals 
         );
         void setMaterial(Material m);
-        GLuint textures[3];
-        GLubyte *bowling,*red, *wood;
-        int width1, height1, max1;
+        void setTexture(int textureId);
         
+        GLuint texture;
         Material mat;
         vector <Vec3D> vertices; 
         vector <Vec3D> uvs; //texture mapping
@@ -60,11 +70,20 @@ class Graphics {
 
         
         void displayAsset(Rot3D r);
-        GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
-        void initTextures();
+        
+        
+        static void loadTextures();
+
+        //GLuint texture;
+        // GLubyte *bowling,*red, *wood;
+        // int width1, height1, max1;
+        // GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
+        // void initTextures();
 
 };
 
+
+//GLuint texture = loadBMP("pin");
 
 
 #endif
