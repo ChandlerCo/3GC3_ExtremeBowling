@@ -23,6 +23,9 @@ void EndMenu::display()
         string underlineTitle((int)message.size(), '_');
         centerText(underlineTitle, font, windowHeight*0.205);
 
+        string scoreText = "Score:";
+        centerText(scoreText, font, windowHeight*0.36);
+
         centerText(score, font, windowHeight*0.4);
 
         backToStart.display();
