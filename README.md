@@ -1,13 +1,24 @@
-# 3GC3_ExtremeBowling
+# CS 3GC3 - Project
 
 Team 2
 
-Sarvin Azadis   azadis2
-Chandler Co     coc
-Thomas Hankins  hankinst
-Joseph Lee      leej240
+## Contributors (Group 1)
 
-# Prototype Features
+- Sarvin Azadis   (azadis2)
+- Chandler Co     (coc)
+- Thomas Hankins  (hankinst)
+- Joseph Lee      (leej240)
+      
+## Features Implemented
+
+- Lighting 
+- Textures
+- Alpha blending
+- Animated characters
+- Non-geometric primitives (menu)
+- Advanced camera control
+- Shaders
+
 * OBJ file parsing and drawing
     - Draws faces and sets normals
     - Textures not yet drawn
@@ -19,8 +30,11 @@ Joseph Lee      leej240
     - Contains physics values(position, bounding box, etc), loaded obj, controls, active power-up
 
 * A pin/powerup class:
-    - created
-    - not yet fully implemented
+    - animation/ movement
+    - physics values(position, bounding box, etc)
+    - loaded obj
+    - textures
+    - alpha blending
 
 * Enemy classes - boomba, sweepers
     - physics values(position, bounding box, etc)
@@ -35,18 +49,17 @@ Joseph Lee      leej240
     - floor
     - moveable character
     - enemies spawned and moving
+    - maps / levels
+    
 
 # Controls
-* Arrow keys move the ball - gives acceleration relative to direction camera is facing
-
-* Move mouse to adjust camera angle
-
-### Project References
-* Boomba
-    - Downloaded from https://free3d.com/3d-model/goomba-424140.html
-* Ball
-    - Downloaded from https://www.cgtrader.com/free-3d-models/architectural/decoration/ibl-studio-setup
-* Pin
-    - Downloaded from https://free3d.com/3d-model/bowling-pin-v1--196951.html
-* Powerup Cube
-    - Downloaded from https://www.cgtrader.com/free-3d-print-models/games-toys/toys/mario-question-cube
+| Command  | Description  |
+|---|---|
+| up arrow  | ball moves forward |
+| down arrow  | ball moves backward  |
+| left arrow  | ball moves left |
+| right arrow  | ball moves right  |
+| left-click  | ball jumps  |   
+| space  | game pauses  |
+| mouse is outside window | game pauses  |
+| moving mouse | camera moves around ball|
