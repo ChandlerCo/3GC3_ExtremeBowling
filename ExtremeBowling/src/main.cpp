@@ -198,7 +198,7 @@ void specialUp(int key, int x, int y){
 void FPS (int val){
     int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     int d_time = time_current - time_past;
-    //frameTime = d_time;
+    frameTime = d_time;
     time_past = time_current; 
 
     if(!pauseStatus){
@@ -294,10 +294,6 @@ void display(void)
         }
         pauseMenu.display();
     } else {
-        if(showFPS){
-            displayFPS();     
-        }
-
         if(currentLevel.getBlend()){
             glEnable(GL_BLEND);
             glDisable(GL_DEPTH_TEST);
@@ -318,6 +314,10 @@ void display(void)
         );
                   
         currentLevel.displayAssets();
+
+        if(showFPS){
+            displayFPS();     
+        }
 
         hudInterface.display(currentLevel.getLives(), currentLevel.getTime());
     }
