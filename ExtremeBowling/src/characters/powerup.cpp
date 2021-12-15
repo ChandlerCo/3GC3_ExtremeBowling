@@ -52,7 +52,8 @@ void PowerUp::setGraphics()
     {
         case ADD_LIVES:
             // set graphics to be checkpoint tile (maybe change texture used?)
-            graphics.setMaterial(RUBY);
+            graphics.setMaterial(WHITE_RUBBER);
+            graphics.setTexture(LIFE_TEXTURE);
             break;
         case HALF_SIZE:
             // set graphics to be checkpoint tile (maybe change texture used?)

@@ -8,7 +8,7 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->physics.setId(BALL);
 
     this->graphics = Graphics("ball", BLUE);
-    this->graphics.setTexture(BALL_TEXTURE);
+    this->graphics.setTexture(USER_TEXTURE);
     this->radius = radius;
     this->lives = 3;
     this->powerUpType = NO_POWERUP;
