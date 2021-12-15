@@ -20,7 +20,11 @@ GLuint Graphics::pinTexture = 0;
 GLuint Graphics::sweeperTexture = 0;
 GLuint Graphics::woodTexture = 0;
 GLuint Graphics::finishTexture = 0;
-GLuint Graphics::ballTexture = 0;
+GLuint Graphics::userTexture = 0;
+GLuint Graphics::boombaTexture = 0;
+GLuint Graphics::lifeTexture = 0;
+GLuint Graphics::ghostTexture = 0;
+GLuint Graphics::sizeTexture = 0;
 
 Graphics::Graphics(){}
 
@@ -160,8 +164,20 @@ void Graphics::setTexture(int textureId)
         case FINISH_TEXTURE:
             this->texture = finishTexture;
             break;
-        case BALL_TEXTURE:
-            this->texture = ballTexture;
+        case USER_TEXTURE:
+            this->texture = userTexture;
+            break;
+        case BOOMBA_TEXTURE:
+            this->texture = boombaTexture;
+            break;
+        case LIFE_TEXTURE:
+            this->texture = lifeTexture;
+            break;
+        case GHOST_TEXTURE:
+            this->texture = ghostTexture;
+            break;
+        case SIZE_TEXTURE:
+            this->texture = sizeTexture;
             break;
         default:
             this->texture = 0;
@@ -306,7 +322,11 @@ void Graphics::loadTextures()
     sweeperTexture = loadPPM("SweeperCoat");
     woodTexture = loadPPM("woodFloor");
     finishTexture = loadPPM("finish");
-    ballTexture = loadPPM("bowlingball");
+    userTexture = loadPPM("PlayerCoat");
+    boombaTexture = loadPPM("EnemyCoat");
+    lifeTexture = loadPPM("ExtraLifeCoat");
+    //ghostTexture = loadPPM("PlayerCoat");
+    //sizeTexture = loadPPM("EnemyCoat");
 }
 
 // GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
