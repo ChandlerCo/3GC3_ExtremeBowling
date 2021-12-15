@@ -41,12 +41,8 @@ Vec3D Camera::focusDirection()
     return Vec3D::createVector(pos, focus).normalize();
 }
 
-void Camera::changeDistance(bool direction){
-    if(direction){
-        this->distance++;
-    } else{
-        this->distance--;
-    }
+void Camera::changeDistance(float direction){
+    this->distance+=direction;
     this->distance = max(this->distance, 1.0f);
     updatePosition();
 }
