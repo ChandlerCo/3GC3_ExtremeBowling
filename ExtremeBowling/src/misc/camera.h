@@ -19,10 +19,7 @@ class Camera {
         Camera();
         Camera(float startDistance);
         void orbit(int deltaX, int deltaY);
-        //void orbitVertical(int amount); 
-        //void orbitHorizontal(int amount);
         void changeDistance(bool direction);
-        //void translate(float x, float y, float z); //input translation distance
         void changePosition(float x, float y, float z);
         Vec3D getForward();
         Vec3D getBackward();
