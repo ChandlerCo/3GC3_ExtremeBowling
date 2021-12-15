@@ -198,7 +198,7 @@ void specialUp(int key, int x, int y){
 void FPS (int val){
     int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     int d_time = time_current - time_past;
-    //frameTime = d_time;
+    frameTime = d_time;
     time_past = time_current; 
 
     if(!pauseStatus){
@@ -261,11 +261,10 @@ void displayFPS(){
     glColor3f(0.0, 1.0, 0.0);
     glRasterPos2i(10, windowY - 15);
 
-    string s = to_string(1000 / (frameTime+1));
+    string s = "FPS : " + to_string(1000 / (frameTime+1));
     void * font = GLUT_BITMAP_9_BY_15;
-    for (string::iterator i = s.begin(); i != s.end(); ++i)
+    for (char& c: s)
     {
-        char c = *i;
         glutBitmapCharacter(font, c);
     }
     glMatrixMode(GL_MODELVIEW);
@@ -294,9 +293,9 @@ void display(void)
         }
         pauseMenu.display();
     } else {
-        if(showFPS){
-            displayFPS();     
-        }
+        // if(showFPS){
+        //     displayFPS();     
+        // }
 
         if(currentLevel.getBlend()){
             glEnable(GL_BLEND);
@@ -318,9 +317,10 @@ void display(void)
         );
                   
         currentLevel.displayAssets();
-
+        displayFPS();
         hudInterface.display(currentLevel.getLives(), currentLevel.getTime());
     }
+    
 
     glFlush();
     glutSwapBuffers();

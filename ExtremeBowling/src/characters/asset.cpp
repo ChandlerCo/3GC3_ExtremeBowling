@@ -87,7 +87,7 @@ void Asset::displayAsset()
     glPushMatrix();
         glTranslatef(this->getX(), this->getY(), this->getZ());
 
-        //REMOVE HITBOX DRAWING
+        // REMOVE HITBOX DRAWING
         // visualize hit box
         // can be removed later
         glColor3f(0, 1, 0);

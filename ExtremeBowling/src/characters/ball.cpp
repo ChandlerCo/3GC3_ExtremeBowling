@@ -7,10 +7,9 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->physics.setSurfaceFriction(1);
     this->physics.setId(BALL);
 
-    this->graphics = Graphics("bowlingball", BRASS);
+    this->graphics = Graphics("ball", BOWLING_BALL);
     this->radius = radius;
     this->lives = 3;
-    this->obj_scalar = radius;
     this->powerUpType = NO_POWERUP;
     this->blend = false;
     this->finishedStatus = false;
