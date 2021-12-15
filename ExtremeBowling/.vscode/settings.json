@@ -9,6 +9,7 @@
         "memory": "cpp",
         "random": "cpp",
         "iostream": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "ostream": "cpp"
     }
 }
