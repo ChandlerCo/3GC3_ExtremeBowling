@@ -17,13 +17,13 @@ void EndMenu::display()
         void* font = GLUT_BITMAP_9_BY_15;
 
         // Game ended title
-        Menu::centerText(message, font, windowHeight*0.20);
+        centerText(message, font, windowHeight*0.20);
 
         // Underline the title
         string underlineTitle((int)message.size(), '_');
-        Menu::centerText(underlineTitle, font, windowHeight*0.205);
+        centerText(underlineTitle, font, windowHeight*0.205);
 
-        Menu::centerText(score, font, windowHeight*0.4);
+        centerText(score, font, windowHeight*0.4);
 
         backToStart.display();
 

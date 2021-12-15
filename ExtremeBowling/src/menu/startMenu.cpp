@@ -57,16 +57,16 @@ void StartMenu::display()
 
         // Game title
         string title = "WELCOME TO EXTREME BOWLING";
-        Menu::centerText(title, font, windowHeight*0.20);
+        centerText(title, font, windowHeight*0.20);
 
         // Underline the title
         string underlineTitle = "__________________________";
-        Menu::centerText(underlineTitle, font, windowHeight*0.205);
+        centerText(underlineTitle, font, windowHeight*0.205);
 
         // High scores
-        Menu::centerText("High Score: " + to_string(level1HighScore), font, windowHeight*0.37);
-        Menu::centerText("High Score: " + to_string(level2HighScore), font, windowHeight*0.50);
-        Menu::centerText("High Score: " + to_string(level3HighScore), font, windowHeight*0.63);
+        centerText("High Score: " + to_string(level1HighScore), font, windowHeight*0.37);
+        centerText("High Score: " + to_string(level2HighScore), font, windowHeight*0.50);
+        centerText("High Score: " + to_string(level3HighScore), font, windowHeight*0.63);
         
         // Buttons
         level1.display();

@@ -18,28 +18,54 @@ void InstructionsMenu::display()
 
         // Instructions title
         string title = "INSTRUCTIONS";
-        Menu::centerText(title, font, windowHeight*0.20);
+        centerText(title, font, windowHeight*0.20);
 
         // Underline the title
         string underlineTitle = "____________";
-        Menu::centerText(underlineTitle, font, windowHeight*0.205);
+        centerText(underlineTitle, font, windowHeight*0.205);
 
         /* Game instructions */
+        // 
+        string goal1 = "The goal of the game is to get to the end of the map";
+        centerText(goal1, font, windowHeight*0.30);
+
+        string goal2 = "(indicated by a checkered tile) as quickly as possible,";
+        centerText(goal2, font, windowHeight*0.33);
+
+        string goal3 = "while collecting as many pins as possible and avoiding";
+        centerText(goal3, font, windowHeight*0.36);
+
+        string goal4 = "being hit by the sweepers and boombas. The green tiles";
+        centerText(goal4, font, windowHeight*0.39);
+
+        string goal5 = "indicate checkpoints, and there are different power ups";
+        centerText(goal5, font, windowHeight*0.42);
+
+        string goal6 = "available, including a life power up, a decrease size";
+        centerText(goal6, font, windowHeight*0.45);
+
+        string goal7 = "power up and a ghost power up.";
+        centerText(goal7, font, windowHeight*0.48);
+
+
+        string commands = "Commands:";
+        centerText(commands, font, windowHeight*0.57);
+
         // Space to pause
         string space = "Press space to pause the game.";
-        Menu::centerText(space, font, windowHeight*0.40);
+        centerText(space, font, windowHeight*0.60);
 
         // Move mouse to move camera 
         string camera = "Look around by moving the mouse.";
-        Menu::centerText(camera, font, windowHeight*0.45);
+        centerText(camera, font, windowHeight*0.63);
 
         // Arrow keys to move
         string arrowKeys = "Use arrow keys to move the ball.";
-        Menu::centerText(arrowKeys, font, windowHeight*0.50);
+        centerText(arrowKeys, font, windowHeight*0.66);
 
         // Left click to jump
         string leftClick = "Left click to make the ball jump.";
-        Menu::centerText(leftClick, font, windowHeight*0.55);
+        centerText(leftClick, font, windowHeight*0.69);
 
         back.display();
 

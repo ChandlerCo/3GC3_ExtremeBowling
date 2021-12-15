@@ -15,7 +15,7 @@ void PauseMenu::display()
 
         // Game title
         string title = "EXTREME BOWLING";
-        Menu::centerText(title, font, windowHeight*0.20);
+        centerText(title, font, windowHeight*0.20);
 
         // Underline the title
         string underlineTitle = "_______________";
@@ -23,7 +23,7 @@ void PauseMenu::display()
 
         // Unpause game text 
         string unpause = "Press space to resume game.";
-        Menu::centerText(unpause, font, windowHeight*0.80);
+        centerText(unpause, font, windowHeight*0.80);
         
     glPopMatrix();
 
