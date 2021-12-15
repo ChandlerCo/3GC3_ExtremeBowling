@@ -38,7 +38,11 @@ using namespace std;
 #define SWEEPER_TEXTURE 2
 #define WOOD_TEXTURE 3
 #define FINISH_TEXTURE 4
-#define BALL_TEXTURE 5
+#define USER_TEXTURE 5
+#define BOOMBA_TEXTURE 6
+#define LIFE_TEXTURE 7
+#define GHOST_TEXTURE 8
+#define SIZE_TEXTURE 9
 
 struct Material {
     float amb[4];
@@ -51,8 +55,7 @@ class Graphics {
 
     private:
 
-    static GLuint pinTexture, sweeperTexture, woodTexture, finishTexture, ballTexture;
-    static GLuint loadBMP(string filename);
+    static GLuint pinTexture, sweeperTexture, woodTexture, finishTexture, userTexture, boombaTexture, lifeTexture, ghostTexture, sizeTexture;
     static GLuint loadPPM(string filename, bool repeat=false);
 
     public:
@@ -78,16 +81,9 @@ class Graphics {
         
         static void loadTextures();
 
-        //GLuint texture;
-        // GLubyte *bowling,*red, *wood;
-        // int width1, height1, max1;
-        // GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
-        // void initTextures();
 
 };
 
-
-//GLuint texture = loadBMP("pin");
 
 
 #endif

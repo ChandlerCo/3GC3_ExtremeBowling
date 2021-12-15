@@ -20,7 +20,11 @@ GLuint Graphics::pinTexture = 0;
 GLuint Graphics::sweeperTexture = 0;
 GLuint Graphics::woodTexture = 0;
 GLuint Graphics::finishTexture = 0;
-GLuint Graphics::ballTexture = 0;
+GLuint Graphics::userTexture = 0;
+GLuint Graphics::boombaTexture = 0;
+GLuint Graphics::lifeTexture = 0;
+GLuint Graphics::ghostTexture = 0;
+GLuint Graphics::sizeTexture = 0;
 
 Graphics::Graphics(){}
 
@@ -160,8 +164,20 @@ void Graphics::setTexture(int textureId)
         case FINISH_TEXTURE:
             this->texture = finishTexture;
             break;
-        case BALL_TEXTURE:
-            this->texture = ballTexture;
+        case USER_TEXTURE:
+            this->texture = userTexture;
+            break;
+        case BOOMBA_TEXTURE:
+            this->texture = boombaTexture;
+            break;
+        case LIFE_TEXTURE:
+            this->texture = lifeTexture;
+            break;
+        case GHOST_TEXTURE:
+            this->texture = ghostTexture;
+            break;
+        case SIZE_TEXTURE:
+            this->texture = sizeTexture;
             break;
         default:
             this->texture = 0;
@@ -169,72 +185,12 @@ void Graphics::setTexture(int textureId)
     }
 }
 
-GLuint Graphics::loadBMP(string filename){ // taken from tutorial website
-    unsigned char header[54];
-    unsigned int dataPos;
-    unsigned int width, height;
-    unsigned int imageSize;
-
-    unsigned char * data;
-
-    filename = "src/objects/" + filename + ".bmp";
-    FILE * file = fopen(filename.c_str(), "rb");
-
-    if (!file){printf("Image could not be opened\n"); return 0;}
-
-    if ( fread(header, 1, 54, file)!=54 ){ // If not 54 bytes read : problem
-        printf("Not a correct BMP file\n");
-        return false;
-    }
-    if ( fread(header, 1, 54, file)!=54 ){ // If not 54 bytes read : problem
-        printf("Not a correct BMP file\n");
-        return false;
-    }
-
-    dataPos    = *(int*)&(header[0x0A]);
-    imageSize  = *(int*)&(header[0x22]);
-    width      = *(int*)&(header[0x12]);
-    height     = *(int*)&(header[0x16]);
-
-
-    if (imageSize==0)    imageSize=width*height*3; // 3 : one byte for each Red, Green and Blue component
-    if (dataPos==0)      dataPos=54; // The BMP header is done that way
-
-
-    std::cout << "width " << width << std::endl;
-    std::cout << "height " << height << std::endl;
-    // Create a buffer
-    data = new unsigned char [imageSize];
-
-    // Read the actual data from the file into the buffer
-    fread(data,1,imageSize,file);
-
-    //Everything is in memory now, the file can be closed
-    fclose(file);
-
-    // Create one OpenGL texture
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-
-    // "Bind" the newly created texture : all future texture functions will modify this texture
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
-    // Give the image to OpenGL
-    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-    return textureID;
-
-}
-
 GLuint Graphics::loadPPM(string filename, bool repeat){ // taken from tutorial website
     int i;
     char b[100];
     char c;
     float s;
-    unsigned int width, height, max, pixels;
+    int width, height, max, pixels;
     GLubyte* img;
     int red, green, blue;
 
@@ -306,82 +262,12 @@ void Graphics::loadTextures()
     sweeperTexture = loadPPM("SweeperCoat");
     woodTexture = loadPPM("woodFloor");
     finishTexture = loadPPM("finish");
-    ballTexture = loadPPM("bowlingball");
+    userTexture = loadPPM("PlayerCoat");
+    boombaTexture = loadPPM("EnemyCoat");
+    lifeTexture = loadPPM("ExtraLifeCoat");
+    //ghostTexture = loadPPM("PlayerCoat");
+    //sizeTexture = loadPPM("EnemyCoat");
 }
-
-// GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
-// {
-//     GLubyte* img;
-//     FILE *fd;
-//     int n, m;
-//     int  k, nm;
-//     char c;
-//     int i;
-//     char b[100];
-//     float s;
-//     int red, green, blue;
-    
-//     fd = fopen(file, "r");
-//     fscanf(fd,"%[^\n] ",b);
-//     if(b[0]!='P'|| b[1] != '3')
-//     {
-        
-//         exit(0);
-//     }
-
-//     fscanf(fd, "%c",&c);
-//     while(c == '#')
-//     {
-//         fscanf(fd, "%[^\n] ", b);
-//         printf("%s\n",b);
-//         fscanf(fd, "%c",&c);
-//     }
-//     ungetc(c,fd);
-//     fscanf(fd, "%d %d %d", &n, &m, &k);
-    
-//     printf("%d rows  %d columns  max value= %d\n",n,m,k);
-    
-//     nm = n*m;
-    
-//     img = (GLubyte*)(malloc(3*sizeof(GLuint)*nm));
-    
-//     s=255.0/k;
-    
-    
-//     for(i=0;i<nm;i++)
-//     {
-//         fscanf(fd,"%d %d %d",&red, &green, &blue );
-//         img[3*nm-3*i-3]=red*s;
-//         img[3*nm-3*i-2]=green*s;
-//         img[3*nm-3*i-1]=blue*s;
-//     }
-//     fclose(fd);
-    
-//     *width = n;
-//     *height = m;
-//     *max = k;
-    
-//     return img;
-// }
-
-// void Graphics::initTextures()
-// {
-	
-// 	glEnable(GL_TEXTURE_2D);
-// 	glEnable(GL_TEXTURE_GEN_S);
-// 	glEnable(GL_TEXTURE_GEN_T);
-// 	glGenTextures(3, &texture);
-
-// 	glBindTexture(GL_TEXTURE_2D, texture);
-// 	GLubyte* wood = LoadPPM((char*)"../wood.ppm",&width1, &height1, &max1);
-// 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, wood);
-// 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-// 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-// 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-// 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-// }
-
 
 
 

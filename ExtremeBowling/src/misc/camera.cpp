@@ -25,7 +25,7 @@ Camera::Camera(float startDistance){
 
     this->rot = Rot3D();
     this->rot.addRotation(1, 0, 0, -30);
-    this->rot.addRotation(0, 1, 0, 45);
+    this->rot.addRotation(0, 1, 0, 180);
     updatePosition();
 }
 
@@ -50,21 +50,7 @@ void Camera::changeDistance(bool direction){
     this->distance = max(this->distance, 1.0f);
     updatePosition();
 }
-/*
-void Camera::orbitVertical(int amount){
-    if((amount > 0 && theta < M_PI/2) || (amount < 0 && theta > M_PI/16) ){
-        this->theta += M_PI*amount*sensitivity/10000;
-        this->updatePosition();
-    }
-}
 
-void Camera::orbitHorizontal(int amount){
-        this->phi += M_PI*amount*sensitivity/10000;
-        this->updatePosition();
-    
-
-}
-*/
 void Camera::orbit(int deltaX, int deltaY)
 {
     if (deltaY != 0)

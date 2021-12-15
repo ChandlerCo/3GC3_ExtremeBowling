@@ -12,9 +12,9 @@ Boomba::Boomba(float inX, float inY, float inZ, float endX, float endY, float en
 
     this->physics.addCallback(BALL, &hitBall, this);
 
-    this->graphics = Graphics("bowlingball", RUBY);
-    this->graphics.setTexture(BALL_TEXTURE);
-    this->obj_scalar = BOOMBA_RADIUS;
+    this->graphics = Graphics("ball", RUBY);
+    this->graphics.setTexture(BOOMBA_TEXTURE);
+    this->obj_scalar = BOOMBA_RADIUS / 5.0f;
 
     // this->moveXBy = 0.5;
 }
