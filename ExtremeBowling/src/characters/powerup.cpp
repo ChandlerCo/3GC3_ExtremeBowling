@@ -46,7 +46,7 @@ bool PowerUp::checkCollision(){
 
 void PowerUp::setGraphics()
 {
-    this->obj_scalar = 4;
+    this->obj_scalar = 1;
     this->graphics = Graphics("powerup");
     switch (physics.getId())
     {
