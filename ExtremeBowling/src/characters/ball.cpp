@@ -85,7 +85,7 @@ void Ball::jump(){
 }
 
 bool Ball::respawn(){
-    this->physics.setPosition(lastCheckpoint.x,radius,lastCheckpoint.z);
+    this->physics.setPosition(lastCheckpoint.x,lastCheckpoint.y,lastCheckpoint.z);
     this->physics.setVelocity(0,0,0);
     this->lives--;
 
@@ -136,6 +136,7 @@ int Ball::hitCheckpoint(void* context, Vec3D deflection, void* obj)
     PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
     // set ball's last checkpoint to obj position
     b->lastCheckpoint.x = other->getX();
+    b->lastCheckpoint.y = other->getY() + b->radius;
     b->lastCheckpoint.z = other->getZ();
     b->onGround = 125;
     return 1;

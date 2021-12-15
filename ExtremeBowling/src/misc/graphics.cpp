@@ -18,6 +18,7 @@ using namespace std;
 
 GLuint Graphics::pinTexture = 0;
 GLuint Graphics::sweeperTexture = 0;
+GLuint Graphics::woodTexture = 0;
 
 Graphics::Graphics(){}
 
@@ -151,6 +152,8 @@ void Graphics::setTexture(int textureId)
         case SWEEPER_TEXTURE:
             this->texture = sweeperTexture;
             break;
+        case WOOD_TEXTURE:
+            this->texture = woodTexture;
         default:
             this->texture = 0;
             break;
@@ -217,12 +220,84 @@ GLuint Graphics::loadBMP(string filename){ // taken from tutorial website
 
 }
 
+GLuint Graphics::loadPPM(string filename, bool repeat){ // taken from tutorial website
+    int i;
+    char b[100];
+    char c;
+    float s;
+    unsigned int width, height, max, pixels;
+    GLubyte* img;
+    int red, green, blue;
+
+    filename = "src/ppm/" + filename + ".ppm";
+    FILE * file = fopen(filename.c_str(), "r");
+
+    fscanf(file,"%[^\n] ",b);
+    if(b[0]!='P'|| b[1] != '3')
+    {
+        printf("%s is not a PPM file!\n",filename.c_str());
+        return false;
+    }
+    fscanf(file, "%c",&c);
+    while(c == '#')
+    {
+        fscanf(file, "%[^\n] ", b);
+        fscanf(file, "%c",&c);
+    }
+    ungetc(c,file);
+    fscanf(file, "%d %d %d", &width, &height, &max);
+    
+    pixels = width*height;
+    
+    img = (GLubyte*)(malloc(3*sizeof(GLuint)*pixels));
+    
+    s=255.0/max;
+    
+    
+    for(i=0;i<pixels;i++)
+    {
+        fscanf(file,"%d %d %d",&red, &green, &blue );
+        img[3*pixels-3*i-3]=red*s;
+        img[3*pixels-3*i-2]=green*s;
+        img[3*pixels-3*i-1]=blue*s;
+    }
+
+    //Everything is in memory now, the file can be closed
+    fclose(file);
+
+    // Create one OpenGL texture
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+
+    // "Bind" the newly created texture : all future texture functions will modify this texture
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Give the image to OpenGL
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
+
+    if (repeat)
+    {
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    }
+    return textureID;
+
+}
+
 void Graphics::loadTextures()
 {   
     
     
-    pinTexture = loadBMP("PinCoat");
-    sweeperTexture = loadBMP("SweeperCoat");
+    pinTexture = loadPPM("pin");
+    sweeperTexture = loadPPM("SweeperCoat");
+    woodTexture = loadPPM("wooden", true);
 }
 
 // GLubyte* Graphics::LoadPPM(char* file, int* width, int* height, int* max)
@@ -305,9 +380,8 @@ void Graphics::displayAsset(Rot3D r)
 {
     
     if(texture != NO_TEXTURE){
+        glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
-    } else {
-        glBindTexture(GL_TEXTURE_2D, NO_TEXTURE);
     }
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat.amb);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat.diff);
@@ -327,5 +401,6 @@ void Graphics::displayAsset(Rot3D r)
         }
         glEnd();
     glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
 
 }

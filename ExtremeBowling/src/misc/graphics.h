@@ -36,6 +36,7 @@ using namespace std;
 #define PIN_TEXTURE 1
 #define SWEEPER_TEXTURE 2
 #define BALL_TEXTURE 3
+#define WOOD_TEXTURE 4
 
 struct Material {
     float amb[4];
@@ -48,8 +49,9 @@ class Graphics {
 
     private:
 
-    static GLuint pinTexture, sweeperTexture;
+    static GLuint pinTexture, sweeperTexture, woodTexture;
     static GLuint loadBMP(string filename);
+    static GLuint loadPPM(string filename, bool repeat=false);
 
     public:
         Graphics();

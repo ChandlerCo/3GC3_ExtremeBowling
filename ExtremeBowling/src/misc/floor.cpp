@@ -40,6 +40,7 @@ void Tile::setGraphics()
 {
     this->obj_scalar = 1;
     graphics = Graphics("floor");
+    this->graphics.setTexture(WOOD_TEXTURE);
     switch (physics.getId())
     {
         case CHECKPOINT:

@@ -5,7 +5,8 @@ Sweeper::Sweeper(float inX, float inY, float inZ, float endX, float endY, float 
     speed = 5;
 
     //this->moveZBy = 1;
-    this->graphics = Graphics("sweeper"); //we change this later
+    this->graphics = Graphics("sweeper", WHITE_RUBBER); //we change this later
+    this->graphics.setTexture(SWEEPER_TEXTURE);
 
     this->physics.addBoxCollider(20, 8, 4, 0, 0, 2);
     this->physics.setId(SWEEPER);
@@ -14,7 +15,7 @@ Sweeper::Sweeper(float inX, float inY, float inZ, float endX, float endY, float 
     this->physics.addCallback(BALL, &hitBall, this);
 
     Vec3D dir = Vec3D::createVector(startPos, endPos);
-    this->physics.setRotation(0, 1, 0, atan2(dir.x, dir.z) * 180.0f / M_PI);
+    this->physics.setRotation(0, 1, 0, atan2(dir.x, dir.z) * 180.0f / M_PI + 180.0f);
     this->obj_scalar = 6;
 }
 
