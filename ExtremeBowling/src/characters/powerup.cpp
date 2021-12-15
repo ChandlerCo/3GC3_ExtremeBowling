@@ -2,7 +2,7 @@
 
 PowerUp::PowerUp(float inX, float inY, float inZ, int type, int local_id) : Asset(inX, inY, inZ)
 {
-    this->physics.addCubeCollider(8, 0, 0, 0);
+    this->physics.addCubeCollider(4, 0, 0, 0);
     this->physics.setInteraction(Reaction::ghost);
     this->physics.setId(type);
     this->physics.setLocalId(local_id);
