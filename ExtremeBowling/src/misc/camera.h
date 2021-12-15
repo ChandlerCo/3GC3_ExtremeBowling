@@ -19,7 +19,7 @@ class Camera {
         Camera();
         Camera(float startDistance);
         void orbit(int deltaX, int deltaY);
-        void changeDistance(bool direction);
+        void changeDistance(float direction);
         void changePosition(float x, float y, float z);
         Vec3D getForward();
         Vec3D getBackward();
