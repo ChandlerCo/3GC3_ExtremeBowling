@@ -57,11 +57,13 @@ void PowerUp::setGraphics()
             break;
         case HALF_SIZE:
             // set graphics to be checkpoint tile (maybe change texture used?)
-            graphics.setMaterial(EMERALD);
+            graphics.setMaterial(WHITE_RUBBER);
+            graphics.setTexture(SIZE_TEXTURE);
             break;
         case GHOST_MODE:
             // set graphics to be normal tile
             graphics.setMaterial(WHITE_RUBBER);
+            graphics.setTexture(GHOST_TEXTURE);
             break;
     }
 }

@@ -265,8 +265,8 @@ void Graphics::loadTextures()
     userTexture = loadPPM("PlayerCoat");
     boombaTexture = loadPPM("EnemyCoat");
     lifeTexture = loadPPM("ExtraLifeCoat");
-    //ghostTexture = loadPPM("PlayerCoat");
-    //sizeTexture = loadPPM("EnemyCoat");
+    ghostTexture = loadPPM("GhostCoat");
+    sizeTexture = loadPPM("HalfSizeCoat");
 }
 
 
