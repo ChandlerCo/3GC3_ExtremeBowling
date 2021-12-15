@@ -198,7 +198,7 @@ void specialUp(int key, int x, int y){
 void FPS (int val){
     int time_current = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     int d_time = time_current - time_past;
-    //frameTime = d_time;
+    frameTime = d_time;
     time_past = time_current; 
 
     if(!pauseStatus){
@@ -258,16 +258,23 @@ void displayFPS(){
     glPushMatrix();
     glLoadIdentity();
 
-    glColor3f(0.0, 1.0, 0.0);
-    glRasterPos2i(10, windowY - 15);
+    glPushMatrix();
+        glDisable(GL_LIGHTING);
+        
+        glColor3f(0.0, 1.0, 0.0);
+        glRasterPos2i(10, windowY - 15);
 
-    string s = to_string(1000 / (frameTime+1));
-    void * font = GLUT_BITMAP_9_BY_15;
-    for (string::iterator i = s.begin(); i != s.end(); ++i)
-    {
-        char c = *i;
-        glutBitmapCharacter(font, c);
-    }
+        string s = to_string(1000 / (frameTime+1));
+        void * font = GLUT_BITMAP_9_BY_15;
+        for (string::iterator i = s.begin(); i != s.end(); ++i)
+        {
+            char c = *i;
+            glutBitmapCharacter(font, c);
+        }
+
+        glEnable(GL_LIGHTING);
+    glPopMatrix();
+
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 
@@ -294,10 +301,6 @@ void display(void)
         }
         pauseMenu.display();
     } else {
-        if(showFPS){
-            displayFPS();     
-        }
-
         if(currentLevel.getBlend()){
             glEnable(GL_BLEND);
             glDisable(GL_DEPTH_TEST);
@@ -318,6 +321,10 @@ void display(void)
         );
                   
         currentLevel.displayAssets();
+
+        if(showFPS){
+            displayFPS();     
+        }
 
         hudInterface.display(currentLevel.getLives(), currentLevel.getTime());
     }
