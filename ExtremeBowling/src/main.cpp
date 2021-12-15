@@ -83,9 +83,6 @@ void keyboard(unsigned char key, int _x, int _y) {
         currentLevel.ballReset();
 }
 
-void mouseWheel(int button, int dir, int x, int y){
-    ballCam.changeDistance(dir);
-}
 
 
 
@@ -396,7 +393,6 @@ int main(int argc, char** argv)
     glutSpecialFunc(special);
     glutSpecialUpFunc(specialUp);
     glutReshapeFunc(handleReshape);
-    glutMouseWheelFunc(mouseWheel);
     glutDisplayFunc(display);    //registers "display" as the display callback function
 
     
