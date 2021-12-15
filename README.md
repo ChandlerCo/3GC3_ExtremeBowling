@@ -11,45 +11,62 @@ Team 2
       
 ## Features Implemented
 
-- Lighting 
-- Textures
-- Alpha blending
-- Animated characters
-- Non-geometric primitives (menu)
-- Advanced camera control
-- Shaders
+* Lighting 
+<!-- Not sure what to include here -->
 
-* OBJ file parsing and drawing
-    - Draws faces and sets normals
-    
+* Textures and materials
+    - Added for all 3D objects, including character class, boombas, sweepers, pins, powerups, and floor
 
-* Camera
+* Alpha blending
+    - Implemented for objects during character class "ghost" mode 
+
+* Animated characters
+    - Sweepers and boombas have default movements in map
+    - Power ups have a "floating" animation
+
+* Non-geometric primitives 
+    - Start menu, instructions menu, pause menu, end menu
+    - HUD interface
+
+* Advanced camera control
     - Complex camera which moves around ball based on mouse movement
 
-* Character Class - ball.h/ball.cpp
-    - Contains physics values(position, bounding box, etc), loaded obj, controls, active power-up
+* Shaders
+<!-- do we have these? -->
 
-* A pin/powerup class:
+* OBJ file parsing and drawing
+    - Done for all 3D objects
+
+* Character class - ball.h/ball.cpp
+    - Contains physics values (position, bounding box, etc), loaded obj, controls, active power-up
+    - Keeps track of last checkpoint
+
+* Pin and power up classes:
+    - Have physics values (position, bounding box, etc)
+    - Disappear after collision with character class
+
+<!-- * A pin/powerup class:
     - animation/ movement
     - physics values(position, bounding box, etc)
     - loaded obj
     - textures
-    - alpha blending
+    - alpha blending -->
 
-* Enemy classes - boomba, sweepers
-    - physics values(position, bounding box, etc)
-    - animation/movement
-    - loaded obj
+* Enemy classes - boombas, sweepers
+    - Have physics values (position, bounding box, etc)
 
 * Physics
-    - physics values, position, velocity, acceleration etc.
-    - bonuding boxes and collision detection
+    - Values including position, velocity, acceleration etc.
+    - Bounding boxes and collision detection
 
 * Basic World
-    - floor
-    - moveable character
-    - enemies spawned and moving
-    - maps / levels
+    - Floor
+    - Moveable character class
+    - Enemies spawned and have animation
+    - 3 different maps/ levels
+
+* Terrain generation
+<!--  -->
     
 
 # Controls
