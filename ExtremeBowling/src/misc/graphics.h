@@ -29,14 +29,16 @@ using namespace std;
 #define GOLD {{0.24725f, 0.2245f, 0.0645f, 0.2f}, {0.34615f, 0.3143f, 0.0903f, 0.2f}, {0.797357f, 0.723991f, 0.208006f, 0.2f}, 83.2f}
 #define OBSIDIAN {{0.05375f, 0.05f, 0.06625f, 0.82f}, {0.18275f, 0.17f, 0.22525f, 0.82f}, {0.332741f, 0.328634f, 0.346435f, 0.82f}, 38.4f}
 #define RUBY {{0.1745f, 0.01175f, 0.01175f, 0.55f}, {0.61424f, 0.04136f, 0.04136f, 0.55f}, {0.727811f, 0.626959f, 0.626959f, 0.55f}, 76.8f}
+#define BLUE {{0.24175f, 0.24175f, 0.5745f, 0.55f}, {0.29136f, 0.29136f, 0.81424f, 0.55f}, {0.726959f, 0.726959f, 0.827811f, 0.55f}, 86.8f}
 #define EMERALD {{0.0215f, 0.1745f, 0.0215f, 0.55f}, {0.07568f, 0.61424f, 0.07568f, 0.55f}, {0.633f, 0.727811f, 0.633f, 0.55f}, 76.8f}
 #define WHITE_RUBBER {{0.45f, 0.45f, 0.45f, 1.0f}, {0.75f, 0.75f, 0.75f, 1.0f}, {0.75f, 0.75f, 0.75f, 1.0f}, 10.0f}
 
 #define NO_TEXTURE 0
 #define PIN_TEXTURE 1
 #define SWEEPER_TEXTURE 2
-#define BALL_TEXTURE 3
-#define WOOD_TEXTURE 4
+#define WOOD_TEXTURE 3
+#define FINISH_TEXTURE 4
+#define BALL_TEXTURE 5
 
 struct Material {
     float amb[4];
@@ -49,7 +51,7 @@ class Graphics {
 
     private:
 
-    static GLuint pinTexture, sweeperTexture, woodTexture;
+    static GLuint pinTexture, sweeperTexture, woodTexture, finishTexture, ballTexture;
     static GLuint loadBMP(string filename);
     static GLuint loadPPM(string filename, bool repeat=false);
 

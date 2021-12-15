@@ -385,6 +385,7 @@ int main(int argc, char** argv)
     
     glutTimerFunc(1000/refreshRate,FPS, 0);
 
+    glEnable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);

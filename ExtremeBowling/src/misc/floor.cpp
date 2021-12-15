@@ -45,11 +45,12 @@ void Tile::setGraphics()
     {
         case CHECKPOINT:
             // set graphics to be checkpoint tile (maybe change texture used?)
-            graphics.setMaterial(SILVER);
+            graphics.setMaterial(EMERALD);
             break;
         case FINISH:
             // set graphics to be checkpoint tile (maybe change texture used?)
-            graphics.setMaterial(GOLD);
+            this->graphics.setTexture(FINISH_TEXTURE);
+            graphics.setMaterial(WHITE_RUBBER);
             break;
         default:
             // set graphics to be normal tile

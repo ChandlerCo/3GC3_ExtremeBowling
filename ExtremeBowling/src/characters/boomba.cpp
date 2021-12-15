@@ -1,19 +1,20 @@
 #include "boomba.h"
-
+#define BOOMBA_RADIUS 2
 Boomba::Boomba(float inX, float inY, float inZ, float endX, float endY, float endZ, int id, float spd) : Enemy(inX, inY, inZ, endX, endY, endZ, id)
 {
     this->speed = spd;
 
     // initial rotation
     this->physics.setRotation(0, 1, 0, -90); // may have to change this? 
-    this->physics.addSphereCollider(3, 0, 0, 0);
+    this->physics.addSphereCollider(BOOMBA_RADIUS * 2, 0, 0, 0);
     this->physics.setId(BOOMBA);
     this->physics.setLocalId(id);
 
     this->physics.addCallback(BALL, &hitBall, this);
 
-    this->graphics = Graphics("bowlingball");
-    this->obj_scalar = 1.5;
+    this->graphics = Graphics("bowlingball", RUBY);
+    this->graphics.setTexture(BALL_TEXTURE);
+    this->obj_scalar = BOOMBA_RADIUS;
 
     // this->moveXBy = 0.5;
 }
@@ -82,7 +83,7 @@ void Boomba::animate(float time)
             target = endPos;
         
         // switch target after reaching it
-        if (physics.getPos().distanceTo(target) < 0.1)
+        if (physics.getPos().distanceTo(target) < 0.5)
             movingToEnd = !movingToEnd;
 
         // set velocity dynamically based on current position and target
@@ -101,7 +102,7 @@ void Boomba::animate(float time)
 
     // for rotation: if enemy is another bowling ball, use this. otherwise, use above section
     Vec3D rot_axis = Vec3D(0, 1, 0).crossProd(this->physics.getVel());
-    physics.addRotation(rot_axis.x, 0, rot_axis.z, this->physics.getVel().length()* time * 0.019f);
+    physics.addRotation(rot_axis.x, 0, rot_axis.z, this->physics.getVel().length()* time * 0.02865f);// / (M_PI * BOOMBA_RADIUS)); 
     
 
     // if (physics.getPos().distanceTo(Point3D(inX, inY, inZ)) >= 10) {
@@ -157,7 +158,7 @@ vector<Boomba*> Boomba::fromJson(vector<json> jsonData, float tileSize)
         float eX = (float)entry.find("end col").value() * tileSize;
         float eZ = (float)entry.find("end row").value() * tileSize;
         float spd = (float)entry.find("speed").value();
-        boombas.push_back(new Boomba(sX, 3, sZ, eX, 3, eZ, counter, spd));
+        boombas.push_back(new Boomba(sX, BOOMBA_RADIUS, sZ, eX, BOOMBA_RADIUS, eZ, counter, spd));
         counter += 1;
     }
     return boombas;
