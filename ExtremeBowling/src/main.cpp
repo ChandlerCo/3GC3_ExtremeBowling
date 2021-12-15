@@ -325,7 +325,9 @@ void display(void)
         );
                   
         currentLevel.displayAssets();
-        displayFPS();
+        if(showFPS){
+            displayFPS();     
+        }
         hudInterface.display(currentLevel.getLives(), currentLevel.getTime());
     }
     
@@ -341,7 +343,7 @@ void init(){
     windowY = DEFAULT_SIZE_Y;
     refreshRate = 120;
     frameTime = 0;
-    showFPS = true;
+    showFPS = false;
     startStatus = true;
 
     time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
