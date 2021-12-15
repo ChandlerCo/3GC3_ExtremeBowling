@@ -214,8 +214,8 @@ void Graphics::initTextures()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	glBindTexture(GL_TEXTURE_2D, textures[2]);
-	GLubyte* red = LoadPPM((char*)"../red_1.ppm",&width1, &height1, &max1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, red);
+	GLubyte* pin = LoadPPM((char*)"../pin.ppm",&width1, &height1, &max1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1,0, GL_RGB, GL_UNSIGNED_BYTE, pin);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
