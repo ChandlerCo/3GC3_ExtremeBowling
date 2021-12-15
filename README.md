@@ -12,7 +12,7 @@ Team 2
 ## Features Implemented
 
 * Lighting 
-<!-- Not sure what to include here -->
+    - Local lighting following the ball
 
 * Textures and materials
     - Added for all 3D objects, including character class, boombas, sweepers, pins, powerups, and floor
