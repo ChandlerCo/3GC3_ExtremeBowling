@@ -21,7 +21,7 @@ Team 2
 
 * OBJ file parsing and drawing
     - Draws faces and sets normals
-    - Textures not yet drawn
+    
 
 * Camera
     - Complex camera which moves around ball based on mouse movement
