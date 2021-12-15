@@ -56,7 +56,6 @@ class Graphics {
     private:
 
     static GLuint pinTexture, sweeperTexture, woodTexture, finishTexture, userTexture, boombaTexture, lifeTexture, ghostTexture, sizeTexture;
-    static GLuint loadBMP(string filename);
     static GLuint loadPPM(string filename, bool repeat=false);
 
     public:
@@ -82,16 +81,9 @@ class Graphics {
         
         static void loadTextures();
 
-        //GLuint texture;
-        // GLubyte *bowling,*red, *wood;
-        // int width1, height1, max1;
-        // GLubyte* LoadPPM(char* file, int* width, int* height, int* max);
-        // void initTextures();
 
 };
 
-
-//GLuint texture = loadBMP("pin");
 
 
 #endif

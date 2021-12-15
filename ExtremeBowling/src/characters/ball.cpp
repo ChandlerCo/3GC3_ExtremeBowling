@@ -15,6 +15,8 @@ Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
     this->blend = false;
     this->finishedStatus = false;
     this->onGround = false;
+
+    this->lastCheckpoint = Point3D(x,y,z);
 }
 
 void Ball::init()
