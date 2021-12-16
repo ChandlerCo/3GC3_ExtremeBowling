@@ -1,10 +1,8 @@
 # CS 3GC3 - Project
 
-Team 2
+## Contributors (Group 2)
 
-## Contributors (Group 1)
-
-- Sarvin Azadis   (azadis2)
+- Sarvin Azadi    (azadis2)
 - Chandler Co     (coc)
 - Thomas Hankins  (hankinst)
 - Joseph Lee      (leej240)
@@ -27,6 +25,7 @@ Team 2
 
 * Non-geometric primitives 
     - Start menu, instructions menu, pause menu, end menu
+        - Clickable buttons to navigate between menus
     - HUD interface
 
 * Advanced camera control
@@ -43,13 +42,28 @@ Team 2
     - Contains physics values (position, bounding box, etc), loaded obj, controls, active power-up
     - Keeps track of last checkpoint
 
-* Pin and power up classes:
+* Pin class:
     - Have physics values (position, bounding box, etc)
     - Disappear after collision with character class
+    - Collecting pins increases score
+
+* Power up class:
+    - Have physics values (position, bounding box, etc)
+    - Disappear after collision with character class
+    - Three types of power ups:
+        - Extra life
+        - Halve size of player 
+        - Make player invulnerable to enemies
+    - Have floating animation
+
+* Enemy classes (sweepers, boombas):
+    - Follow predetermined path
+    - Collide with player
+    - Boombas themselves also get bounced back after collision
 
 * Physics
     - Values including position, velocity, acceleration etc.
-    - Bounding boxes and collision detection
+    - Bounding boxes and collision detection between boxes and spheres
     - Calculates deflections from collisions
 
 * Advanced world
@@ -60,17 +74,27 @@ Team 2
 
 * Terrain generation
     - JSON file containing data for all world entities
+    - Terrain tiles have position, friction and can be angled
+    - Terrain also has checkpoints and finish tile
+
+* File IO
+    - Level details are stored in JSON files: 
+        - Terrain generation with CSV
+        - Spawn locations
+        - High score
     
 Running make will compile and run the program.
 
 # Controls
 | Command  | Description  |
 |---|---|
-| up arrow  | ball moves forward |
-| down arrow  | ball moves backward  |
-| left arrow  | ball moves left |
-| right arrow  | ball moves right  |
+| up arrow or w | ball moves forward |
+| down arrow or s | ball moves backward  |
+| left arrow or a | ball moves left |
+| right arrow or d | ball moves right  |
 | left-click  | ball jumps  |   
 | space  | game pauses  |
 | mouse is outside window | game pauses  |
 | moving mouse | camera moves around ball|
+| ` | toggle FPS display |
+| r | reset ball position |
