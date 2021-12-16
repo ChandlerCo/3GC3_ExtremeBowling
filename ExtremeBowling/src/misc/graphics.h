@@ -13,6 +13,7 @@
 #endif
 
 #include <vector>
+#include <string>
 #include "mathlib_3D.h"
 
 using namespace std;
