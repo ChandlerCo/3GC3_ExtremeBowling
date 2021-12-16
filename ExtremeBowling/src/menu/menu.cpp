@@ -1,4 +1,3 @@
-//#include <iostream>
 #include "button.h"
 #include "menu.h"
 
@@ -22,7 +21,6 @@ void Menu::start2D()
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix(); // save modelview matrix state
             glDisable(GL_CULL_FACE);
-            //glClear(GL_DEPTH_BUFFER_BIT);
             glDisable(GL_DEPTH_TEST);
             glLoadIdentity(); // reset modelview matrix state
             glDisable(GL_LIGHTING);

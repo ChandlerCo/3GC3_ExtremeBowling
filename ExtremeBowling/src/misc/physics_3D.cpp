@@ -1,6 +1,4 @@
 #include "physics_3D.h"
-#include <iostream>
-#include <stdio.h>
 
 Collider3D::Collider3D()
 {
@@ -47,7 +45,6 @@ Vec3D Collider3D::collide(Collider3D col)
     }
     else if (col.collider_type == Shape::box)
     {
-        //cout << "colliding with box\n";
         return collisionBoxSphere(col, *this).multiply(-1);
     }
     return collisionSphereSphere(*this, col);
@@ -61,17 +58,10 @@ Vec3D Collider3D::collisionPointSphere(Point3D p, Point3D sph_p, float rad)
         return p_to_s.normalize().multiply(rad - p_to_s.length());
     return Vec3D();
 }
-/*
-Vec3D Collider3D::collisionBoxPoint(Collider3D box, Point3D box_p, Point3D old_bp, Point3D p, Point3D old_p)
-{
-    Vec3D b_to_p = Vec3D::createVector(box_p, p);
-}
-*/
 
 Vec3D Collider3D::collisionCornerSphere(Point3D corner, Vec3D edge_x, Vec3D edge_y, Vec3D edge_z, Point3D sph_p, float rad)
 {
     Vec3D c_to_s = Vec3D::createVector(corner, sph_p);
-    //std::cout << corner.x << " - " << corner.y << " - " << corner.z << std::endl;
 
     float rad_2 = rad * rad;
 
@@ -84,7 +74,6 @@ Vec3D Collider3D::collisionCornerSphere(Point3D corner, Vec3D edge_x, Vec3D edge
     // check edge parallel to y axis
     Vec3D proj_y = edge_y.project(c_to_s);
     Vec3D y_to_s = c_to_s.addVec(proj_y.multiply(-1));
-    //std::cout << y_to_s.quickLength() << std::endl;
     if (y_to_s.quickLength() < rad_2 && c_to_s.dotProd(edge_y) >= 0 && proj_y.quickLength() < edge_y.quickLength())
         return y_to_s.normalize().multiply(rad - y_to_s.length());
     
@@ -120,7 +109,6 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
     float rad = sph.size_x / 2;
 
     float contact_length = rad + max(max(box.size_x, box.size_y), box.size_z);
-    //std::cout << b_to_s.length() << " | " << contact_length << " colliding with box\n";
     if (b_to_s.length() < contact_length)
     {
         if (b_to_s.length() <= ZERO)
@@ -130,9 +118,7 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
         Vec3D x_axis = Vec3D(box.size_x / 2, 0, 0);
         box.p_rot->rotate3D(&x_axis);
         Vec3D y_axis = Vec3D(0, box.size_y / 2, 0);
-        //std::cout << y_axis.x << " | " << y_axis.y << " | " << y_axis.z << std::endl;
         box.p_rot->rotate3D(&y_axis);
-        //std::cout << y_axis.x << " | " << y_axis.y << " | " << y_axis.z << std::endl;
         Vec3D z_axis = Vec3D(0, 0, box.size_z / 2);
         box.p_rot->rotate3D(&z_axis);
 
@@ -140,15 +126,12 @@ Vec3D Collider3D::collisionBoxSphere(Collider3D box, Collider3D sph)
         float delta_y = y_axis.project(b_to_s).length();
         float delta_z = z_axis.project(b_to_s).length();
 
-        //std::cout << delta_x << " | " << delta_y << " | " << delta_z << " colliding with box\n";
-
         // check if colliding
         // sphere center is within box
         if (delta_x < box.size_x / 2 && delta_y < box.size_y / 2 && delta_z < box.size_z / 2)
         {
             // complicated reflection - need to find where previous sphere position was
-            // placeholder: use closest face
-            //std::cout << rad + (box.size_y / 2) - delta_y << " placeholder\n";
+            // use closest face
             float max_delta = max(max(delta_x, delta_y), delta_z);
             if (max_delta == delta_x)
             {
@@ -474,7 +457,6 @@ void PhysicsObject3D::removeCallback(int i)
 void PhysicsObject3D::updatePhysics(float time, bool gravity, vector<PhysicsObject3D *> &objs)
 {
     time = time / 1000;     // convert to seconds
-    //std::cout << "friction: " << acc_friction << " acc: " << acc.length() << std::endl;
 
     // ------------------- deceleration due to friction -------------------------
     acc_friction = min(acc_friction * time, 0.75f);
@@ -507,11 +489,6 @@ void PhysicsObject3D::updatePhysics(float time, bool gravity, vector<PhysicsObje
             collision(*it);
         }
 
-        // ----------------------------------------------FLOOR PLACEHOLDER---------------------------------------------
-        // create floor
-        //PhysicsObject3D the_floor = PhysicsObject3D(pos.x, -15, pos.z);      // create a floor object directly below object
-        //the_floor.addBoxCollider(10, 10, 10, 0, 0, 0);                      // results in a floor at 0
-        //collisionImmovable(the_floor);
     }
 }
 
@@ -520,34 +497,6 @@ void PhysicsObject3D::reflect(Vec3D ref_normal, float scale)
     vel = vel.addVec(ref_normal.project(vel).multiply(-2)).multiply(scale);
 }
 
-/*
-void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
-{
-    Vec3D ref_normal = collider.collide(other_obj->collider);
-
-    if (ref_normal.length() == 0)
-        return;
-
-    // ref_normal is normal of reflection plane that both objects should move away from
-    // this means it is the direction the two objects should move in order to move away from each other
-    // the length of ref_normal is the length the two objects should be separated by in order to stop overlapping
-    pos = ref_normal.multiply(-0.5).movePoint(pos);
-    other_obj->pos = ref_normal.multiply(0.5).movePoint(other_obj->pos);
-
-    if (ref_normal.dotProd(vel) > 0)
-        vel = vel.addVec(ref_normal.project(vel).multiply(-1));
-
-    if (ref_normal.dotProd(other_obj->vel) < 0)
-        other_obj->vel = other_obj->vel.addVec(ref_normal.project(other_obj->vel).multiply(-1));
-
-    acc_friction = max(other_obj->getSurfaceFriction() * surface_friction, acc_friction);
-    other_obj->setAccFriction(acc_friction);
-
-    addCollided(other_obj->getId(), ref_normal.multiply(-1), other_obj);
-    other_obj->addCollided(getId(), ref_normal, other_obj);
-}
-*/
-
 void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
 {
     // ref_normal is normal of reflection plane that both objects should move away from
@@ -555,8 +504,6 @@ void PhysicsObject3D::collision(PhysicsObject3D *other_obj)
     // the length of ref_normal is the length the two objects should be separated by in order to stop overlapping
     Vec3D ref_normal = collider.collide(other_obj->collider);
 
-    //if (other_obj->getId() != 0 && other_obj->getId() < 30)
-    //    cout << "ID: " << other_obj->getId() << " reflection: " << ref_normal.length() << " " << other_obj->collider.p_pos << " " << &other_obj->pos << endl;
     if (ref_normal.length() == 0)
         return;
 

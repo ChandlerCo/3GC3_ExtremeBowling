@@ -1,5 +1,8 @@
 #include "floor.h"
 
+#include <string>
+#include <vector>
+
 #define SPAWN_HEIGHT 10
 
 vector<string> split(string str, string delimiter=" ")
@@ -19,9 +22,7 @@ vector<string> split(string str, string delimiter=" ")
     return words;
 }
 
-Tile::Tile(): Asset()
-{
-}
+Tile::Tile(): Asset() {}
 
 Tile::Tile(float x, float y, float z, float size, float friction, int tile_type, float r_a, float r_x, float r_y, float r_z):Asset(x, y, z)
 {
@@ -44,11 +45,11 @@ void Tile::setGraphics()
     switch (physics.getId())
     {
         case CHECKPOINT:
-            // set graphics to be checkpoint tile (maybe change texture used?)
+            // set graphics to be checkpoint tile 
             graphics.setMaterial(EMERALD);
             break;
         case FINISH:
-            // set graphics to be checkpoint tile (maybe change texture used?)
+            // set graphics to be checkpoint tile 
             this->graphics.setTexture(FINISH_TEXTURE);
             graphics.setMaterial(WHITE_RUBBER);
             break;
@@ -99,7 +100,6 @@ Floor::Floor(vector<string> csv, float tile_size, float friction, float x, float
     for (string line : csv)
     {
         str_row = split(line, ",");
-        //cout << "line: " << line << endl;
         col = 0;
         for (string tile : str_row)
         {
@@ -190,10 +190,10 @@ void Floor::clearTiles()
     floor_tiles.clear();
 }
 
-void Floor::displayFloor()
+void Floor::displayFloor(bool hitbox)
 {
     for (Tile* tile : floor_tiles)
     {
-        tile->displayAsset();
+        tile->displayAsset(hitbox);
     }
 }

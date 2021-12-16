@@ -1,8 +1,9 @@
 #include "camera.h"
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <iostream>
 
+#define _USE_MATH_DEFINES
+
+#include <cmath>
+#include <algorithm>
 
 Camera::Camera(){
     this->sensitivity = 180.0f / 400.0f;

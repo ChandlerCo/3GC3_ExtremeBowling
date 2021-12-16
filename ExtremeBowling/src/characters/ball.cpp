@@ -1,5 +1,4 @@
 # include "ball.h"
-# include <iostream>
 
 Ball::Ball(float x, float y, float z, float radius): Asset(x, y, z)
 {
@@ -23,8 +22,6 @@ void Ball::init()
 {
     this->physics.addSphereCollider(this->radius * 2, 0, 0, 0);
     
-    //this->physics.addCallback(BOOMBA, &hitBoomba, this);
-    //this->physics.addCallback(SWEEPER, &hitSweeper, this);
     this->physics.addCallback(CHECKPOINT, &hitCheckpoint, this);
     this->physics.addCallback(FINISH, &hitFinish, this);
     this->physics.addCallback(FLOOR, &hitFloor, this);
@@ -107,29 +104,6 @@ bool Ball::finished()
 
 int Ball::getLives(){
     return this->lives;
-}
-
-int Ball::hitBoomba(void* context, Vec3D deflection, void* obj)
-{
-    Ball* b = static_cast<Ball*>(context);
-    //PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
-    //b->physics.setVelocity(0, 20, 0);
-    // if invincible, return -1
-    if (b->powerUpType == GHOST_MODE)
-        return -1;
-
-    return 0;
-}
-
-int Ball::hitSweeper(void* context, Vec3D deflection, void* obj)
-{
-    Ball* b = static_cast<Ball*>(context);
-    //PhysicsObject3D* other = static_cast<PhysicsObject3D*>(obj);
-    //b->physics.setVelocity(0, 50, 0);
-    if (b->powerUpType == GHOST_MODE)
-        return -1;
-
-    return 0;
 }
 
 int Ball::hitCheckpoint(void* context, Vec3D deflection, void* obj)

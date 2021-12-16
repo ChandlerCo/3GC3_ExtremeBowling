@@ -59,12 +59,7 @@ void Asset::velocity(float x, float y, float z)
 {
     this->physics.setVelocity(x, y, z);
 }
-/*
-void Asset::addVelocity(float x, float y, float z)
-{
-    this->physics.addVelocity(x, y, z);
-}
-*/
+
 void Asset::accelerate(float x, float y, float z)
 {
     this->physics.addAcceleration(x, y, z);
@@ -82,27 +77,27 @@ PhysicsObject3D * Asset::getPhysicsPointer()
 
 // Load the obj file
 
-void Asset::displayAsset()
+void Asset::displayAsset(bool hitbox)
 {
     glPushMatrix();
         glTranslatef(this->getX(), this->getY(), this->getZ());
 
-        /*REMOVE HITBOX DRAWING
-        // visualize hit box
-        // can be removed later
-        glColor3f(0, 1, 0);
-        glPushMatrix();
-            glRotatef(physics.getRot().getAngle(), physics.getRot().getX(), physics.getRot().getY(), physics.getRot().getZ());
-            glTranslatef(physics.collider.offset.x, physics.collider.offset.y, physics.collider.offset.z);
-            if (physics.collider.collider_type == Shape::sphere)
-                glutWireSphere(physics.collider.size_x / 2, physics.collider.size_x / 2 + 2, physics.collider.size_x / 2 + 2);
-            else if (physics.collider.collider_type == Shape::box)
-            {
-                glScalef(physics.collider.size_x, physics.collider.size_y, physics.collider.size_z);
-                glutWireCube(1);
-            }
-        glPopMatrix();
-        // end hit box drawing*/
+        if (hitbox) {
+            // visualize hit box
+            glColor3f(0, 1, 0);
+            glPushMatrix();
+                glRotatef(physics.getRot().getAngle(), physics.getRot().getX(), physics.getRot().getY(), physics.getRot().getZ());
+                glTranslatef(physics.collider.offset.x, physics.collider.offset.y, physics.collider.offset.z);
+                if (physics.collider.collider_type == Shape::sphere)
+                    glutWireSphere(physics.collider.size_x / 2, physics.collider.size_x / 2 + 2, physics.collider.size_x / 2 + 2);
+                else if (physics.collider.collider_type == Shape::box)
+                {
+                    glScalef(physics.collider.size_x, physics.collider.size_y, physics.collider.size_z);
+                    glutWireCube(1);
+                }
+            glPopMatrix();
+            // end hit box drawing
+        }
         
 
         glScalef(obj_scalar, obj_scalar, obj_scalar);

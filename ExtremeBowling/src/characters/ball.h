@@ -11,16 +11,14 @@ class Ball : public Asset{
         Ball(float x, float y, float z, float radius);
         void init();
         void runPhysics(float time, vector<PhysicsObject3D*> &world_objs);
-        void activatePowerUp(PowerUp powerup); // needs to be redefined
-        void clearPowerUp(); //needs to be defined
+        void activatePowerUp(PowerUp powerup); 
+        void clearPowerUp(); 
         void jump();
         bool respawn();
         bool finished();
-        bool blend;
         int getLives();
+        bool blend;
         
-        static int hitBoomba(void* context, Vec3D deflection, void* obj);
-        static int hitSweeper(void* context, Vec3D deflection, void* obj);
         static int hitCheckpoint(void* context, Vec3D deflection, void* obj);
         static int hitFinish(void* context, Vec3D deflection, void* obj);
         static int hitFloor(void* context, Vec3D deflection, void* obj);

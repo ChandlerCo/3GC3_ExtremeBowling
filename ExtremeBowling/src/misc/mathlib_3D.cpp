@@ -1,4 +1,3 @@
-#include <iostream>
 #include "mathlib_3D.h"
 
 Dimension3::Dimension3()

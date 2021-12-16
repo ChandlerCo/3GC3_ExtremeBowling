@@ -45,6 +45,7 @@ bool instructionsStatus;
 bool endStatus;
 
 bool showFPS;
+bool showHitbox;
 
 int frameTime;
 int frameCount;
@@ -64,12 +65,8 @@ HudInterface hudInterface(windowX, windowY);
 DirectionController arrowKeys;
 
 Level currentLevel;
-//Level level1("src/levels/map1.json");
 
 void keyboard(unsigned char key, int _x, int _y) {
-    // if (key == 'q') {
-    //     exit(0);
-    // }
 
     if (key == '`'){
         showFPS = !showFPS;
@@ -79,10 +76,13 @@ void keyboard(unsigned char key, int _x, int _y) {
         pauseStatus = !pauseStatus;
     }
 
-    if (key == 'r' && !pauseStatus) // change !pauseStatus to logic for running game
+    if (key == 'r' && !pauseStatus){ 
         currentLevel.ballReset();
+    }
 
-
+    if (key == '~'){
+        showHitbox = !showHitbox;
+    }
 
     if (key == 'w')
         arrowKeys.toggleUp(true);
@@ -145,12 +145,9 @@ void mouse(int button, int state, int x, int y) {
                 endStatus = false;
                 startStatus = true;
             }
-        } else { // else if !pauseStatus ? 
+        } else { 
             currentLevel.ballJump();
         }
-
-        
-
     }
     prevX = x;
     prevY = y;
@@ -160,11 +157,6 @@ void mouse(int button, int state, int x, int y) {
 void motion(int x, int y){
     if(!pauseStatus){
         ballCam.orbit(x - prevX, y - prevY);
-        //ballCam.orbitHorizontal(x - prevX);
-        //ballCam.orbitVertical(y - prevY);
-
-        prevX = x;
-        prevY = y;
     }
     if (x > windowX || x < 0 || y > windowY || y < 0) {
         pauseStatus = true; // if mouse outside window, game pauses
@@ -176,14 +168,9 @@ void motion(int x, int y){
 void passive(int x, int y){
     if(!pauseStatus){
         ballCam.orbit(x - prevX, y - prevY);
-        //ballCam.orbitHorizontal(x - prevX);
-        //ballCam.orbitVertical(y - prevY);
 
         arrowKeys.setForward(ballCam.getForward());
         arrowKeys.setRightward(ballCam.getRight());
-
-        prevX = x;
-        prevY = y;
     }
     if (x > windowX || x < 0 || y > windowY || y < 0) {
         pauseStatus = true; // if mouse outside window, game pauses
@@ -198,7 +185,7 @@ void windowEntry(int state){
 }
 
 
-void special(int key, int x, int y){
+void special(int key, int _x, int _y){
     if (key == GLUT_KEY_UP)
         arrowKeys.toggleUp(true);
     else if (key == GLUT_KEY_DOWN)
@@ -211,7 +198,7 @@ void special(int key, int x, int y){
     glutPostRedisplay();
 }
 
-void specialUp(int key, int x, int y){
+void specialUp(int key, int _x, int _y){
     if (key == GLUT_KEY_UP)
         arrowKeys.toggleUp(false);
     else if (key == GLUT_KEY_DOWN)
@@ -250,16 +237,13 @@ void FPS (int val){
                     endMenu.setText("Level Complete!", currentScore);
                 }
             } else {
+                //Call game over menu
                 endMenu.setText("GUTTER BALL! You Lose!", currentScore);
-                //call game over menu
             }
             currentLevel = Level();
         }
     
-    
     }
-
-
 
     glutPostRedisplay();
 
@@ -330,10 +314,6 @@ void display(void)
         }
         pauseMenu.display();
     } else {
-        // if(showFPS){
-        //     displayFPS();     
-        // }
-
         if(currentLevel.getBlend()){
             glEnable(GL_BLEND);
             glDisable(GL_DEPTH_TEST);
@@ -353,7 +333,7 @@ void display(void)
         0,1,0
         );
                   
-        currentLevel.displayAssets();
+        currentLevel.displayAssets(showHitbox);
         if(showFPS){
             displayFPS();     
         }
@@ -374,6 +354,7 @@ void init(){
     frameTime = 0;
     showFPS = false;
     startStatus = true;
+    showHitbox = false;
 
     time_past = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
@@ -384,7 +365,7 @@ void handleReshape(int w, int h) {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glShadeModel(GL_SMOOTH);
-    glColor4f(1.0f,1.0f,1.0f,0.7f);		// Full Brightness, 50% Alpha
+    glColor4f(1.0f,1.0f,1.0f,0.7f);		// Full Brightness, 70% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);	// blending function for translucency based on source alpha value
     
     glViewport(0, 0, (GLint)w, (GLint)h);

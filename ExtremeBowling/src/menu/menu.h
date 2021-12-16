@@ -23,7 +23,7 @@ class Menu {
         virtual void display();
         virtual void display(int lives, int currentTime); // for hudInterface
     protected:
-        float windowWidth; // need to store window size as float for centering text
+        float windowWidth; 
         float windowHeight;
         void centerText(string text, void* font, float y);
         void start2D();

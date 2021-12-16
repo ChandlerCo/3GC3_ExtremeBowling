@@ -1,11 +1,6 @@
 #ifndef FLOOR_H
 #define FLOOR_H
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
-
 #include "physics_3D.h"
 #include "../characters/asset.h"
 #include "../characters/character_ids.h"
@@ -28,7 +23,6 @@ class Floor {
         vector<Tile*> floor_tiles;
         float size;
         Point3D pos;
-
         Point3D spawn;
     public:
         Floor();
@@ -39,7 +33,7 @@ class Floor {
         float spawnY();
         float spawnZ();
         float getTileSize();
-        void displayFloor();
+        void displayFloor(bool hitbox);
         void clearTiles();
 };
 

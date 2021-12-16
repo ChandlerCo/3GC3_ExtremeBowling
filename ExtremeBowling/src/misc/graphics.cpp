@@ -1,18 +1,9 @@
- #include "graphics.h"
-#include <iostream>
+#include "graphics.h"
 
-#ifdef __APPLE__
-#define GL_SILENCE_DEPRECATION
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
-#  include <GLUT/glut.h>
-#else
-#  include <GL/gl.h>
-#  include <GL/glu.h>
-#  include <GL/freeglut.h>
-#endif
-
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string>
 
 using namespace std;
 
@@ -35,8 +26,6 @@ Graphics::Graphics(string filename, Material m){
             this->normals);
     mat = m;
     this->texture = NO_TEXTURE;
-
-
 }
 
 bool Graphics::loadObj(string filename,
@@ -56,7 +45,6 @@ bool Graphics::loadObj(string filename,
 
     
     if( file == NULL ){
-        //char tmp[256];
         printf("Impossible to open file %s from\n", filename.c_str());
          return false;
     }
@@ -64,7 +52,6 @@ bool Graphics::loadObj(string filename,
     // reading the file
     while(true) 
     {
-        
         char lineHeader[128];
 
         int res = fscanf(file, "%s", lineHeader);
@@ -99,9 +86,9 @@ bool Graphics::loadObj(string filename,
             vtxIndices.push_back(vertexIndex[0]);
             vtxIndices.push_back(vertexIndex[1]);
             vtxIndices.push_back(vertexIndex[2]);
-            uvIndices     .push_back(uvIndex[0]);
-            uvIndices    .push_back(uvIndex[1]);
-            uvIndices    .push_back(uvIndex[2]);
+            uvIndices.push_back(uvIndex[0]);
+            uvIndices.push_back(uvIndex[1]);
+            uvIndices.push_back(uvIndex[2]);
             nIndices.push_back(normalIndex[0]);
             nIndices.push_back(normalIndex[1]);
             nIndices.push_back(normalIndex[2]);
@@ -185,7 +172,7 @@ void Graphics::setTexture(int textureId)
     }
 }
 
-GLuint Graphics::loadPPM(string filename, bool repeat){ // taken from tutorial website
+GLuint Graphics::loadPPM(string filename, bool repeat){
     int i;
     char b[100];
     char c;

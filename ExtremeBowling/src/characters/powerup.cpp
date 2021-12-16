@@ -30,11 +30,6 @@ void PowerUp::defaultAnimation(float time_ms)
     this->physics.updatePhysics(time_ms, false, empty);
 }
 
-void PowerUp::collisionAnimation()
-{
-
-}
-
 int PowerUp::powerUpType()
 {
     return this->physics.getId();
@@ -48,21 +43,16 @@ void PowerUp::setGraphics()
 {
     this->obj_scalar = 1;
     this->graphics = Graphics("powerup");
+    graphics.setMaterial(WHITE_RUBBER);
     switch (physics.getId())
     {
         case ADD_LIVES:
-            // set graphics to be checkpoint tile (maybe change texture used?)
-            graphics.setMaterial(WHITE_RUBBER);
             graphics.setTexture(LIFE_TEXTURE);
             break;
         case HALF_SIZE:
-            // set graphics to be checkpoint tile (maybe change texture used?)
-            graphics.setMaterial(WHITE_RUBBER);
             graphics.setTexture(SIZE_TEXTURE);
             break;
         case GHOST_MODE:
-            // set graphics to be normal tile
-            graphics.setMaterial(WHITE_RUBBER);
             graphics.setTexture(GHOST_TEXTURE);
             break;
     }

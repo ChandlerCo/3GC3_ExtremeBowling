@@ -25,7 +25,6 @@ void InstructionsMenu::display()
         centerText(underlineTitle, font, windowHeight*0.205);
 
         /* Game instructions */
-        // 
         string goal1 = "The goal of the game is to get to the end of the map";
         centerText(goal1, font, windowHeight*0.30);
 

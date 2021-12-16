@@ -15,7 +15,6 @@
 using namespace std;
 
 class Level {
-    //note if we have a map with a y dimension we can just adjust spawn at that location
     private:
         string levelFilename;
         int highScore;
@@ -26,7 +25,7 @@ class Level {
         vector <Sweeper*> sweepers;
 
         Ball ball;
-        Floor map; //needs to be implemented still
+        Floor map; 
         
         vector<PhysicsObject3D *> worldObjects;
         
@@ -63,7 +62,7 @@ class Level {
             //clear overdue powerups
             
 
-        void displayAssets();
+        void displayAssets(bool hitbox);
 
         bool endLevel(); //return true if good ending, return false if bad ending
 
@@ -73,7 +72,6 @@ class Level {
             delete all objects/vectors
             call main menu
             delete map
-            maybe delete level itself instead
 
         */
 
@@ -95,27 +93,3 @@ class Level {
 };
 
 #endif
-
-/*
-    put in timer func, run end screen for 10 seconds, go back to start menu
-    or press smth to go back to start 
-    
-    if level.ended = true
-        currentscore = level.getScore
-        highscore = level.getHighScore
-
-        if(endLevel()){
-
-            Your Score is currentScore
-            if currentScore > highScore
-                congrats new high score
-        } else {
-            game over ...
-        }
-        
-        delete currentLevel
-
-
-    global variable for menu function called currentLevel
-    currentLevel = Level("map1.json")
-*/

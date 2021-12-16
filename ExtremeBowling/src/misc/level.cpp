@@ -1,6 +1,4 @@
 #include "level.h"
-#include <algorithm>
-
 
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -14,6 +12,8 @@
 #endif
 
 #include <iostream>
+#include <fstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -104,7 +104,6 @@ void Level::runLevel(int timePassed){
             this->powerUpStart = currentTime;
             this->ball.activatePowerUp(*(*it));
 
-            //WARNING --- DON'T TRY TO UNDERSTAND THIS
             int localID = (*it)->getPhysicsPointer()->getLocalId();
             int objectID = (*it)->getPhysicsPointer()->getId();
             
@@ -133,7 +132,6 @@ void Level::runLevel(int timePassed){
         if((*it)->checkCollision() == true){
             this->score += 1;
 
-            //WARNING --- DON'T TRY TO UNDERSTAND THIS
             int localID = (*it)->getPhysicsPointer()->getLocalId();
             int objectID = (*it)->getPhysicsPointer()->getId();
             
@@ -173,10 +171,7 @@ void Level::runLevel(int timePassed){
         this->ended = true;
 }
 
-void Level::displayAssets(){
-    
-
-
+void Level::displayAssets(bool hitbox){
     float lightPos[] ={ ball.getX(), 50, ball.getZ() - 5, 1 };
     float lightAmb[] = { 1, 1, 1, 1 };
     float lightDif[] = { 0.8, 0.8, 0.8, 1 };
@@ -189,43 +184,35 @@ void Level::displayAssets(){
     
 
     for(Boomba* i : boombas){
-        i->displayAsset();//add materials
+        i->displayAsset(hitbox);
     }
 
     for(Sweeper* i : sweepers){
-        i->displayAsset();
+        i->displayAsset(hitbox);
     }
     for(Pin* i : pins){
-        i->displayAsset();
+        i->displayAsset(hitbox);
     }
 
 
     for(PowerUp* i : powerUps){
-        i->displayAsset();
+        i->displayAsset(hitbox);
     }
 
-    //glBindTexture(GL_TEXTURE_2D, textures[0]);
-    this->map.displayFloor();
+    this->map.displayFloor(hitbox);
 
 
     if (ball.blend) 
     {
-        //cout << "enable blending\n";
         glEnable(GL_BLEND);					// Turn Blending On
-		// glDisable(GL_DEPTH_TEST);			// Turn Depth Testing Off
     }
 
-    glBindTexture(GL_TEXTURE_2D, 0);
 
-    this->ball.displayAsset();
+    this->ball.displayAsset(hitbox);
     
     glDisable(GL_BLEND);					// Turn Blending Off
 	glEnable(GL_DEPTH_TEST);				// Turn Depth Testing On
     
-
-
-
-
 }
 
 int Level::getScore(){
@@ -278,6 +265,7 @@ bool Level::endLevel(){
 int Level::getHighScore(){
     return this->highScore;
 }
+
 void Level::saveHighScore()
 {
     // read JSON file
@@ -313,10 +301,8 @@ void Level::ballJump(){
 void Level::ballMove(Vec3D direction){
     int mult = 10;
 
-    //Vec3D vel = direction.multiply(10);
     Vec3D acc = direction.multiply(mult);
     
-    //ball.addVelocity(vel.x, vel.y, vel.z);
     ball.accelerate(acc.x, acc.y, acc.z);
 }
 

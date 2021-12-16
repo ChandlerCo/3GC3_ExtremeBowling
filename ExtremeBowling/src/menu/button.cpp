@@ -9,8 +9,6 @@ Button::Button(float leftX, float rightX, float botY, float topY, string text)
     this->botY = botY;
     this->topY = topY;
     this->text = text;
-
-    // handle mouse clicks
 }
 
 void Button::display()

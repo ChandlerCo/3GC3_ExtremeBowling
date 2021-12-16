@@ -13,11 +13,6 @@ Pin::Pin(float inX, float inY, float inZ, int local_id) : Asset(inX, inY, inZ)
     this->physics.addCallback(BALL, &hitBall, this);
 }
 
-void Pin::collisionAnimation()
-{
-
-}
-
 bool Pin::checkCollision(){
     return collided;
 }

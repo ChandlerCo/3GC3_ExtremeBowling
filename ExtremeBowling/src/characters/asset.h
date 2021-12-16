@@ -2,10 +2,10 @@
 #define ASSET_H
 
 #include <vector>
+#include "character_ids.h"
 #include "../misc/graphics.h"
 #include "../misc/physics_3D.h"
 #include "../misc/mathlib_3D.h"
-#include "character_ids.h"
 #include "../third_party/json.hpp"
 
 using namespace std;
@@ -27,7 +27,6 @@ class Asset {
 
         void position(float x, float y, float z);
         void velocity(float x, float y, float z);
-        void addVelocity(float x, float y, float z);
         void accelerate(float x, float y, float z);
         void runPhysics(float time, bool gravity = false, vector<PhysicsObject3D *> objs = {});
 
@@ -35,7 +34,7 @@ class Asset {
 
         float obj_scalar;
 
-        virtual void displayAsset();
+        virtual void displayAsset(bool hitbox);
 
         virtual ~Asset();
 };

@@ -1,3 +1,6 @@
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
+
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #  include <OpenGL/gl.h>
@@ -8,15 +11,8 @@
 #  include <GL/glu.h>
 #  include <GL/freeglut.h>
 #endif
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
 
 #include <vector>
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string>
 #include "mathlib_3D.h"
 
 using namespace std;
@@ -54,9 +50,8 @@ struct Material {
 class Graphics {
 
     private:
-
-    static GLuint pinTexture, sweeperTexture, woodTexture, finishTexture, userTexture, boombaTexture, lifeTexture, ghostTexture, sizeTexture;
-    static GLuint loadPPM(string filename, bool repeat=false);
+        static GLuint pinTexture, sweeperTexture, woodTexture, finishTexture, userTexture, boombaTexture, lifeTexture, ghostTexture, sizeTexture;
+        static GLuint loadPPM(string filename, bool repeat=false);
 
     public:
         Graphics();

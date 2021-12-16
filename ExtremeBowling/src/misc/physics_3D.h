@@ -3,7 +3,6 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <iostream>
 #include <map>
 #include <vector>
 
@@ -57,7 +56,6 @@ public:
     Vec3D collide(Collider3D col);
 private:
     static Vec3D collisionPointSphere(Point3D p, Point3D sph_p, float rad);
-    //static Vec3D collisionBoxPoint(Collider3D box, Point3D box_p, Point3D old_bp, Point3D p, Point3D old_p);
     static Vec3D collisionCornerSphere(Point3D corner, Vec3D edge_x, Vec3D edge_y, Vec3D edge_z, Point3D sph_p, float rad);
     static Vec3D collisionBoxBox(Collider3D box_1, Collider3D box_2);
     static Vec3D collisionBoxSphere(Collider3D box, Collider3D sph);
@@ -66,7 +64,7 @@ private:
 
 class PhysicsObject3D{
 private:
-    //Point3D pos;
+    Point3D pos;
     Vec3D vel;
     Vec3D acc;
     Rot3D rot;
@@ -82,7 +80,6 @@ private:
     vector<Collision> collided;       // when an object collides with another object, they can add some value to collided to know what they collided with 
     map<int, Callback> callbacks;
 public:
-    Point3D pos;
     Collider3D collider;
     PhysicsObject3D();
     PhysicsObject3D(float p_x, float p_y, float p_z, int i = 1, float f = 0);
@@ -132,7 +129,6 @@ public:
     void reflect(Vec3D ref_normal, float scale);
     
     void collision(PhysicsObject3D *other_obj);
-    //void collisionImmovable(PhysicsObject3D *other_obj);
     int runCallback(int id, Vec3D deflection, void* obj);
 };
 
