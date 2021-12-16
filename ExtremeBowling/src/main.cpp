@@ -412,7 +412,9 @@ int main(int argc, char** argv)
 
     //callbacks
     glutKeyboardFunc(keyboard);
-    glutKeyboardFunc(keyboardUp);
+    glutKeyboardUpFunc(keyboardUp);
+
+
     glutMouseFunc(mouse);
     glutPassiveMotionFunc(passive);
     glutEntryFunc(windowEntry);
