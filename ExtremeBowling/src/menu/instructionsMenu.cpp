@@ -60,7 +60,7 @@ void InstructionsMenu::display()
         centerText(camera, font, windowHeight*0.63);
 
         // Arrow keys to move
-        string arrowKeys = "Use arrow keys to move the ball.";
+        string arrowKeys = "Use arrow keys or WASD to move the ball.";
         centerText(arrowKeys, font, windowHeight*0.66);
 
         // Left click to jump

@@ -23,6 +23,7 @@ Team 2
 * Animated characters
     - Sweepers and boombas have default movements in map
     - Power ups have a "floating" animation
+    - Ball rolls based on its movement
 
 * Non-geometric primitives 
     - Start menu, instructions menu, pause menu, end menu
@@ -30,9 +31,10 @@ Team 2
 
 * Advanced camera control
     - Complex camera which moves around ball based on mouse movement
+    - Quaternion-based camera
 
 * Shaders
-<!-- do we have these? -->
+    - Smooth shading
 
 * OBJ file parsing and drawing
     - Done for all 3D objects
@@ -45,29 +47,21 @@ Team 2
     - Have physics values (position, bounding box, etc)
     - Disappear after collision with character class
 
-<!-- * A pin/powerup class:
-    - animation/ movement
-    - physics values(position, bounding box, etc)
-    - loaded obj
-    - textures
-    - alpha blending -->
-
-* Enemy classes - boombas, sweepers
-    - Have physics values (position, bounding box, etc)
-
 * Physics
     - Values including position, velocity, acceleration etc.
     - Bounding boxes and collision detection
+    - Calculates deflections from collisions
 
-* Basic World
-    - Floor
-    - Moveable character class
+* Advanced world
+    - Floor loaded from CSV data
+    - Moveable character class with acceleration and jump
     - Enemies spawned and have animation
     - 3 different maps/ levels
 
 * Terrain generation
-<!--  -->
+    - JSON file containing data for all world entities
     
+Running make will compile and run the program.
 
 # Controls
 | Command  | Description  |
