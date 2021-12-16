@@ -81,9 +81,34 @@ void keyboard(unsigned char key, int _x, int _y) {
 
     if (key == 'r' && !pauseStatus) // change !pauseStatus to logic for running game
         currentLevel.ballReset();
+
+
+
+    if (key == 'w')
+        arrowKeys.toggleUp(true);
+    else if (key == 's')
+        arrowKeys.toggleDown(true);
+    else if (key == 'd')
+        arrowKeys.toggleRight(true);
+    else if (key == 'a')
+        arrowKeys.toggleLeft(true);
+
+    glutPostRedisplay();
 }
 
 
+void keyboardUp(unsigned char key, int _x, int _y) {
+    if (key == 'w')
+        arrowKeys.toggleUp(false);
+    else if (key == 's')
+        arrowKeys.toggleDown(false);
+    else if (key == 'd')
+        arrowKeys.toggleRight(false);
+    else if (key == 'a')
+        arrowKeys.toggleLeft(false);
+
+    glutPostRedisplay();
+}
 
 
 
@@ -387,6 +412,7 @@ int main(int argc, char** argv)
 
     //callbacks
     glutKeyboardFunc(keyboard);
+    glutKeyboardFunc(keyboardUp);
     glutMouseFunc(mouse);
     glutPassiveMotionFunc(passive);
     glutEntryFunc(windowEntry);
