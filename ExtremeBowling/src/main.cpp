@@ -33,11 +33,11 @@ using namespace std;
 using namespace std::chrono;
 
 #define DEFAULT_SIZE_X 800
-#define DEFAULT_SIZE_Y 800
+#define DEFAULT_SIZE_Y 600
 
 int refreshRate;
-int windowX = DEFAULT_SIZE_X; // need to initialize this first here for menu parameters
-int windowY = DEFAULT_SIZE_Y;
+float windowX = DEFAULT_SIZE_X; // need to initialize this first here for menu parameters
+float windowY = DEFAULT_SIZE_Y;
 
 bool pauseStatus;
 bool startStatus;
@@ -369,9 +369,11 @@ void handleReshape(int w, int h) {
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);	// blending function for translucency based on source alpha value
     
     glViewport(0, 0, (GLint)w, (GLint)h);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(70, windowX/windowY, 1, 1000);
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
