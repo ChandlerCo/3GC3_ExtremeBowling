@@ -8,7 +8,7 @@ class EndMenu : public Menu {
         EndMenu(int windowX, int windowY);
         void display();
         void setText(string message, int score);
-        bool backToStartClicked(int x, int y);
+        bool backToStartClicked(float x, float y);
     private:
         Button backToStart;
         string message;

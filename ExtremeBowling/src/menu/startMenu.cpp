@@ -81,27 +81,37 @@ void StartMenu::display()
     end2D();
 }
 
-bool StartMenu::level1Clicked(int x, int y)
+bool StartMenu::level1Clicked(float x, float y)
 {
+    x *= windowWidth;
+    y *= windowHeight;
     return level1.clicked(x, y);
 }
 
-bool StartMenu::level2Clicked(int x, int y)
+bool StartMenu::level2Clicked(float x, float y)
 {
+    x *= windowWidth;
+    y *= windowHeight;
     return level2.clicked(x, y);
 }
 
-bool StartMenu::level3Clicked(int x, int y)
+bool StartMenu::level3Clicked(float x, float y)
 {
+    x *= windowWidth;
+    y *= windowHeight;
     return level3.clicked(x, y);
 }
 
-bool StartMenu::instructionsClicked(int x, int y)
+bool StartMenu::instructionsClicked(float x, float y)
 {
+    x *= windowWidth;
+    y *= windowHeight;
     return instructions.clicked(x, y);
 }
 
-bool StartMenu::quitClicked(int x, int y)
+bool StartMenu::quitClicked(float x, float y)
 {
+    x *= windowWidth;
+    y *= windowHeight;
     return quit.clicked(x, y);
 }

@@ -73,7 +73,9 @@ void InstructionsMenu::display()
     end2D();
 }
 
-bool InstructionsMenu::backClicked(int x, int y)
+bool InstructionsMenu::backClicked(float x, float y)
 {
+    x *= windowWidth;
+    y *= windowHeight;
     return back.clicked(x, y);
 }

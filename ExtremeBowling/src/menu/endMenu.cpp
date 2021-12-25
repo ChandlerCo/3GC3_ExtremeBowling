@@ -35,8 +35,10 @@ void EndMenu::display()
     end2D();
 }
 
-bool EndMenu::backToStartClicked(int x, int y) 
+bool EndMenu::backToStartClicked(float x, float y) 
 {
+    x *= windowWidth;
+    y *= windowHeight;
     return backToStart.clicked(x, y);
 }
 

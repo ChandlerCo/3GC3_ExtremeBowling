@@ -7,11 +7,11 @@ class StartMenu : public Menu {
     public:
         StartMenu(int windowX, int windowY);
         void display();
-        bool level1Clicked(int x, int y);
-        bool level2Clicked(int x, int y);
-        bool level3Clicked(int x, int y);
-        bool instructionsClicked(int x, int y);
-        bool quitClicked(int x, int y);
+        bool level1Clicked(float x, float y);
+        bool level2Clicked(float x, float y);
+        bool level3Clicked(float x, float y);
+        bool instructionsClicked(float x, float y);
+        bool quitClicked(float x, float y);
     private:
         int level1HighScore;
         int level2HighScore;

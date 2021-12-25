@@ -114,34 +114,36 @@ void keyboardUp(unsigned char key, int _x, int _y) {
 
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        float pX = x / windowX;
+        float pY = y / windowY;
         if (startStatus) {
-            if (startMenu.instructionsClicked(x, y)) { // switch to instructions menu
+            if (startMenu.instructionsClicked(pX, pY)) { // switch to instructions menu
                 startStatus = false;
                 instructionsStatus = true;
-            } else if (startMenu.quitClicked(x, y)) { // quit program
+            } else if (startMenu.quitClicked(pX, pY)) { // quit program
                 exit(0);
-            } else if (startMenu.level1Clicked(x, y)) {
+            } else if (startMenu.level1Clicked(pX, pY)) {
                 startStatus = false;
                 pauseStatus = false;
                 currentLevel.init("src/levels/map1.json");
             } 
-            else if (startMenu.level2Clicked(x, y)) {
+            else if (startMenu.level2Clicked(pX, pY)) {
                 startStatus = false;
                 pauseStatus = false;
                 currentLevel.init("src/levels/map2.json");
             }
-            else if (startMenu.level3Clicked(x, y)) {
+            else if (startMenu.level3Clicked(pX, pY)) {
                 startStatus = false;
                 pauseStatus = false;
                 currentLevel.init("src/levels/map3.json");
             }
         } else if (instructionsStatus) {
-            if (instructionsMenu.backClicked(x, y)) {
+            if (instructionsMenu.backClicked(pX, pY)) {
                 instructionsStatus = false;
                 startStatus = true;
             }
         } else if (endStatus) {
-            if (endMenu.backToStartClicked(x, y)) {
+            if (endMenu.backToStartClicked(pX, pY)) {
                 endStatus = false;
                 startStatus = true;
             }
