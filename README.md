@@ -1,5 +1,7 @@
 # CS 3GC3 - Project
 
+https://youtu.be/gX8Px2r2wXs
+
 ## Contributors (Group 2)
 
 - Sarvin Azadi    (azadis2)
@@ -96,5 +98,6 @@ Running make will compile and run the program.
 | space  | game pauses  |
 | mouse is outside window | game pauses  |
 | moving mouse | camera moves around ball|
-| ` | toggle FPS display |
 | r | reset ball position |
+| ` | toggle FPS display |
+| ~ | toggle hit box display |
