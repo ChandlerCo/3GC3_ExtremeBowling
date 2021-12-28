@@ -24,7 +24,7 @@ void Sweeper::animate(float time)
     if(movingToEnd)
         target = endPos;
     
-    if (physics.getPos().distanceTo(target) < 0.1)
+    if (physics.getPos().distanceTo(target) < speed * (float)time / 1000.0f)
         movingToEnd = !movingToEnd;
 
     Vec3D vel = Vec3D::createVector(physics.getPos(), target).normalize().multiply(speed);

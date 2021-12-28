@@ -41,7 +41,7 @@ void Boomba::animate(float time)
             target = endPos;
         
         // switch target after reaching it
-        if (physics.getPos().distanceTo(target) < 0.5)
+        if (physics.getPos().distanceTo(target) < speed * (float)time / 1000.0f)
             movingToEnd = !movingToEnd;
 
         // set velocity dynamically based on current position and target
